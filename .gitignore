@@ -1,0 +1,43 @@
+# IDE
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Dependencies
+node_modules/
+/springboot/target/
+/springboot/.mvn/
+/springboot/mvnw
+/uniapp/node_modules/
+/vue3/node_modules/
+
+# Build outputs
+/springboot/target/
+/vue3/dist/
+/uniapp/unpackage/
+
+# Logs
+*.log
+logs/
+/springboot/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env.local
+.env.*.local
+
+# Redis (可选,如果不想提交 Redis)
+# Redis-x64-3.0.504/
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
