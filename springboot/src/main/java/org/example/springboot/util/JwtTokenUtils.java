@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -35,6 +36,7 @@ import java.util.Date;
  * - 完善的异常处理和日志记录
  */
 @Slf4j
+@Component
 public class JwtTokenUtils {
 
     /**
@@ -103,6 +105,30 @@ public class JwtTokenUtils {
             return jwt.getExpiresAt().before(new Date());
         } catch (Exception e) {
             return true;
+        }
+    }
+
+    /**
+     * 从token字符串中获取用户ID
+     * @param token JWT token字符串（可能包含Bearer前缀）
+     * @return 用户ID，获取失败返回null
+     */
+    public static Long getUserIdFromToken(String token) {
+        try {
+            if (!StringUtils.hasText(token)) {
+                return null;
+            }
+            // 处理Bearer前缀
+            String actualToken = token;
+            if (token.startsWith("Bearer ")) {
+                actualToken = token.substring(7);
+            }
+            DecodedJWT jwt = verifyToken(actualToken);
+            Long userId = jwt.getClaim("userId").asLong();
+            return userId;
+        } catch (Exception e) {
+            log.error("从token中获取用户ID失败: {}", e.getMessage());
+            return null;
         }
     }
 

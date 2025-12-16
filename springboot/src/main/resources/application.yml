@@ -19,7 +19,7 @@ spring:
   
   # Web配置
   mvc:
-    static-path-pattern: /**  # 允许根路径访问静态资源
+    static-path-pattern: /static/**  # 只拦截/static下的静态资源，避免拦截API请求
   web:
     resources:
       static-locations: classpath:/static/, file:./files/  # 添加files目录

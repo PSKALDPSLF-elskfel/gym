@@ -399,6 +399,42 @@ public class EquipmentService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 分页查询预约记录（后台管理）
+     */
+    public Page<EquipmentBookingResponseDTO> getBookingPage(Long current, Long size,
+                                                             Long equipmentId, Long userId, Integer status) {
+        log.info("分页查询预约记录: current={}, size={}, equipmentId={}, userId={}, status={}",
+                current, size, equipmentId, userId, status);
+
+        Page<GymEquipmentBooking> page = new Page<>(current, size);
+        LambdaQueryWrapper<GymEquipmentBooking> wrapper = new LambdaQueryWrapper<>();
+
+        if (equipmentId != null) {
+            wrapper.eq(GymEquipmentBooking::getEquipmentId, equipmentId);
+        }
+        if (userId != null) {
+            wrapper.eq(GymEquipmentBooking::getUserId, userId);
+        }
+        if (status != null) {
+            wrapper.eq(GymEquipmentBooking::getStatus, status);
+        }
+
+        wrapper.orderByDesc(GymEquipmentBooking::getCreateTime);
+
+        Page<GymEquipmentBooking> bookingPage = bookingMapper.selectPage(page, wrapper);
+
+        // 转换为DTO
+        Page<EquipmentBookingResponseDTO> dtoPage = new Page<>(bookingPage.getCurrent(),
+                bookingPage.getSize(), bookingPage.getTotal());
+        List<EquipmentBookingResponseDTO> dtoList = bookingPage.getRecords().stream()
+                .map(this::convertToBookingResponseDTO)
+                .collect(Collectors.toList());
+        dtoPage.setRecords(dtoList);
+
+        return dtoPage;
+    }
+
     // ==================== 器材排队 ====================
 
     /**
@@ -625,7 +661,8 @@ public class EquipmentService {
         dto.setCurrentUserId(equipment.getCurrentUserId());
         dto.setUsageStartTime(equipment.getUsageStartTime());
         dto.setAvailable(equipment.isAvailable());
-        dto.setRemark(equipment.getRemark());
+        // 跳过remark字段，避免BLOB序列化错误
+        // dto.setRemark(equipment.getRemark());
         dto.setCreateTime(equipment.getCreateTime());
         dto.setUpdateTime(equipment.getUpdateTime());
 

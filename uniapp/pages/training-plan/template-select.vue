@@ -109,8 +109,8 @@
     </view>
 
     <!-- 模板详情弹窗 -->
-    <uni-popup ref="detailPopup" type="bottom">
-      <view class="popup-container">
+    <view class="popup-mask" v-if="showDetailPopup" @click="closeDetail">
+      <view class="popup-container" @click.stop>
         <view class="popup-header">
           <text class="popup-title">模板详情</text>
           <text class="popup-close" @click="closeDetail">×</text>
@@ -175,11 +175,11 @@
           <button class="create-btn" @click="confirmCreate">使用此模板创建计划</button>
         </view>
       </view>
-    </uni-popup>
+    </view>
 
     <!-- 创建计划名称输入弹窗 -->
-    <uni-popup ref="namePopup" type="dialog">
-      <view class="name-popup">
+    <view class="popup-mask" v-if="showNamePopup" @click="cancelCreate">
+      <view class="name-popup" @click.stop>
         <view class="name-popup-title">创建训练计划</view>
         <view class="name-popup-content">
           <input 
@@ -194,15 +194,16 @@
           <button class="name-btn confirm" @click="submitCreate">确定</button>
         </view>
       </view>
-    </uni-popup>
+    </view>
   </view>
 </template>
 
 <script>
 import { getTemplatePage, getTemplateById, createPlanFromTemplate } from '@/apis/trainingPlan.js'
-import { getUserInfo } from '@/utils/auth.js'
+import { getCurrentUser } from '@/utils/auth.js'
 
 export default {
+  components: {},
   data() {
     return {
       loading: false,
@@ -210,6 +211,8 @@ export default {
       currentTemplate: null,
       templateDetails: [],
       planName: '',
+      showDetailPopup: false,
+      showNamePopup: false,
       
       // 筛选条件
       goalOptions: [
@@ -247,33 +250,30 @@ export default {
   
   methods: {
     // 加载模板列表
-    loadTemplates() {
+    async loadTemplates() {
       this.loading = true
-      const params = {
-        currentPage: this.currentPage,
-        pageSize: this.pageSize,
-        status: 1  // 只查询启用的模板
-      }
-      
-      if (this.selectedGoal) {
-        params.goal = this.selectedGoal
-      }
-      if (this.selectedDifficulty) {
-        params.difficulty = this.selectedDifficulty
-      }
-      
-      getTemplatePage(params, {
-        success: (res) => {
-          this.templates = res.data.records || []
-          this.total = res.data.total || 0
-        },
-        fail: (err) => {
-          uni.showToast({ title: '加载失败', icon: 'none' })
-        },
-        complete: () => {
-          this.loading = false
+      try {
+        const params = {
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
+          status: 1  // 只查询启用的模板
         }
-      })
+        
+        if (this.selectedGoal) {
+          params.goal = this.selectedGoal
+        }
+        if (this.selectedDifficulty) {
+          params.difficulty = this.selectedDifficulty
+        }
+        
+        const res = await getTemplatePage(params)
+        this.templates = res.records || []
+        this.total = res.total || 0
+      } catch (err) {
+        uni.showToast({ title: '加载失败', icon: 'none' })
+      } finally {
+        this.loading = false
+      }
     },
     
     // 目标筛选
@@ -299,82 +299,78 @@ export default {
     },
     
     // 查看模板详情
-    viewTemplate(template) {
-      getTemplateById(template.id, {
-        success: (res) => {
-          this.currentTemplate = res.data
-          this.templateDetails = res.data.details || []
-          this.$refs.detailPopup.open()
-        },
-        fail: (err) => {
-          uni.showToast({ title: '加载详情失败', icon: 'none' })
-        }
-      })
+    async viewTemplate(template) {
+      try {
+        const res = await getTemplateById(template.id)
+        this.currentTemplate = res
+        this.templateDetails = res.details || []
+        this.showDetailPopup = true
+      } catch (err) {
+        uni.showToast({ title: '加载详情失败', icon: 'none' })
+      }
     },
     
     // 关闭详情
     closeDetail() {
-      this.$refs.detailPopup.close()
+      this.showDetailPopup = false
     },
     
     // 选择模板
     selectTemplate(template) {
       this.currentTemplate = template
       this.planName = template.name + ' - 我的计划'
-      this.$refs.namePopup.open()
+      this.showNamePopup = true
     },
     
     // 确认创建
     confirmCreate() {
-      this.$refs.detailPopup.close()
+      this.showDetailPopup = false
       this.planName = this.currentTemplate.name + ' - 我的计划'
-      this.$refs.namePopup.open()
+      this.showNamePopup = true
     },
     
     // 取消创建
     cancelCreate() {
-      this.$refs.namePopup.close()
+      this.showNamePopup = false
       this.planName = ''
     },
     
     // 提交创建
-    submitCreate() {
+    async submitCreate() {
       if (!this.planName.trim()) {
         uni.showToast({ title: '请输入计划名称', icon: 'none' })
         return
       }
       
-      const userInfo = getUserInfo()
+      const userInfo = getCurrentUser()
       if (!userInfo || !userInfo.id) {
         uni.showToast({ title: '请先登录', icon: 'none' })
         return
       }
       
-      uni.showLoading({ title: '创建中...' })
-      
-      createPlanFromTemplate(
-        this.currentTemplate.id,
-        userInfo.id,
-        this.planName,
-        {
-          success: (res) => {
-            uni.hideLoading()
-            uni.showToast({ title: '创建成功', icon: 'success' })
-            this.$refs.namePopup.close()
-            
-            // 跳转到计划详情
-            setTimeout(() => {
-              uni.navigateTo({
-                url: `/pages/training-plan/detail?id=${res.data.id}`
-              })
-            }, 1500)
-          },
-          fail: (err) => {
-            uni.hideLoading()
-            uni.showToast({ title: err.message || '创建失败', icon: 'none' })
-          }
-        }
-      )
+      try {
+        uni.showLoading({ title: '创建中...' })
+        
+        const res = await createPlanFromTemplate(
+          this.currentTemplate.id,
+          userInfo.id,
+          this.planName
+        )
+        
+        uni.hideLoading()
+        uni.showToast({ title: '创建成功', icon: 'success' })
+        this.showNamePopup = false
+        
+        // 跳转到计划详情
+        setTimeout(() => {
+          uni.navigateTo({
+            url: `/pages/training-plan/detail?id=${res.id}`
+          })
+        }, 1500)
+      } catch (err) {
+        uni.hideLoading()
+        uni.showToast({ title: err?.message || '创建失败', icon: 'none' })
+      }
     },
     
     // 上一页
@@ -630,11 +626,26 @@ export default {
   opacity: 0.5;
 }
 
+/* 弹窗遮罩层 */
+.popup-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 999;
+}
+
 /* 弹窗样式 */
 .popup-container {
   background-color: #fff;
   border-radius: 24rpx 24rpx 0 0;
   max-height: 80vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -765,11 +776,12 @@ export default {
 }
 
 /* 名称输入弹窗 */
-.name-popup {
+.popup-mask .name-popup {
   background-color: #fff;
   border-radius: 16rpx;
   padding: 40rpx;
   width: 600rpx;
+  margin: auto;
 }
 
 .name-popup-title {

@@ -33,6 +33,21 @@ public class CoachStudentService {
     private final GymBodyTestMapper bodyTestMapper;
 
     /**
+     * 根据用户ID获取教练ID
+     * @param userId 用户ID
+     * @return 教练ID
+     */
+    public Long getCoachIdByUserId(Long userId) {
+        LambdaQueryWrapper<GymCoach> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(GymCoach::getUserId, userId);
+        GymCoach coach = coachMapper.selectOne(wrapper);
+        if (coach == null) {
+            throw new BusinessException("当前用户不是教练");
+        }
+        return coach.getId();
+    }
+
+    /**
      * 查询教练的学员列表（分页）
      * @param coachId 教练ID
      * @param keyword 搜索关键词（昵称或手机号）

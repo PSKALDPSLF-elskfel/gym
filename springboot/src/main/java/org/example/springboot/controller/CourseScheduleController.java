@@ -10,8 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.springboot.common.Result;
 import org.example.springboot.dto.command.CourseScheduleCreateDTO;
 import org.example.springboot.dto.command.CourseScheduleUpdateDTO;
+import org.example.springboot.dto.command.CourseSignInDTO;
 import org.example.springboot.dto.response.CourseScheduleResponseDTO;
 import org.example.springboot.service.CourseScheduleService;
+import org.example.springboot.service.CourseSignInService;
+import org.example.springboot.util.JwtTokenUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +31,9 @@ public class CourseScheduleController {
 
     @Resource
     private CourseScheduleService courseScheduleService;
+
+    @Resource
+    private CourseSignInService signInService;
 
     /**
      * 创建课程时间安排
@@ -132,5 +138,21 @@ public class CourseScheduleController {
         log.info("批量删除过期排课");
         int count = courseScheduleService.deleteExpiredSchedules();
         return Result.success(count);
+    }
+
+    /**
+     * 学员签到
+     */
+    @Operation(summary = "学员签到")
+    @PostMapping("/{scheduleId}/sign-in")
+    public Result<Void> signIn(
+            @Parameter(description = "排课ID") @PathVariable Long scheduleId,
+            @Valid @RequestBody CourseSignInDTO signInDTO) {
+        // 从 JWT 中获取当前操作人 ID(教练/管理员)
+        Long operatorId = JwtTokenUtils.getCurrentUserId();
+        log.info("学员签到: scheduleId={}, bookingId={}, operatorId={}", 
+                scheduleId, signInDTO.getBookingId(), operatorId);
+        signInService.signIn(scheduleId, signInDTO, operatorId);
+        return Result.success();
     }
 }

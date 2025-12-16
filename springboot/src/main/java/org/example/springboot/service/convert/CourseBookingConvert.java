@@ -5,6 +5,7 @@ import org.example.springboot.dto.response.CourseBookingResponseDTO;
 import org.example.springboot.entity.GymCourse;
 import org.example.springboot.entity.GymCourseBooking;
 import org.example.springboot.entity.GymCourseSchedule;
+import org.example.springboot.entity.GymCourseSignIn;
 import org.example.springboot.entity.User;
 
 /**
@@ -45,6 +46,17 @@ public class CourseBookingConvert {
                                                       User user, 
                                                       GymCourseSchedule schedule, 
                                                       GymCourse course) {
+        return toDetailDTO(booking, user, schedule, course, null);
+    }
+
+    /**
+     * Entity转DetailDTO(包含课程、用户和签到信息)
+     */
+    public static CourseBookingDetailDTO toDetailDTO(GymCourseBooking booking, 
+                                                      User user, 
+                                                      GymCourseSchedule schedule, 
+                                                      GymCourse course,
+                                                      GymCourseSignIn signIn) {
         if (booking == null) {
             return null;
         }
@@ -86,6 +98,13 @@ public class CourseBookingConvert {
             dto.setCourseName(course.getName());
             dto.setCourseCoverImage(course.getCoverImage());
             dto.setCourseDuration(course.getDuration());
+        }
+
+        // 签到信息
+        if (signIn != null) {
+            dto.setCheckInTime(signIn.getSignInTime());
+            dto.setSignInType(signIn.getSignInType());
+            dto.setSignInTypeDisplayName(signIn.getSignInTypeDisplayName());
         }
 
         return dto;

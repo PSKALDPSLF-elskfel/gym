@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/coach/students")
+@RequestMapping("/coach/students")
 @RequiredArgsConstructor
 @Tag(name = "教练学员管理", description = "教练端学员管理相关接口")
 public class CoachStudentController {
@@ -47,9 +47,8 @@ public class CoachStudentController {
         // 从token中获取教练用户ID
         Long userId = JwtTokenUtils.getUserIdFromToken(token);
         
-        // 通过userId获取coachId（需要关联查询）
-        // 这里假设userId就是教练的user_id，需要根据实际情况调整
-        Long coachId = userId; // TODO: 从gym_coach表中获取coachId
+        // 通过userId获取coachId
+        Long coachId = coachStudentService.getCoachIdByUserId(userId);
         
         Page<StudentDTO> result = coachStudentService.getMyStudents(coachId, keyword, memberType, pageNum, pageSize);
         return Result.success(result);
@@ -65,7 +64,7 @@ public class CoachStudentController {
             @Parameter(description = "学员用户ID") @PathVariable Long userId
     ) {
         Long coachUserId = JwtTokenUtils.getUserIdFromToken(token);
-        Long coachId = coachUserId; // TODO: 从gym_coach表中获取coachId
+        Long coachId = coachStudentService.getCoachIdByUserId(coachUserId);
         
         StudentDetailDTO result = coachStudentService.getStudentDetail(userId, coachId);
         return Result.success(result);
@@ -81,7 +80,7 @@ public class CoachStudentController {
             @Valid @RequestBody StudentRemarkUpdateDTO dto
     ) {
         Long coachUserId = JwtTokenUtils.getUserIdFromToken(token);
-        Long coachId = coachUserId; // TODO: 从gym_coach表中获取coachId
+        Long coachId = coachStudentService.getCoachIdByUserId(coachUserId);
         
         coachStudentService.updateStudentRemark(dto.getUserId(), coachId, dto.getRemark());
         return Result.success();
@@ -97,7 +96,7 @@ public class CoachStudentController {
             @Parameter(description = "学员用户ID") @PathVariable Long userId
     ) {
         Long coachUserId = JwtTokenUtils.getUserIdFromToken(token);
-        Long coachId = coachUserId; // TODO: 从gym_coach表中获取coachId
+        Long coachId = coachStudentService.getCoachIdByUserId(coachUserId);
         
         List<BodyTestResponseDTO> result = coachStudentService.getStudentBodyTests(userId, coachId);
         return Result.success(result);
@@ -113,7 +112,7 @@ public class CoachStudentController {
             @Parameter(description = "学员用户ID") @PathVariable Long userId
     ) {
         Long coachUserId = JwtTokenUtils.getUserIdFromToken(token);
-        Long coachId = coachUserId; // TODO: 从gym_coach表中获取coachId
+        Long coachId = coachStudentService.getCoachIdByUserId(coachUserId);
         
         List<TrainingPlanResponseDTO> result = coachStudentService.getStudentTrainingPlans(userId, coachId);
         return Result.success(result);

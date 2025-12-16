@@ -192,23 +192,21 @@ export default {
   methods: {
     // 加载计划详情
     async loadPlanDetail() {
-      uni.showLoading({ title: '加载中...' })
-      
-      getTrainingPlanById(this.planId, {
-        success: async (res) => {
-          this.plan = res
-          this.processWeeklyPlan(res.details || [])
-          await this.loadProgress()
-          uni.hideLoading()
-        },
-        fail: (err) => {
-          uni.hideLoading()
-          uni.showToast({
-            title: err || '加载失败',
-            icon: 'none'
-          })
-        }
-      })
+      try {
+        uni.showLoading({ title: '加载中...' })
+        
+        const res = await getTrainingPlanById(this.planId)
+        this.plan = res
+        this.processWeeklyPlan(res.details || [])
+        await this.loadProgress()
+        uni.hideLoading()
+      } catch (err) {
+        uni.hideLoading()
+        uni.showToast({
+          title: err?.message || '加载失败',
+          icon: 'none'
+        })
+      }
     },
     
     // 处理每周训练计划
@@ -236,11 +234,12 @@ export default {
     
     // 加载进度
     async loadProgress() {
-      calculateProgress(this.planId, {
-        success: (progress) => {
-          this.progress = Math.round(progress || 0)
-        }
-      })
+      try {
+        const progress = await calculateProgress(this.planId)
+        this.progress = Math.round(progress || 0)
+      } catch (err) {
+        // 加载失败晃无，穿行报告
+      }
     },
     
     // 切换完成状态
@@ -282,27 +281,26 @@ export default {
     },
     
     // 更新完成状态
-    updateCompletion(detailId, isCompleted, actualSets, actualReps, executionNote) {
-      updateDetailCompletion(detailId, {
-        isCompleted,
-        actualSets,
-        actualReps,
-        executionNote
-      }, {
-        success: () => {
-          uni.showToast({
-            title: isCompleted === 1 ? '已标记完成' : '已取消完成',
-            icon: 'success'
-          })
-          this.loadPlanDetail()
-        },
-        fail: (err) => {
-          uni.showToast({
-            title: err || '操作失败',
-            icon: 'none'
-          })
-        }
-      })
+    async updateCompletion(detailId, isCompleted, actualSets, actualReps, executionNote) {
+      try {
+        await updateDetailCompletion(detailId, {
+          isCompleted,
+          actualSets,
+          actualReps,
+          executionNote
+        })
+        
+        uni.showToast({
+          title: isCompleted === 1 ? '已标记完成' : '已取消完成',
+          icon: 'success'
+        })
+        this.loadPlanDetail()
+      } catch (err) {
+        uni.showToast({
+          title: err?.message || '操作失败',
+          icon: 'none'
+        })
+      }
     },
     
     // 获取星期名称

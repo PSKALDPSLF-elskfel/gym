@@ -118,6 +118,142 @@
 			}
 		},
 		{
+			"path" : "pages/notification/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "系统通知",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/equipment/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "器材列表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/equipment/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "器材详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/equipment/booking",
+			"style" : 
+			{
+				"navigationBarTitleText" : "器材预约",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/equipment/my-booking",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的器材预约",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/training-plan/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的训练计划",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/training-plan/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "计划详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/training-plan/history",
+			"style" : 
+			{
+				"navigationBarTitleText" : "训练历史",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/training-plan/template-select",
+			"style" : 
+			{
+				"navigationBarTitleText" : "选择模板",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/workout/add-record",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加运动记录",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/workout/history",
+			"style" : 
+			{
+				"navigationBarTitleText" : "运动历史",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/workout/statistics",
+			"style" : 
+			{
+				"navigationBarTitleText" : "运动统计",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/workout/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "运动详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/body-test/report",
+			"style" : 
+			{
+				"navigationBarTitleText" : "体测报告",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/body-test/history",
+			"style" : 
+			{
+				"navigationBarTitleText" : "体测历史",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/body-test/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "体测详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/body-test/compare",
+			"style" : 
+			{
+				"navigationBarTitleText" : "数据对比",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path" : "pages/page2/page2",
 			"style" : 
 			{
@@ -130,6 +266,14 @@
 			"style" : 
 			{
 				"navigationBarTitleText" : ""
+			}
+		},
+		{
+			"path" : "pages/debug/api-test",
+			"style" : 
+			{
+				"navigationBarTitleText" : "API诊断",
+				"navigationStyle": "custom"
 			}
 		}
 	],
@@ -151,6 +295,12 @@
 			{
 				"text":"课程",
 				"pagePath": "pages/course/list",
+				"iconPath": "/static/images/shop.png",
+				"selectedIconPath": "/static/images/shop-selected.png"
+			},
+			{
+				"text":"器材",
+				"pagePath": "pages/equipment/list",
 				"iconPath": "/static/images/shop.png",
 				"selectedIconPath": "/static/images/shop-selected.png"
 			},	

@@ -9,10 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import jakarta.annotation.Resource;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.example.springboot.entity.GymCoach;
 import org.example.springboot.entity.User;
+import org.example.springboot.mapper.GymCoachMapper;
 import org.example.springboot.mapper.UserMapper;
 import org.example.springboot.dto.command.*;
 import org.example.springboot.dto.query.*;
@@ -33,6 +36,9 @@ public class UserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private GymCoachMapper coachMapper;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -122,6 +128,21 @@ public class UserService {
 
             userMapper.insert(user);
             log.info("用户注册成功: {}", user.getUsername());
+
+            // 如果是教练类型，同时创建教练信息
+            if ("COACH".equals(registerDTO.getUserType())) {
+                GymCoach coach = GymCoach.builder()
+                        .userId(user.getId())
+                        .specialty("") // 默认为空，后续可由教练完善
+                        .introduction("") // 默认为空
+                        .rating(new BigDecimal("0.0")) // 默认评分为0
+                        .status(1) // 默认在职
+                        .createTime(LocalDateTime.now())
+                        .updateTime(LocalDateTime.now())
+                        .build();
+                coachMapper.insert(coach);
+                log.info("教练信息创建成功: userId={}, coachId={}", user.getId(), coach.getId());
+            }
 
             return UserConvert.entityToDetailResponse(user);
 

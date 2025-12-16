@@ -154,8 +154,8 @@ import { onLoad } from '@dcloudio/uni-app'
 import { getEquipmentById } from '@/apis/equipment.js'
 import { getEquipmentQueueList, joinEquipmentQueue, leaveEquipmentQueue } from '@/apis/equipment.js'
 import { getUserEquipmentBookings } from '@/apis/equipment.js'
-import { formatDate, formatTime } from '@/utils/dateUtils.js'
-import { getToken, getUserInfo } from '@/utils/auth.js'
+import DateUtils from '@/utils/dateUtils.js'
+import { useUserStore } from '@/store/user.js'
 
 // 数据
 const equipmentDetail = ref(null)
@@ -231,9 +231,9 @@ const checkUserBooking = () => {
     showDefaultMsg: false,
     onSuccess: (data) => {
       // 检查是否有该器材的预约中记录
-      hasActiveBooking.value = data.some(booking => 
+      hasActiveBooking.value = (Array.isArray(data) && data.length > 0) ? data.some(booking => 
         booking.equipmentId === equipmentId.value && booking.status === 1
-      )
+      ) : false
     },
     onError: () => {
       hasActiveBooking.value = false
@@ -271,14 +271,15 @@ const getQueueStatusClass = (status) => {
  */
 const formatDateTime = (dateTime) => {
   if (!dateTime) return ''
-  return `${formatDate(dateTime)} ${formatTime(dateTime)}`
+  return DateUtils.formatDateTime(dateTime)
 }
 
 /**
  * 跳转到预约页面
  */
 const goToBooking = () => {
-  if (!getToken()) {
+  const userStore = useUserStore()
+  if (!userStore.isLoggedIn) {
     uni.showToast({
       title: '请先登录',
       icon: 'none'
@@ -300,7 +301,8 @@ const goToBooking = () => {
  * 加入排队
  */
 const handleJoinQueue = () => {
-  if (!getToken()) {
+  const userStore = useUserStore()
+  if (!userStore.isLoggedIn) {
     uni.showToast({
       title: '请先登录',
       icon: 'none'
@@ -362,9 +364,9 @@ onLoad((options) => {
   equipmentId.value = options.id
   
   // 获取当前用户ID
-  const userInfo = getUserInfo()
-  if (userInfo) {
-    currentUserId.value = userInfo.id
+  const userStore = useUserStore()
+  if (userStore.isLoggedIn) {
+    currentUserId.value = userStore.userId
   }
   
   fetchEquipmentDetail()

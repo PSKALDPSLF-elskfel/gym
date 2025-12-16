@@ -10,6 +10,7 @@ import org.example.springboot.dto.response.CourseBookingResponseDTO;
 import org.example.springboot.entity.GymCourse;
 import org.example.springboot.entity.GymCourseBooking;
 import org.example.springboot.entity.GymCourseSchedule;
+import org.example.springboot.entity.GymCourseSignIn;
 import org.example.springboot.entity.User;
 import org.example.springboot.exception.BusinessException;
 import org.example.springboot.mapper.GymCourseBookingMapper;
@@ -48,6 +49,9 @@ public class CourseBookingService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private CourseSignInService signInService;
 
     /**
      * 创建预约
@@ -217,7 +221,10 @@ public class CourseBookingService {
             course = courseMapper.selectById(schedule.getCourseId());
         }
 
-        return CourseBookingConvert.toDetailDTO(booking, user, schedule, course);
+        // 查询签到信息
+        GymCourseSignIn signIn = signInService.getByBookingId(bookingId);
+
+        return CourseBookingConvert.toDetailDTO(booking, user, schedule, course, signIn);
     }
 
     /**
@@ -261,12 +268,19 @@ public class CourseBookingService {
 
         User user = userMapper.selectById(userId);
 
+        // 查询签到信息
+        List<Long> bookingIds = bookings.stream()
+                .map(GymCourseBooking::getId)
+                .collect(Collectors.toList());
+        Map<Long, GymCourseSignIn> signInMap = getSignInMapByBookingIds(bookingIds);
+
         // 转换为DetailDTO
         List<CourseBookingDetailDTO> result = new ArrayList<>();
         for (GymCourseBooking booking : bookings) {
             GymCourseSchedule schedule = scheduleMap.get(booking.getScheduleId());
             GymCourse course = schedule != null ? courseMap.get(schedule.getCourseId()) : null;
-            result.add(CourseBookingConvert.toDetailDTO(booking, user, schedule, course));
+            GymCourseSignIn signIn = signInMap.get(booking.getId());
+            result.add(CourseBookingConvert.toDetailDTO(booking, user, schedule, course, signIn));
         }
 
         return result;
@@ -304,11 +318,18 @@ public class CourseBookingService {
                 userMapper.selectBatchIds(userIds).stream()
                         .collect(Collectors.toMap(User::getId, u -> u));
 
+        // 查询签到信息
+        List<Long> bookingIds = bookings.stream()
+                .map(GymCourseBooking::getId)
+                .collect(Collectors.toList());
+        Map<Long, GymCourseSignIn> signInMap = getSignInMapByBookingIds(bookingIds);
+
         // 转换为DetailDTO
         List<CourseBookingDetailDTO> result = new ArrayList<>();
         for (GymCourseBooking booking : bookings) {
             User user = userMap.get(booking.getUserId());
-            result.add(CourseBookingConvert.toDetailDTO(booking, user, schedule, course));
+            GymCourseSignIn signIn = signInMap.get(booking.getId());
+            result.add(CourseBookingConvert.toDetailDTO(booking, user, schedule, course, signIn));
         }
 
         return result;
@@ -430,13 +451,20 @@ public class CourseBookingService {
                 courseMapper.selectBatchIds(courseIds).stream()
                         .collect(Collectors.toMap(GymCourse::getId, c -> c));
 
+        // 查询签到信息
+        List<Long> bookingIds = bookings.stream()
+                .map(GymCourseBooking::getId)
+                .collect(Collectors.toList());
+        Map<Long, GymCourseSignIn> signInMap = getSignInMapByBookingIds(bookingIds);
+
         // 转换为DetailDTO
         List<CourseBookingDetailDTO> detailList = new ArrayList<>();
         for (GymCourseBooking booking : bookings) {
             User user = userMap.get(booking.getUserId());
             GymCourseSchedule schedule = scheduleMap.get(booking.getScheduleId());
             GymCourse course = schedule != null ? courseMap.get(schedule.getCourseId()) : null;
-            detailList.add(CourseBookingConvert.toDetailDTO(booking, user, schedule, course));
+            GymCourseSignIn signIn = signInMap.get(booking.getId());
+            detailList.add(CourseBookingConvert.toDetailDTO(booking, user, schedule, course, signIn));
         }
 
         // 构建分页结果
@@ -511,6 +539,36 @@ public class CourseBookingService {
 
         public BigDecimal getDiscountRate() {
             return discountRate;
+        }
+    }
+
+    /**
+     * 根据预约ID列表批量查询签到信息
+     * @param bookingIds 预约ID列表
+     * @return 签到信息Map(key: bookingId, value: signIn)
+     */
+    private Map<Long, GymCourseSignIn> getSignInMapByBookingIds(List<Long> bookingIds) {
+        if (bookingIds == null || bookingIds.isEmpty()) {
+            return Map.of();
+        }
+
+        try {
+            // 使用批量查询代替循环单条查询，提高性能和稳定性
+            LambdaQueryWrapper<GymCourseSignIn> wrapper = new LambdaQueryWrapper<>();
+            wrapper.in(GymCourseSignIn::getBookingId, bookingIds);
+            
+            List<GymCourseSignIn> signInList = signInService.listByBookingIds(wrapper);
+            
+            return signInList.stream()
+                    .collect(Collectors.toMap(
+                            GymCourseSignIn::getBookingId,
+                            signIn -> signIn,
+                            (existing, replacement) -> existing
+                    ));
+        } catch (Exception e) {
+            log.error("批量查询签到信息失败: bookingIds={}", bookingIds, e);
+            // 发生异常时返回空map，避免导致整个查询失败
+            return Map.of();
         }
     }
 }

@@ -108,7 +108,7 @@
 import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { getUserEquipmentBookings, cancelEquipmentBooking, startUsingEquipment, endUsingEquipment } from '@/apis/equipment.js'
-import { formatDate, formatTime } from '@/utils/dateUtils.js'
+import DateUtils from '@/utils/dateUtils.js'
 
 // 状态标签
 const statusTabs = [
@@ -129,7 +129,7 @@ const loading = ref(false)
 // 格式化日期时间
 const formatDateTime = (dateTime) => {
   if (!dateTime) return ''
-  return `${formatDate(dateTime)} ${formatTime(dateTime)}`
+  return DateUtils.formatDateTime(dateTime)
 }
 
 // 获取状态样式类

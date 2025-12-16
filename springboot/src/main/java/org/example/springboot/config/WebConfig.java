@@ -2,6 +2,7 @@ package org.example.springboot.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * 1. API前缀配置
  * 2. 静态资源映射配置  
  * 3. API文档资源配置
+ * 4. CORS跨域配置
  * 
  * 🚀 架构优势：
  * - 统一管理所有Web相关配置
@@ -99,5 +101,36 @@ public class WebConfig implements WebMvcConfigurer {
                 
         registry.addResourceHandler("/v3/api-docs/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+    /**
+     * 配置CORS跨域支持
+     * 
+     * 🎯 配置目标：
+     * - 允许前端开发服务器（localhost:5173）访问后端API
+     * - 支持所有HTTP方法（GET、POST、PUT、DELETE等）
+     * - 允许携带认证信息（JWT Token）
+     * - 支持所有请求头
+     * 
+     * 📝 安全说明：
+     * - 开发环境允许所有来源，生产环境应限制具体域名
+     * - allowCredentials=true 允许携带Cookie和Authorization header
+     * - maxAge=3600 预检请求缓存1小时，减少OPTIONS请求
+     * 
+     * @param registry CORS注册器
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                // 允许的源（开发环境）
+                .allowedOriginPatterns("*")
+                // 允许的HTTP方法
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+                // 允许的请求头
+                .allowedHeaders("*")
+                // 允许携带认证信息
+                .allowCredentials(true)
+                // 预检请求缓存时间（秒）
+                .maxAge(3600);
     }
 }

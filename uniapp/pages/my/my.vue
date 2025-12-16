@@ -30,6 +30,17 @@
 
       <!-- 功能菜单 -->
       <view class="menu-section">
+        <view class="menu-item" @click="goToNotifications">
+          <view class="menu-left">
+            <text class="fa fa-bell menu-icon" style="color: #ff6b00;"></text>
+            <text class="menu-text">系统通知</text>
+          </view>
+          <view class="menu-right">
+            <view v-if="unreadCount > 0" class="badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</view>
+            <text class="fa fa-chevron-right menu-arrow"></text>
+          </view>
+        </view>
+
         <view class="menu-item" @click="goToMyBookings">
           <view class="menu-left">
             <text class="fa fa-calendar menu-icon" style="color: #52c41a;"></text>
@@ -54,6 +65,30 @@
           <text class="fa fa-chevron-right menu-arrow"></text>
         </view>
 
+        <view class="menu-item" @click="goToTrainingPlan">
+          <view class="menu-left">
+            <text class="fa fa-dumbbell menu-icon" style="color: #10b981;"></text>
+            <text class="menu-text">我的训练计划</text>
+          </view>
+          <text class="fa fa-chevron-right menu-arrow"></text>
+        </view>
+
+        <view class="menu-item" @click="goToTrainingHistory">
+          <view class="menu-left">
+            <text class="fa fa-history menu-icon" style="color: #8b5cf6;"></text>
+            <text class="menu-text">训练历史</text>
+          </view>
+          <text class="fa fa-chevron-right menu-arrow"></text>
+        </view>
+
+        <view class="menu-item" @click="goToBodyTest">
+          <view class="menu-left">
+            <text class="fa fa-heartbeat menu-icon" style="color: #ef4444;"></text>
+            <text class="menu-text">体测报告</text>
+          </view>
+          <text class="fa fa-chevron-right menu-arrow"></text>
+        </view>
+
         <view class="menu-item" @click="goToProfile">
           <view class="menu-left">
             <text class="fa fa-user menu-icon"></text>
@@ -69,6 +104,14 @@
           </view>
           <text class="fa fa-chevron-right menu-arrow"></text>
         </view>
+
+        <view class="menu-item" @click="goToApiTest" style="border-top: 2px solid #ff6b00; margin-top: 20px; padding-top: 20px;">
+          <view class="menu-left">
+            <text class="fa fa-bug menu-icon" style="color: #ff6b00;"></text>
+            <text class="menu-text">🔧 API诊断</text>
+          </view>
+          <text class="fa fa-chevron-right menu-arrow"></text>
+        </view>
       </view>
       
       <button class="logout-btn" @click="handleLogout">
@@ -80,13 +123,17 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useUserStore } from '@/store/user.js'
 import { safeLogout } from '@/utils/auth.js'
 import { getFileUrl } from '@/utils/fileUtils.js'
+import { getUnreadCount } from '@/apis/notification.js'
 
 // 获取用户store
 const userStore = useUserStore()
+
+// 未读通知数量
+const unreadCount = ref(0)
 
 // 计算属性
 const isLoggedIn = computed(() => userStore.isLoggedIn)
@@ -101,6 +148,15 @@ const memberType = computed(() => userStore.userInfo?.memberType || 0)
 const goToLogin = () => {
   uni.navigateTo({
     url: '/pages/auth/login'
+  })
+}
+
+/**
+ * 跳转到系统通知页
+ */
+const goToNotifications = () => {
+  uni.navigateTo({
+    url: '/pages/notification/list'
   })
 }
 
@@ -150,6 +206,42 @@ const goToChangePassword = () => {
 }
 
 /**
+ * 跳转到API诊断页
+ */
+const goToApiTest = () => {
+  uni.navigateTo({
+    url: '/pages/debug/api-test'
+  })
+}
+
+/**
+ * 跳转到我的训练计划页
+ */
+const goToTrainingPlan = () => {
+  uni.navigateTo({
+    url: '/pages/training-plan/list'
+  })
+}
+
+/**
+ * 跳转到训练历史页
+ */
+const goToTrainingHistory = () => {
+  uni.navigateTo({
+    url: '/pages/training-plan/history'
+  })
+}
+
+/**
+ * 跳转到体测报告页
+ */
+const goToBodyTest = () => {
+  uni.navigateTo({
+    url: '/pages/body-test/report'
+  })
+}
+
+/**
  * 退出登录
  */
 const handleLogout = async () => {
@@ -163,6 +255,25 @@ const handleLogout = async () => {
     }
   })
 }
+
+/**
+ * 加载未读通知数量
+ */
+const loadUnreadCount = async () => {
+  if (!isLoggedIn.value) return
+  
+  try {
+    const count = await getUnreadCount({ showDefaultMsg: false })
+    unreadCount.value = count || 0
+  } catch (error) {
+    console.error('获取未读通知数量失败:', error)
+  }
+}
+
+// 页面加载时获取未读数量
+onMounted(() => {
+  loadUnreadCount()
+})
 
 /**
  * 获取头像URL
@@ -365,6 +476,24 @@ const getMemberTypeIcon = () => {
       .menu-text {
         font-size: 28rpx;
         color: #333;
+      }
+    }
+
+    .menu-right {
+      display: flex;
+      align-items: center;
+      gap: 16rpx;
+      
+      .badge {
+        min-width: 36rpx;
+        height: 36rpx;
+        line-height: 36rpx;
+        padding: 0 8rpx;
+        background-color: #ff4d4f;
+        color: #fff;
+        font-size: 20rpx;
+        text-align: center;
+        border-radius: 18rpx;
       }
     }
 

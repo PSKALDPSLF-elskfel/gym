@@ -33,7 +33,7 @@ public class User {
     private Long id;
 
     @Schema(description = "用户类型：USER-普通用户，ADMIN-管理员，COACH-教练")
-    @TableField("userType")
+    @TableField("user_type")
     private String userType;
 
     @Schema(description = "用户昵称/管理员姓名")

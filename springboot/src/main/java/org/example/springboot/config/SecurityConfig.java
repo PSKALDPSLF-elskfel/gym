@@ -57,8 +57,15 @@ public class SecurityConfig {
         "/api/user/register",    // 用户注册
         "/api/user/forget",      // 忘记密码
         "/api/user/add",         // 用户添加
-        "/api/file/**",          // 临时公开
-        "/api/**",
+        "/api/file/**",          // 文件上传下载
+        
+        // 公告相关接口（公开访问）
+        "/announcement/**",      // 公告相关接口
+        
+        // 训练计划模板查询接口（公开访问，用户浏览模板）
+        "/api/training-plan-templates/page",   // 模板列表查询
+        "/api/training-plan-templates/{id}",   // 模板详情查询
+        
         // 公开信息接口
         "/api/user/{id}",        // 用户信息查询（公开）
         
@@ -122,6 +129,9 @@ public class SecurityConfig {
         http
             // 禁用CSRF保护（API服务通常不需要）
             .csrf(csrf -> csrf.disable())
+            
+            // 启用CORS支持，使用WebConfig中的配置
+            .cors(cors -> cors.configure(http))
             
             // 配置会话管理为无状态（适合JWT）
             .sessionManagement(session -> 

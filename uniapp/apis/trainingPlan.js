@@ -10,8 +10,8 @@ import request from '@/utils/request.js'
  * url地址：/training-plans/page
  * 请求方式：GET
  */
-export function getTrainingPlanPage(params, callbacks) {
-  return request.get('/training-plans/page', params, callbacks)
+export function getTrainingPlanPage(params, config = {}) {
+  return request.get('/training-plans/page', params, config)
 }
 
 /**
@@ -22,8 +22,8 @@ export function getTrainingPlanPage(params, callbacks) {
  * url地址：/training-plans/{id}
  * 请求方式：GET
  */
-export function getTrainingPlanById(id, callbacks) {
-  return request.get(`/training-plans/${id}`, null, callbacks)
+export function getTrainingPlanById(id, config = {}) {
+  return request.get(`/training-plans/${id}`, null, config)
 }
 
 /**
@@ -34,8 +34,8 @@ export function getTrainingPlanById(id, callbacks) {
  * url地址：/training-plans
  * 请求方式：POST
  */
-export function createTrainingPlan(params, callbacks) {
-  return request.post('/training-plans', params, callbacks)
+export function createTrainingPlan(params, config = {}) {
+  return request.post('/training-plans', params, config)
 }
 
 /**
@@ -46,8 +46,8 @@ export function createTrainingPlan(params, callbacks) {
  * url地址：/training-plans/{id}
  * 请求方式：PUT
  */
-export function updateTrainingPlan(id, params, callbacks) {
-  return request.put(`/training-plans/${id}`, params, callbacks)
+export function updateTrainingPlan(id, params, config = {}) {
+  return request.put(`/training-plans/${id}`, params, config)
 }
 
 /**
@@ -58,8 +58,8 @@ export function updateTrainingPlan(id, params, callbacks) {
  * url地址：/training-plans/{id}
  * 请求方式：DELETE
  */
-export function deleteTrainingPlan(id, callbacks) {
-  return request.delete(`/training-plans/${id}`, null, callbacks)
+export function deleteTrainingPlan(id, config = {}) {
+  return request.delete(`/training-plans/${id}`, config)
 }
 
 // ==================== 训练明细管理 ====================
@@ -72,8 +72,8 @@ export function deleteTrainingPlan(id, callbacks) {
  * url地址：/training-plans/detail/{detailId}/completion
  * 请求方式：PUT
  */
-export function updateDetailCompletion(detailId, params, callbacks) {
-  return request.put(`/training-plans/detail/${detailId}/completion`, null, callbacks, params)
+export function updateDetailCompletion(detailId, params, config = {}) {
+  return request.put(`/training-plans/detail/${detailId}/completion`, params, config)
 }
 
 /**
@@ -84,8 +84,8 @@ export function updateDetailCompletion(detailId, params, callbacks) {
  * url地址：/training-plans/detail/{detailId}/note
  * 请求方式：POST
  */
-export function addExecutionNote(detailId, note, callbacks) {
-  return request.post(`/training-plans/detail/${detailId}/note`, null, callbacks, { note })
+export function addExecutionNote(detailId, note, config = {}) {
+  return request.post(`/training-plans/detail/${detailId}/note`, { note }, config)
 }
 
 /**
@@ -96,8 +96,8 @@ export function addExecutionNote(detailId, note, callbacks) {
  * url地址：/training-plans/execution-history
  * 请求方式：GET
  */
-export function getExecutionHistory(params, callbacks) {
-  return request.get('/training-plans/execution-history', params, callbacks)
+export function getExecutionHistory(params, config = {}) {
+  return request.get('/training-plans/execution-history', params, config)
 }
 
 /**
@@ -108,6 +108,44 @@ export function getExecutionHistory(params, callbacks) {
  * url地址：/training-plans/{id}/progress
  * 请求方式：GET
  */
-export function calculateProgress(id, callbacks) {
-  return request.get(`/training-plans/${id}/progress`, null, callbacks)
+export function calculateProgress(id, config = {}) {
+  return request.get(`/training-plans/${id}/progress`, null, config)
+}
+
+// ==================== 训练计划模板管理 ====================
+
+/**
+ * 分页查询训练计划模板列表
+ * 功能描述：查询可用的训练计划模板（系统模板+公开模板）
+ * 入参：{ currentPage, pageSize, goal?, difficulty?, status? }
+ * 返回参数：{ records: array, total: number }
+ * url地址：/training-plan-templates/page
+ * 请求方式：GET
+ */
+export function getTemplatePage(params, config = {}) {
+  return request.get('/training-plan-templates/page', params, config)
+}
+
+/**
+ * 根据ID查询模板详情
+ * 功能描述：查询指定ID的训练计划模板详情，包含训练动作明细
+ * 入参：id - 模板ID
+ * 返回参数：{ id, name, goal, difficulty, durationDays, description, details: [] }
+ * url地址：/training-plan-templates/{id}
+ * 请求方式：GET
+ */
+export function getTemplateById(id, config = {}) {
+  return request.get(`/training-plan-templates/${id}`, null, config)
+}
+
+/**
+ * 从模板创建训练计划
+ * 功能描述：从选中的模板快速创建一个新的训练计划
+ * 入参：{ templateId, userId, planName }
+ * 返回参数：新创建的训练计划对象
+ * url地址：/training-plan-templates/{templateId}/create-plan
+ * 请求方式：POST
+ */
+export function createPlanFromTemplate(templateId, userId, planName, config = {}) {
+  return request.post(`/training-plan-templates/${templateId}/create-plan`, { userId, planName }, config)
 }

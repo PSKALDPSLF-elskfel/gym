@@ -24,6 +24,12 @@ public class CourseCreateDTO {
     @Size(max = 100, message = "课程名称长度不能超过100个字符")
     private String name;
 
+    @Schema(description = "课程分类ID")
+    private Long categoryId;
+
+    @Schema(description = "教练ID")
+    private Long coachId;
+
     @Schema(description = "课程描述")
     private String description;
 

@@ -31,6 +31,14 @@ public class GymCourse {
     @Schema(description = "课程名称")
     private String name;
 
+    @Schema(description = "课程分类ID")
+    @TableField("category_id")
+    private Long categoryId;
+
+    @Schema(description = "教练ID")
+    @TableField("coach_id")
+    private Long coachId;
+
     @Schema(description = "课程描述")
     private String description;
 

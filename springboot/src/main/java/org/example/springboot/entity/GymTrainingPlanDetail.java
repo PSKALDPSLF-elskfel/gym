@@ -69,6 +69,18 @@ public class GymTrainingPlanDetail {
     @TableField("complete_time")
     private LocalDateTime completeTime;
 
+    @Schema(description = "执行备注")
+    @TableField("execution_note")
+    private String executionNote;
+
+    @Schema(description = "实际完成组数")
+    @TableField("actual_sets")
+    private Integer actualSets;
+
+    @Schema(description = "实际完成次数")
+    @TableField("actual_reps")
+    private Integer actualReps;
+
     @Schema(description = "创建时间")
     @TableField("create_time")
     private LocalDateTime createTime;

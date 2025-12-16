@@ -52,7 +52,7 @@
 
 <script>
 import { getExecutionHistory } from '@/apis/trainingPlan.js'
-import { getUserInfo } from '@/utils/auth.js'
+import { getCurrentUser } from '@/utils/auth.js'
 
 export default {
   data() {
@@ -68,7 +68,7 @@ export default {
   methods: {
     // 加载历史记录
     loadHistory() {
-      const userInfo = getUserInfo()
+      const userInfo = getCurrentUser()
       if (!userInfo || !userInfo.id) {
         uni.showToast({
           title: '请先登录',

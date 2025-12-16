@@ -73,14 +73,48 @@
     <view v-else-if="planList.length > 0" class="no-more">
       <text>没有更多了</text>
     </view>
+    
+    <!-- 浮动创建按钮 -->
+    <view class="fab-container">
+      <view class="fab-btn" @click="showCreateOptions">
+        <text class="fab-icon">+</text>
+      </view>
+    </view>
+    
+    <!-- 创建方式选择弹窗 -->
+    <view v-if="showCreatePopup" class="popup-mask" @click="hideCreateOptions">
+      <view class="create-popup" @click.stop>
+        <view class="popup-title">创建训练计划</view>
+        <view class="create-options">
+          <view class="create-option" @click="createFromTemplate">
+            <view class="option-icon">📋</view>
+            <view class="option-content">
+              <view class="option-title">从模板创建</view>
+              <view class="option-desc">选择专业模板快速创建</view>
+            </view>
+          </view>
+          <view class="create-option" @click="createFromScratch">
+            <view class="option-icon">✍️</view>
+            <view class="option-content">
+              <view class="option-title">自定义创建</view>
+              <view class="option-desc">完全自定义您的计划</view>
+            </view>
+          </view>
+        </view>
+        <view class="popup-cancel" @click="hideCreateOptions">
+          <text>取消</text>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script>
 import { getTrainingPlanPage, calculateProgress } from '@/apis/trainingPlan.js'
-import { getUserInfo } from '@/utils/auth.js'
+import { getCurrentUser } from '@/utils/auth.js'
 
 export default {
+  components: {},
   data() {
     return {
       statusTabs: [
@@ -93,7 +127,8 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      hasMore: false
+      hasMore: false,
+      showCreatePopup: false
     }
   },
   
@@ -104,7 +139,7 @@ export default {
   methods: {
     // 加载训练计划列表
     async loadPlanList() {
-      const userInfo = getUserInfo()
+      const userInfo = getCurrentUser()
       if (!userInfo || !userInfo.id) {
         uni.showToast({
           title: '请先登录',
@@ -113,56 +148,49 @@ export default {
         return
       }
       
-      uni.showLoading({ title: '加载中...' })
-      
-      getTrainingPlanPage({
-        currentPage: this.currentPage,
-        pageSize: this.pageSize,
-        userId: userInfo.id,
-        status: this.currentStatus
-      }, {
-        success: async (res) => {
-          uni.hideLoading()
-          const records = res.records || []
-          
-          // 加载每个计划的进度
-          for (let plan of records) {
-            await this.loadProgress(plan)
-          }
-          
-          if (this.currentPage === 1) {
-            this.planList = records
-          } else {
-            this.planList = [...this.planList, ...records]
-          }
-          
-          this.total = res.total
-          this.hasMore = this.planList.length < this.total
-        },
-        fail: (err) => {
-          uni.hideLoading()
-          uni.showToast({
-            title: err || '加载失败',
-            icon: 'none'
-          })
+      try {
+        uni.showLoading({ title: '加载中...' })
+        
+        const res = await getTrainingPlanPage({
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
+          userId: userInfo.id,
+          status: this.currentStatus
+        })
+        
+        const records = res.records || []
+        
+        // 加载每个计划的进度
+        for (let plan of records) {
+          await this.loadProgress(plan)
         }
-      })
+        
+        if (this.currentPage === 1) {
+          this.planList = records
+        } else {
+          this.planList = [...this.planList, ...records]
+        }
+        
+        this.total = res.total
+        this.hasMore = this.planList.length < this.total
+        uni.hideLoading()
+      } catch (err) {
+        uni.hideLoading()
+        uni.showToast({
+          title: err?.message || '加载失败',
+          icon: 'none'
+        })
+      }
     },
     
     // 加载计划进度
     async loadProgress(plan) {
-      return new Promise((resolve) => {
-        calculateProgress(plan.id, {
-          success: (progress) => {
-            plan.progress = Math.round(progress || 0)
-            resolve()
-          },
-          fail: () => {
-            plan.progress = 0
-            resolve()
-          }
-        })
-      })
+      try {
+        const progress = await calculateProgress(plan.id)
+        plan.progress = Math.round(progress || 0)
+      } catch (err) {
+        plan.progress = 0
+      }
     },
     
     // 切换状态
@@ -196,6 +224,33 @@ export default {
       const month = String(date.getMonth() + 1).padStart(2, '0')
       const day = String(date.getDate()).padStart(2, '0')
       return `${year}-${month}-${day}`
+    },
+    
+    // 显示创建选项
+    showCreateOptions() {
+      this.showCreatePopup = true
+    },
+    
+    // 隐藏创建选项
+    hideCreateOptions() {
+      this.showCreatePopup = false
+    },
+    
+    // 从模板创建
+    createFromTemplate() {
+      this.showCreatePopup = false
+      uni.navigateTo({
+        url: '/pages/training-plan/template-select'
+      })
+    },
+    
+    // 自定义创建
+    createFromScratch() {
+      this.showCreatePopup = false
+      uni.showToast({
+        title: '自定义创建功能待开发',
+        icon: 'none'
+      })
     }
   }
 }
@@ -360,5 +415,111 @@ export default {
   padding: 30rpx;
   font-size: 28rpx;
   color: #999;
+}
+
+/* 浮动按钮 */
+.fab-container {
+  position: fixed;
+  right: 30rpx;
+  bottom: 150rpx;
+  z-index: 999;
+}
+
+.fab-btn {
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.4);
+}
+
+.fab-icon {
+  font-size: 60rpx;
+  color: #fff;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* 弹窗蒙版 */
+.popup-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  z-index: 9999;
+}
+
+/* 创建弹窗 */
+.create-popup {
+  background-color: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 40rpx 30rpx 60rpx;
+  width: 100%;
+}
+
+.popup-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30rpx;
+  color: #333;
+}
+
+.create-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.create-option {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background-color: #f9f9f9;
+  border-radius: 16rpx;
+  transition: all 0.3s;
+}
+
+.create-option:active {
+  background-color: #f0f0f0;
+  transform: scale(0.98);
+}
+
+.option-icon {
+  font-size: 60rpx;
+  margin-right: 20rpx;
+}
+
+.option-content {
+  flex: 1;
+}
+
+.option-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.option-desc {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.popup-cancel {
+  text-align: center;
+  padding: 24rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #666;
 }
 </style>

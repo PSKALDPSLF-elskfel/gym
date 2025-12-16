@@ -22,6 +22,8 @@ public class CourseConvert {
         return GymCourse.builder()
                 .id(createDTO.getId())
                 .name(createDTO.getName())
+                .categoryId(createDTO.getCategoryId())
+                .coachId(createDTO.getCoachId())
                 .description(createDTO.getDescription())
                 .coverImage(createDTO.getCoverImage())
                 .duration(createDTO.getDuration())
@@ -42,6 +44,8 @@ public class CourseConvert {
         return GymCourse.builder()
                 .id(updateDTO.getId())
                 .name(updateDTO.getName())
+                .categoryId(updateDTO.getCategoryId())
+                .coachId(updateDTO.getCoachId())
                 .description(updateDTO.getDescription())
                 .coverImage(updateDTO.getCoverImage())
                 .duration(updateDTO.getDuration())
@@ -58,6 +62,17 @@ public class CourseConvert {
      * @return 课程响应DTO
      */
     public static CourseResponseDTO entityToResponse(GymCourse entity) {
+        return entityToResponse(entity, null, null);
+    }
+
+    /**
+     * 实体转换为响应DTO（包含分类和教练信息）
+     * @param entity GymCourse实体
+     * @param categoryName 分类名称
+     * @param coachName 教练姓名
+     * @return 课程响应DTO
+     */
+    public static CourseResponseDTO entityToResponse(GymCourse entity, String categoryName, String coachName) {
         if (entity == null) {
             return null;
         }
@@ -65,6 +80,10 @@ public class CourseConvert {
         return CourseResponseDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
+                .categoryId(entity.getCategoryId())
+                .categoryName(categoryName)
+                .coachId(entity.getCoachId())
+                .coachName(coachName)
                 .description(entity.getDescription())
                 .coverImage(entity.getCoverImage())
                 .duration(entity.getDuration())

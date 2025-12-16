@@ -58,4 +58,13 @@ public class TrainingPlanDetailResponseDTO {
 
     @Schema(description = "完成时间")
     private LocalDateTime completeTime;
+
+    @Schema(description = "执行备注")
+    private String executionNote;
+
+    @Schema(description = "实际完成组数")
+    private Integer actualSets;
+
+    @Schema(description = "实际完成次数")
+    private Integer actualReps;
 }

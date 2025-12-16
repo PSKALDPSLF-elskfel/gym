@@ -26,6 +26,18 @@ public class CourseResponseDTO {
     @Schema(description = "课程名称")
     private String name;
 
+    @Schema(description = "课程分类ID")
+    private Long categoryId;
+
+    @Schema(description = "课程分类名称")
+    private String categoryName;
+
+    @Schema(description = "教练ID")
+    private Long coachId;
+
+    @Schema(description = "教练姓名")
+    private String coachName;
+
     @Schema(description = "课程描述")
     private String description;
 

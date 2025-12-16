@@ -4,6 +4,7 @@
  */
 
 import { useUserStore } from '@/store/user.js'
+import { getBaseUrl } from '@/config/site.js'
 
 // 错误类型枚举
 const ErrorTypes = {
@@ -16,19 +17,19 @@ const ErrorTypes = {
 // 请求计数器
 let requestId = 0
 
-// 基础配置
+// 基础配置 - 使用统一的 baseURL 获取方法
+const baseURL = getBaseUrl()
+
 const baseConfig = {
-  // #ifdef H5
-  baseURL: '/api', // H5端使用代理
-  // #endif
-  // #ifndef H5
-  baseURL: 'http://localhost:8888/api', // 非H5端使用完整地址
-  // #endif
+  baseURL,
   timeout: 30000, // 增加超时时间到30秒，避免首次加载超时
   header: {
     'Content-Type': 'application/json;charset=utf-8'
   }
 }
+
+// 开发调试：打印当前baseURL
+console.log('🌐 API Base URL:', baseConfig.baseURL)
 
 /**
  * 获取完整的请求URL
@@ -37,7 +38,9 @@ function getFullUrl(url) {
   if (url.startsWith('http')) {
     return url
   }
-  return baseConfig.baseURL + url
+  const fullUrl = baseConfig.baseURL + url
+  console.log('📍 Full URL:', fullUrl)
+  return fullUrl
 }
 
 /**
@@ -134,10 +137,13 @@ function request(options = {}) {
     // 处理GET请求参数
     let finalUrl = url
     if (params && method.toUpperCase() === 'GET') {
-      const queryString = Object.keys(params)
+      const queryParams = Object.keys(params)
+        .filter(key => params[key] !== null && params[key] !== undefined && params[key] !== '')
         .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
         .join('&')
-      finalUrl = `${url}${url.includes('?') ? '&' : '?'}${queryString}`
+      if (queryParams) {
+        finalUrl = `${url}${url.includes('?') ? '&' : '?'}${queryParams}`
+      }
     }
 
     console.log(`📤 发送请求 [${currentRequestId}]:`, {
@@ -161,8 +167,14 @@ function request(options = {}) {
           method: method.toUpperCase(),
           url: finalUrl,
           code: res.data?.code,
-          time: `${responseTime}ms`
+          time: `${responseTime}ms`,
+          statusCode: res.statusCode
         })
+        
+        // 完整响应内容日志（用于调试）
+        if (res.data?.code !== "200") {
+          console.log(`响应详情 [${currentRequestId}]:`, JSON.stringify(res.data, null, 2))
+        }
 
         // HTTP状态码检查
         if (res.statusCode !== 200) {
@@ -171,6 +183,13 @@ function request(options = {}) {
             code: res.statusCode,
             message: `HTTP错误(${res.statusCode})`,
             requestId: currentRequestId
+          }
+          
+          // HTTP 500 错误时，尝试从响应体中获取详细错误信息
+          if (res.statusCode === 500 && res.data) {
+            const errorMsg = res.data.msg || res.data.message || res.data.error || '服务器内部错误'
+            error.message = errorMsg
+            console.error(`服务器错误详情 [${currentRequestId}]:`, res.data)
           }
 
           if (errorMsg) {
@@ -210,6 +229,7 @@ function request(options = {}) {
           }
         } else {
           // 业务错误处理
+          console.error(`业务错误 [${currentRequestId}]:`, responseData)
           const error = {
             type: ErrorTypes.BUSINESS,
             code: responseData.code,

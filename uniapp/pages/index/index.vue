@@ -88,6 +88,30 @@
           <text class="card-title">我的预约</text>
           <text class="card-desc">管理预约记录</text>
         </view>
+        
+        <view class="menu-card" @click="goToWorkoutHistory">
+          <view class="card-icon">
+            <text class="fa fa-heartbeat"></text>
+          </view>
+          <text class="card-title">运动记录</text>
+          <text class="card-desc">记录运动数据</text>
+        </view>
+        
+        <view class="menu-card" @click="goToWorkoutStats">
+          <view class="card-icon">
+            <text class="fa fa-bar-chart"></text>
+          </view>
+          <text class="card-title">运动统计</text>
+          <text class="card-desc">查看数据分析</text>
+        </view>
+        
+        <view class="menu-card" @click="goToTrainingPlan">
+          <view class="card-icon">
+            <text class="fa fa-trophy"></text>
+          </view>
+          <text class="card-title">训练计划</text>
+          <text class="card-desc">制定训练目标</text>
+        </view>
       </view>
     </view>
   </view>
@@ -159,6 +183,33 @@ const goToMyBookings = () => {
 }
 
 /**
+ * 跳转到运动历史
+ */
+const goToWorkoutHistory = () => {
+  uni.navigateTo({
+    url: '/pages/workout/history'
+  })
+}
+
+/**
+ * 跳转到运动统计
+ */
+const goToWorkoutStats = () => {
+  uni.navigateTo({
+    url: '/pages/workout/statistics'
+  })
+}
+
+/**
+ * 跳转到训练计划
+ */
+const goToTrainingPlan = () => {
+  uni.navigateTo({
+    url: '/pages/training-plan/list'
+  })
+}
+
+/**
  * 获取公告列表
  */
 const fetchAnnouncements = () => {
@@ -216,8 +267,17 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.page-wrap {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .page-content {
-  padding-bottom: 40rpx;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 140rpx;
   background: #f5f5f5;
   
   // 轮播图区域
@@ -343,9 +403,9 @@ onMounted(() => {
   background: #fff;
   border: 1rpx solid #e8e8e8;
   border-radius: 16rpx;
-  padding: 40rpx 20rpx;
+  padding: 30rpx 20rpx;
   text-align: center;
-  min-height: 200rpx;
+  min-height: 180rpx;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -353,9 +413,9 @@ onMounted(() => {
 }
 
 .card-icon {
-  margin-bottom: 20rpx;
-  width: 100rpx;
-  height: 100rpx;
+  margin-bottom: 16rpx;
+  width: 80rpx;
+  height: 80rpx;
   background: #fff5f0;
   border-radius: 50%;
   display: flex;
@@ -363,22 +423,22 @@ onMounted(() => {
   justify-content: center;
   
   .fa {
-    font-size: 48rpx;
+    font-size: 40rpx;
     color: #ff6b35;
   }
 }
 
 .card-title {
   display: block;
-  font-size: 30rpx;
+  font-size: 26rpx;
   font-weight: 600;
   color: #333;
-  margin-bottom: 10rpx;
+  margin-bottom: 8rpx;
 }
 
 .card-desc {
   display: block;
-  font-size: 24rpx;
+  font-size: 22rpx;
   color: #999;
   line-height: 1.4;
 }

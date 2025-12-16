@@ -8,15 +8,20 @@ import org.example.springboot.dto.command.CourseCreateDTO;
 import org.example.springboot.dto.command.CourseUpdateDTO;
 import org.example.springboot.dto.response.CourseResponseDTO;
 import org.example.springboot.entity.GymCourse;
+import org.example.springboot.entity.GymCourseCategory;
+import org.example.springboot.entity.User;
 import org.example.springboot.enums.CourseStatus;
 import org.example.springboot.exception.BusinessException;
 import org.example.springboot.mapper.GymCourseMapper;
+import org.example.springboot.mapper.GymCourseCategoryMapper;
+import org.example.springboot.mapper.UserMapper;
 import org.example.springboot.service.convert.CourseConvert;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +34,12 @@ public class CourseService {
 
     @Resource
     private GymCourseMapper gymCourseMapper;
+
+    @Resource
+    private GymCourseCategoryMapper courseCategoryMapper;
+
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 创建课程
@@ -47,6 +58,31 @@ public class CourseService {
         // 校验状态
         if (!CourseStatus.isValidCode(createDTO.getStatus())) {
             throw new BusinessException("无效的课程状态");
+        }
+
+        // 校验课程分类
+        if (createDTO.getCategoryId() != null) {
+            GymCourseCategory category = courseCategoryMapper.selectById(createDTO.getCategoryId());
+            if (category == null) {
+                throw new BusinessException("课程分类不存在");
+            }
+            if (category.getStatus() == 0) {
+                throw new BusinessException("课程分类已禁用");
+            }
+        }
+
+        // 校验教练
+        if (createDTO.getCoachId() != null) {
+            User coach = userMapper.selectById(createDTO.getCoachId());
+            if (coach == null) {
+                throw new BusinessException("教练不存在");
+            }
+            if (!"COACH".equals(coach.getUserType())) {
+                throw new BusinessException("指定用户不是教练");
+            }
+            if (coach.getStatus() == 0) {
+                throw new BusinessException("教练已禁用");
+            }
         }
 
         // 检查课程名称是否重复
@@ -84,6 +120,31 @@ public class CourseService {
         // 校验状态
         if (!CourseStatus.isValidCode(updateDTO.getStatus())) {
             throw new BusinessException("无效的课程状态");
+        }
+
+        // 校验课程分类
+        if (updateDTO.getCategoryId() != null) {
+            GymCourseCategory category = courseCategoryMapper.selectById(updateDTO.getCategoryId());
+            if (category == null) {
+                throw new BusinessException("课程分类不存在");
+            }
+            if (category.getStatus() == 0) {
+                throw new BusinessException("课程分类已禁用");
+            }
+        }
+
+        // 校验教练
+        if (updateDTO.getCoachId() != null) {
+            User coach = userMapper.selectById(updateDTO.getCoachId());
+            if (coach == null) {
+                throw new BusinessException("教练不存在");
+            }
+            if (!"COACH".equals(coach.getUserType())) {
+                throw new BusinessException("指定用户不是教练");
+            }
+            if (coach.getStatus() == 0) {
+                throw new BusinessException("教练已禁用");
+            }
         }
 
         // 检查课程名称是否与其他课程重复
@@ -143,7 +204,21 @@ public class CourseService {
             throw new BusinessException("课程不存在");
         }
 
-        return CourseConvert.entityToResponse(course);
+        // 查询分类名称
+        String categoryName = null;
+        if (course.getCategoryId() != null) {
+            GymCourseCategory category = courseCategoryMapper.selectById(course.getCategoryId());
+            categoryName = category != null ? category.getName() : null;
+        }
+
+        // 查询教练姓名
+        String coachName = null;
+        if (course.getCoachId() != null) {
+            User coach = userMapper.selectById(course.getCoachId());
+            coachName = coach != null ? coach.getNickname() : null;
+        }
+
+        return CourseConvert.entityToResponse(course, categoryName, coachName);
     }
 
     /**
@@ -172,10 +247,37 @@ public class CourseService {
 
         Page<GymCourse> coursePage = gymCourseMapper.selectPage(page, wrapper);
 
+        // 批量查询分类和教练信息
+        List<Long> categoryIds = coursePage.getRecords().stream()
+                .map(GymCourse::getCategoryId)
+                .filter(id -> id != null)
+                .distinct()
+                .collect(Collectors.toList());
+
+        List<Long> coachIds = coursePage.getRecords().stream()
+                .map(GymCourse::getCoachId)
+                .filter(id -> id != null)
+                .distinct()
+                .collect(Collectors.toList());
+
+        // 构建分类映射
+        Map<Long, String> categoryMap = categoryIds.isEmpty() ? Map.of() :
+                courseCategoryMapper.selectBatchIds(categoryIds).stream()
+                        .collect(Collectors.toMap(GymCourseCategory::getId, GymCourseCategory::getName));
+
+        // 构建教练映射
+        Map<Long, String> coachMap = coachIds.isEmpty() ? Map.of() :
+                userMapper.selectBatchIds(coachIds).stream()
+                        .collect(Collectors.toMap(User::getId, User::getNickname));
+
         // 转换为DTO
         Page<CourseResponseDTO> dtoPage = new Page<>(coursePage.getCurrent(), coursePage.getSize(), coursePage.getTotal());
         List<CourseResponseDTO> dtoList = coursePage.getRecords().stream()
-                .map(CourseConvert::entityToResponse)
+                .map(course -> {
+                    String categoryName = course.getCategoryId() != null ? categoryMap.get(course.getCategoryId()) : null;
+                    String coachName = course.getCoachId() != null ? coachMap.get(course.getCoachId()) : null;
+                    return CourseConvert.entityToResponse(course, categoryName, coachName);
+                })
                 .collect(Collectors.toList());
         dtoPage.setRecords(dtoList);
 
@@ -225,8 +327,35 @@ public class CourseService {
 
         List<GymCourse> courseList = gymCourseMapper.selectList(wrapper);
 
+        // 批量查询分类和教练信息
+        List<Long> categoryIds = courseList.stream()
+                .map(GymCourse::getCategoryId)
+                .filter(id -> id != null)
+                .distinct()
+                .collect(Collectors.toList());
+
+        List<Long> coachIds = courseList.stream()
+                .map(GymCourse::getCoachId)
+                .filter(id -> id != null)
+                .distinct()
+                .collect(Collectors.toList());
+
+        // 构建分类映射
+        Map<Long, String> categoryMap = categoryIds.isEmpty() ? Map.of() :
+                courseCategoryMapper.selectBatchIds(categoryIds).stream()
+                        .collect(Collectors.toMap(GymCourseCategory::getId, GymCourseCategory::getName));
+
+        // 构建教练映射
+        Map<Long, String> coachMap = coachIds.isEmpty() ? Map.of() :
+                userMapper.selectBatchIds(coachIds).stream()
+                        .collect(Collectors.toMap(User::getId, User::getNickname));
+
         return courseList.stream()
-                .map(CourseConvert::entityToResponse)
+                .map(course -> {
+                    String categoryName = course.getCategoryId() != null ? categoryMap.get(course.getCategoryId()) : null;
+                    String coachName = course.getCoachId() != null ? coachMap.get(course.getCoachId()) : null;
+                    return CourseConvert.entityToResponse(course, categoryName, coachName);
+                })
                 .collect(Collectors.toList());
     }
 }

@@ -55,7 +55,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result<?> handleException(Exception e) {
-        log.error(e.getMessage(), e);
-        return Result.error(ResultCode.SYSTEM_ERROR.getCode(), "系统错误");
+        log.error("未捕获的系统异常", e);
+        // 开发环境下返回详细错误信息，便于针对性修复
+        String errorMsg = e.getMessage() != null ? e.getMessage() : "未知系统错误";
+        return Result.error(ResultCode.SYSTEM_ERROR.getCode(), errorMsg);
     }
 } 

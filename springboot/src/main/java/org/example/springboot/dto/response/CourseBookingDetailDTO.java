@@ -88,4 +88,13 @@ public class CourseBookingDetailDTO {
 
     @Schema(description = "节省金额")
     private BigDecimal savedAmount;
+
+    @Schema(description = "签到时间")
+    private LocalDateTime checkInTime;
+
+    @Schema(description = "签到方式：1-扫码，2-手动")
+    private Integer signInType;
+
+    @Schema(description = "签到方式显示名称")
+    private String signInTypeDisplayName;
 }

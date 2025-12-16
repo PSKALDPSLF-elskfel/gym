@@ -1,5 +1,6 @@
 package org.example.springboot.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,10 +44,18 @@ public class EquipmentBookingController {
     public Result<Long> createBooking(
             @Valid @RequestBody EquipmentBookingCreateDTO createDTO,
             @RequestHeader("Authorization") String token) {
-        Long userId = jwtTokenUtils.getUserIdFromToken(token.replace("Bearer ", ""));
-        log.info("用户 {} 创建器材预约", userId);
-        Long bookingId = equipmentService.createBooking(createDTO, userId);
-        return Result.success(bookingId);
+        try {
+            Long userId = jwtTokenUtils.getUserIdFromToken(token.replace("Bearer ", ""));
+            if (userId == null) {
+                throw new RuntimeException("无效的token，无法获取用户ID");
+            }
+            log.info("用户 {} 创建器材预约", userId);
+            Long bookingId = equipmentService.createBooking(createDTO, userId);
+            return Result.success(bookingId);
+        } catch (Exception e) {
+            log.error("创建预约失败", e);
+            throw e;
+        }
     }
 
     /**
@@ -58,6 +67,9 @@ public class EquipmentBookingController {
             @Parameter(description = "预约ID") @PathVariable Long bookingId,
             @RequestHeader("Authorization") String token) {
         Long userId = jwtTokenUtils.getUserIdFromToken(token.replace("Bearer ", ""));
+        if (userId == null) {
+            throw new RuntimeException("无效的token，无法获取用户ID");
+        }
         log.info("用户 {} 取消预约 {}", userId, bookingId);
         equipmentService.cancelBooking(bookingId, userId);
         return Result.success();
@@ -72,6 +84,9 @@ public class EquipmentBookingController {
             @Parameter(description = "预约ID") @PathVariable Long bookingId,
             @RequestHeader("Authorization") String token) {
         Long userId = jwtTokenUtils.getUserIdFromToken(token.replace("Bearer ", ""));
+        if (userId == null) {
+            throw new RuntimeException("无效的token，无法获取用户ID");
+        }
         log.info("用户 {} 开始使用器材，预约ID: {}", userId, bookingId);
         equipmentService.startUsing(bookingId, userId);
         return Result.success();
@@ -86,6 +101,9 @@ public class EquipmentBookingController {
             @Parameter(description = "预约ID") @PathVariable Long bookingId,
             @RequestHeader("Authorization") String token) {
         Long userId = jwtTokenUtils.getUserIdFromToken(token.replace("Bearer ", ""));
+        if (userId == null) {
+            throw new RuntimeException("无效的token，无法获取用户ID");
+        }
         log.info("用户 {} 结束使用器材，预约ID: {}", userId, bookingId);
         equipmentService.endUsing(bookingId, userId);
         return Result.success();
@@ -105,6 +123,26 @@ public class EquipmentBookingController {
         return Result.success(list);
     }
 
+    /**
+     * 分页查询所有预约记录（后台管理）
+     */
+    @Operation(summary = "分页查询所有预约记录")
+    @GetMapping("/page")
+    public Result<Page<EquipmentBookingResponseDTO>> getBookingPage(
+            @Parameter(description = "当前页码") @RequestParam(defaultValue = "1") Long current,
+            @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") Long size,
+            @Parameter(description = "器材ID") @RequestParam(required = false) Long equipmentId,
+            @Parameter(description = "用户ID") @RequestParam(required = false) Long userId,
+            @Parameter(description = "状态") @RequestParam(required = false) Integer status) {
+
+        log.info("分页查询预约记录: current={}, size={}, equipmentId={}, userId={}, status={}",
+                current, size, equipmentId, userId, status);
+
+        Page<EquipmentBookingResponseDTO> pageResult = equipmentService.getBookingPage(
+                current, size, equipmentId, userId, status);
+        return Result.success(pageResult);
+    }
+
     // ==================== 器材排队 ====================
 
     /**
@@ -116,6 +154,9 @@ public class EquipmentBookingController {
             @Valid @RequestBody EquipmentQueueCreateDTO createDTO,
             @RequestHeader("Authorization") String token) {
         Long userId = jwtTokenUtils.getUserIdFromToken(token.replace("Bearer ", ""));
+        if (userId == null) {
+            throw new RuntimeException("无效的token，无法获取用户ID");
+        }
         log.info("用户 {} 加入排队", userId);
         Long queueId = equipmentService.joinQueue(userId, createDTO.getEquipmentId());
         return Result.success(queueId);
@@ -130,6 +171,9 @@ public class EquipmentBookingController {
             @Parameter(description = "排队ID") @PathVariable Long queueId,
             @RequestHeader("Authorization") String token) {
         Long userId = jwtTokenUtils.getUserIdFromToken(token.replace("Bearer ", ""));
+        if (userId == null) {
+            throw new RuntimeException("无效的token，无法获取用户ID");
+        }
         log.info("用户 {} 退出排队 {}", userId, queueId);
         equipmentService.leaveQueue(queueId, userId);
         return Result.success();
