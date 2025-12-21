@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.springboot.mapper.GymCoachReviewMapper">
+
+    <!-- 查询教练平均评分 -->
+    <select id="selectAverageRating" resultType="java.lang.Double">
+        SELECT AVG(rating)
+        FROM gym_coach_review
+        WHERE coach_id = #{coachId}
+          AND status = 1
+    </select>
+
+    <!-- 统计教练各星级评价数量 -->
+    <select id="selectRatingStatistics" resultType="map">
+        SELECT
+            COUNT(*) as total_reviews,
+            AVG(rating) as average_rating,
+            SUM(CASE WHEN rating = 5 THEN 1 ELSE 0 END) as rating_5_count,
+            SUM(CASE WHEN rating = 4 THEN 1 ELSE 0 END) as rating_4_count,
+            SUM(CASE WHEN rating = 3 THEN 1 ELSE 0 END) as rating_3_count,
+            SUM(CASE WHEN rating = 2 THEN 1 ELSE 0 END) as rating_2_count,
+            SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END) as rating_1_count
+        FROM gym_coach_review
+        WHERE coach_id = #{coachId}
+          AND status = 1
+    </select>
+
+    <!-- 分页查询教练评价(带用户和教练信息) -->
+    <select id="selectReviewPageWithUserInfo" resultType="map">
+        SELECT
+            r.id,
+            r.user_id,
+            r.coach_id,
+            r.plan_id,
+            r.course_booking_id,
+            r.review_type,
+            r.rating,
+            r.tag_list,
+            r.content,
+            r.images,
+            r.is_anonymous,
+            r.reply,
+            r.reply_time,
+            r.is_top,
+            r.status,
+            r.create_time,
+            r.update_time,
+            u.nickname as user_nickname,
+            u.avatar as user_avatar,
+            cu.nickname as coach_name,
+            cu.avatar as coach_avatar
+        FROM gym_coach_review r
+        LEFT JOIN user u ON r.user_id = u.id
+        LEFT JOIN gym_coach c ON r.coach_id = c.id
+        LEFT JOIN user cu ON c.user_id = cu.id
+        <where>
+            <if test="params.coachId != null">
+                AND r.coach_id = #{params.coachId}
+            </if>
+            <if test="params.userId != null">
+                AND r.user_id = #{params.userId}
+            </if>
+            <if test="params.rating != null">
+                AND r.rating = #{params.rating}
+            </if>
+            <if test="params.status != null">
+                AND r.status = #{params.status}
+            </if>
+        </where>
+        ORDER BY r.is_top DESC, r.create_time DESC
+    </select>
+
+</mapper>
