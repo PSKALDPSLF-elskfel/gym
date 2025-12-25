@@ -20,7 +20,7 @@ import java.util.List;
  * @author system
  */
 @RestController
-@RequestMapping("/api/sys-configs")
+@RequestMapping("/sys-configs")
 @Tag(name = "系统配置管理", description = "系统配置相关接口")
 public class SysConfigController {
 

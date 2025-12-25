@@ -22,7 +22,14 @@
         </view>
         
         <view class="course-info">
-          <view class="course-name">{{ course.name }}</view>
+          <view class="course-header">
+            <view class="course-name">{{ course.name }}</view>
+            <view v-if="course.categoryName" class="course-category">
+              <text class="fa fa-tag"></text>
+              <text>{{ course.categoryName }}</text>
+            </view>
+          </view>
+          
           <view class="course-desc">{{ course.description || '暂无描述' }}</view>
           
           <view class="course-meta">
@@ -33,6 +40,10 @@
             <view class="meta-item">
               <text class="fa fa-users"></text>
               <text class="meta-text">{{ course.maxParticipants }}人</text>
+            </view>
+            <view v-if="course.coachName" class="meta-item">
+              <text class="fa fa-user-tie"></text>
+              <text class="meta-text">{{ course.coachName }}</text>
             </view>
           </view>
           
@@ -80,7 +91,8 @@ const fetchCourseList = () => {
   getCourseListOnline({
     showDefaultMsg: false,
     onSuccess: (data) => {
-      courseList.value = data || []
+      // 确保数据是数组
+      courseList.value = Array.isArray(data) ? data : []
       loading.value = false
     },
     onError: (error) => {
@@ -166,14 +178,38 @@ onMounted(() => {
   padding: 24rpx;
 }
 
+.course-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+  gap: 16rpx;
+}
+
 .course-name {
+  flex: 1;
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
-  margin-bottom: 12rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.course-category {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 6rpx 16rpx;
+  background-color: #667eea;
+  color: #fff;
+  font-size: 22rpx;
+  border-radius: 24rpx;
+  white-space: nowrap;
+  
+  .fa {
+    font-size: 20rpx;
+  }
 }
 
 .course-desc {

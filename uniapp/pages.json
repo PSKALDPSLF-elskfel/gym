@@ -230,6 +230,14 @@
 			}
 		},
 		{
+			"path" : "pages/body-test/add",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加体测数据",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path" : "pages/body-test/history",
 			"style" : 
 			{
@@ -268,11 +276,51 @@
 				"navigationBarTitleText" : ""
 			}
 		},
+		// {
+		// 	"path" : "pages/debug/api-test",
+		// 	"style" : 
+		// 	{
+		// 		"navigationBarTitleText" : "API诊断",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
 		{
-			"path" : "pages/debug/api-test",
+			"path" : "pages/coach-review/list",
 			"style" : 
 			{
-				"navigationBarTitleText" : "API诊断",
+				"navigationBarTitleText" : "教练评价",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/coach-review/create",
+			"style" : 
+			{
+				"navigationBarTitleText" : "发布评价",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/coach-review/my",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的评价",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/coach-review/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "评价详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/coach-review/all-reviews",
+			"style" : 
+			{
+				"navigationBarTitleText" : "查看教练评价",
 				"navigationStyle": "custom"
 			}
 		}
@@ -285,6 +333,10 @@
 	},
 	// "uniIdRouter": {},
 	"tabBar": {
+		"color": "#666666",
+		  "selectedColor": "#FF5722",
+		  "borderStyle": "black",
+		  "backgroundColor": "#ffffff",
 		"list": [
 			{
 				"text":"首页",
@@ -301,8 +353,8 @@
 			{
 				"text":"器材",
 				"pagePath": "pages/equipment/list",
-				"iconPath": "/static/images/shop.png",
-				"selectedIconPath": "/static/images/shop-selected.png"
+				"iconPath": "/static/images/equipment.png",
+				"selectedIconPath": "/static/images/equipment-selected.png"
 			},	
 			{
 				"text":"我的",

@@ -36,6 +36,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getAllAnnouncements } from '@/apis/announcement.js'
+import DateUtils from '@/utils/dateUtils.js'
 
 // 公告列表
 const announcements = ref([])
@@ -47,7 +48,8 @@ const fetchAnnouncements = () => {
   getAllAnnouncements({
     showDefaultMsg: false,
     onSuccess: (res) => {
-      announcements.value = res || []
+      // 确保返回值是数组
+      announcements.value = Array.isArray(res) ? res : []
     },
     onError: () => {
       announcements.value = []
@@ -55,26 +57,8 @@ const fetchAnnouncements = () => {
   })
 }
 
-/**
- * 格式化日期时间
- * 兼容iOS：将 "2025-10-28 13:26:36" 转换为 "2025/10/28 13:26:36"
- */
 const formatDateTime = (dateTime) => {
-  if (!dateTime) return ''
-  
-  // 将日期字符串中的 "-" 替换为 "/"，兼容iOS
-  const iosCompatibleDate = dateTime.replace(/-/g, '/')
-  const date = new Date(iosCompatibleDate)
-  
-  if (isNaN(date.getTime())) return ''
-  
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  const hours = String(date.getHours()).padStart(2, '0')
-  const minutes = String(date.getMinutes()).padStart(2, '0')
-  
-  return `${year}-${month}-${day} ${hours}:${minutes}`
+  return DateUtils.format(dateTime, 'YYYY-MM-DD HH:mm')
 }
 
 /**

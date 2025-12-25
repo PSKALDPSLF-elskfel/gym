@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @author system
  */
 @RestController
-@RequestMapping("/api/training-plan-templates")
+@RequestMapping("/training-plan-templates")
 @Tag(name = "训练计划模板管理", description = "训练计划模板相关接口")
 public class TrainingPlanTemplateController {
 

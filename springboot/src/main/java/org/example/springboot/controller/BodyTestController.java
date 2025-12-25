@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @author system
  */
 @RestController
-@RequestMapping("/api/body-tests")
+@RequestMapping("/body-tests")
 @Tag(name = "体测数据管理", description = "体测数据相关接口")
 public class BodyTestController {
 

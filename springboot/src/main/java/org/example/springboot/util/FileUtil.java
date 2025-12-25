@@ -9,8 +9,10 @@ import org.example.springboot.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,11 +27,36 @@ import java.nio.file.Paths;
  * 
  * @author system
  */
-
+@Component
 public class FileUtil {
     private final static Logger log = LoggerFactory.getLogger(FileUtil.class);
-    public final static String FILE_BASE_PATH = System.getProperty("user.dir") + "/files/";
+    
+    private static String FILE_BASE_PATH;
     private static final String ROOT_PATH = "/files/";
+    
+    @Value("${file.upload.path:./files}")
+    private String uploadPath;
+    
+    private static FileUtil instance;
+    
+    @PostConstruct
+    public void init() {
+        instance = this;
+        // 确保路径以分隔符结尾
+        String path = uploadPath.replace("\\", "/");
+        if (!path.endsWith("/")) {
+            path = path + "/";
+        }
+        FILE_BASE_PATH = path;
+        log.info("文件上传基础路径已初始化: {}", FILE_BASE_PATH);
+    }
+    
+    public static String getFileBasePath() {
+        if (FILE_BASE_PATH == null && instance != null) {
+            instance.init();
+        }
+        return FILE_BASE_PATH != null ? FILE_BASE_PATH : System.getProperty("user.dir") + "/files/";
+    }
     
     /**
      * 将访问路径转换为相对物理路径
@@ -153,10 +180,10 @@ public class FileUtil {
             filename = convertToRelativePath(filename);
             
             // 获取文件的绝对路径
-            Path filePath = Paths.get(FILE_BASE_PATH, filename);
+            Path filePath = Paths.get(getFileBasePath(), filename);
             
             // 验证文件路径是否在允许的目录内
-            Path basePath = Paths.get(FILE_BASE_PATH);
+            Path basePath = Paths.get(getFileBasePath());
             if (!filePath.toAbsolutePath().startsWith(basePath.toAbsolutePath())) {
                 log.error("文件路径超出允许范围：{}", filePath);
                 return false;
@@ -218,7 +245,7 @@ public class FileUtil {
             // 转换为相对物理路径
             filename = convertToRelativePath(filename);
             
-            Path filePath = Paths.get(FILE_BASE_PATH, filename);
+            Path filePath = Paths.get(getFileBasePath(), filename);
             return Files.exists(filePath);
         } catch (Exception e) {
             log.error("检查文件存在性异常，文件名：{}，错误：{}", filename, e.getMessage());
@@ -238,7 +265,7 @@ public class FileUtil {
             // 转换为相对物理路径
             filename = convertToRelativePath(filename);
             
-            Path filePath = Paths.get(FILE_BASE_PATH, filename);
+            Path filePath = Paths.get(getFileBasePath(), filename);
             if (Files.exists(filePath)) {
                 return Files.size(filePath);
             }
@@ -273,7 +300,7 @@ public class FileUtil {
      */
     private static Path buildSafeFilePath(String relativeDir, String folderName) {
         try {
-            Path projectRootPath = Paths.get(FILE_BASE_PATH);
+            Path projectRootPath = Paths.get(getFileBasePath());
 
             String  filePath=relativeDir;
             // 如果folderName不为null，则在指定目录后面加入folderName

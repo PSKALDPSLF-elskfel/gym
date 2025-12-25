@@ -143,9 +143,9 @@ export function getTemplateById(id, config = {}) {
  * 功能描述：从选中的模板快速创建一个新的训练计划
  * 入参：{ templateId, userId, planName }
  * 返回参数：新创建的训练计划对象
- * url地址：/training-plan-templates/{templateId}/create-plan
+ * url地址：/training-plan-templates/{templateId}/create-plan?userId=xxx&planName=xxx
  * 请求方式：POST
  */
 export function createPlanFromTemplate(templateId, userId, planName, config = {}) {
-  return request.post(`/training-plan-templates/${templateId}/create-plan`, { userId, planName }, config)
+  return request.post(`/training-plan-templates/${templateId}/create-plan?userId=${userId}&planName=${encodeURIComponent(planName)}`, null, config)
 }

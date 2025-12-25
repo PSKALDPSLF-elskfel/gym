@@ -37,26 +37,31 @@ public class GymCoachReviewStatistics {
     /**
      * 5星评价数
      */
+    @TableField("rating_5_count")
     private Integer rating5Count;
     
     /**
      * 4星评价数
      */
+    @TableField("rating_4_count")
     private Integer rating4Count;
     
     /**
      * 3星评价数
      */
+    @TableField("rating_3_count")
     private Integer rating3Count;
     
     /**
      * 2星评价数
      */
+    @TableField("rating_2_count")
     private Integer rating2Count;
     
     /**
      * 1星评价数
      */
+    @TableField("rating_1_count")
     private Integer rating1Count;
     
     /**

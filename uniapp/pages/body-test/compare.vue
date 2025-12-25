@@ -94,26 +94,30 @@
 					<!-- 趋势图表 -->
 					<view class="card">
 						<view class="card-title">体重趋势</view>
-						<view class="chart-container">
-							<qiun-data-charts 
-								type="line"
-								:opts="chartOpts"
-								:chartData="chartData"
-								:style="{height: chartHeight}"
-							/>
+						<view class="chart-wrapper">
+							<view class="chart-container">
+								<qiun-data-charts 
+									type="line"
+									:opts="chartOpts"
+									:chartData="chartData"
+									:canvas2d="true"
+								/>
+							</view>
 						</view>
 					</view>
 					
 					<!-- BMI趋势 -->
 					<view class="card">
 						<view class="card-title">BMI趋势</view>
-						<view class="chart-container">
-							<qiun-data-charts 
-								type="line"
-								:opts="bmiChartOpts"
-								:chartData="bmiChartData"
-								:style="{height: chartHeight}"
-							/>
+						<view class="chart-wrapper">
+							<view class="chart-container">
+								<qiun-data-charts 
+									type="line"
+									:opts="bmiChartOpts"
+									:chartData="bmiChartData"
+									:canvas2d="true"
+								/>
+							</view>
 						</view>
 					</view>
 					
@@ -154,7 +158,6 @@ export default {
 			recordList: [],
 			record1: null,
 			record2: null,
-			chartHeight: '400rpx',
 			// 体重图表配置
 			chartOpts: {
 				color: ["#667eea"],
@@ -491,9 +494,43 @@ export default {
 	color: #999;
 }
 
+.chart-wrapper {
+	width: 100%;
+	height: 400rpx;
+	overflow: hidden;
+	position: relative;
+	flex-shrink: 0;
+	z-index: 1;
+}
+
+/* 强制 canvas 在容器内 */
+.chart-wrapper ::v-deep .qiun-charts {
+	position: relative !important;
+	width: 100% !important;
+	height: 100% !important;
+	display: block !important;
+	overflow: hidden !important;
+	transform: translateZ(0) !important;
+}
+
+/* 针对 uCharts 内部 canvas 容器 */
+.chart-wrapper ::v-deep .charts-wrapper {
+	position: relative !important;
+	width: 100% !important;
+	height: 100% !important;
+}
+
+/* 强制 canvas 元素本身 */
+.chart-wrapper ::v-deep canvas {
+	position: relative !important;
+	transform: translateZ(0) !important;
+}
+
 .chart-container {
 	width: 100%;
-	margin-top: 20rpx;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
 }
 
 .summary-list {

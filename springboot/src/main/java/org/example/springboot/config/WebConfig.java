@@ -83,8 +83,9 @@ public class WebConfig implements WebMvcConfigurer {
         
         // 2. 文件上传目录配置 - 用户上传文件访问
         registry.addResourceHandler("/files/**")
-                .addResourceLocations("file:./files/")
+                .addResourceLocations("file:D:/健身房预约小程序/springboot/files/")
                 .setCachePeriod(86400); // 缓存24小时
+        
         
         // 2. API文档资源配置 - Knife4j/Swagger相关
         registry.addResourceHandler("doc.html")

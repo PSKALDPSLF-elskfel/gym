@@ -30,6 +30,9 @@ public class TrainingPlanResponseDTO {
     @Schema(description = "用户昵称")
     private String userNickname;
 
+    @Schema(description = "用户头像")
+    private String userAvatar;
+
     @Schema(description = "教练ID")
     private Long coachId;
 

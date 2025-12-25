@@ -23,6 +23,9 @@ public class CoachResponseDTO {
     @Schema(description = "用户名")
     private String username;
 
+    @Schema(description = "用户类型")
+    private String userType;
+
     @Schema(description = "昵称")
     private String nickname;
 
@@ -31,6 +34,9 @@ public class CoachResponseDTO {
 
     @Schema(description = "手机号")
     private String phone;
+
+    @Schema(description = "邮箱")
+    private String email;
 
     @Schema(description = "专业领域")
     private String specialty;

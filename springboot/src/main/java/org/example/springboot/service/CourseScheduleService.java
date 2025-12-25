@@ -13,6 +13,7 @@ import org.example.springboot.enums.CourseScheduleStatus;
 import org.example.springboot.exception.BusinessException;
 import org.example.springboot.mapper.GymCourseMapper;
 import org.example.springboot.mapper.GymCourseScheduleMapper;
+import org.example.springboot.mapper.GymCoachMapper;
 import org.example.springboot.service.convert.CourseScheduleConvert;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,9 @@ public class CourseScheduleService {
 
     @Resource
     private GymCourseMapper courseMapper;
+
+    @Resource
+    private GymCoachMapper coachMapper;
 
     /**
      * 创建课程时间安排
@@ -190,11 +194,48 @@ public class CourseScheduleService {
      */
     public Page<CourseScheduleResponseDTO> selectPage(Long current, Long size, String courseId, 
                                                        Integer status, String startDate, String endDate) {
-        log.info("分页查询课程时间安排: current={}, size={}, courseId={}, status={}, startDate={}, endDate={}", 
-                 current, size, courseId, status, startDate, endDate);
+        return selectPage(current, size, courseId, status, startDate, endDate, null);
+    }
+
+    /**
+     * 分页查询课程时间安排(支持按教练筛选)
+     * @param current 当前页
+     * @param size 每页大小
+     * @param courseId 课程ID
+     * @param status 状态
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @param coachId 教练ID(可选,为null则不筛选)
+     * @return 分页结果
+     */
+    public Page<CourseScheduleResponseDTO> selectPage(Long current, Long size, String courseId, 
+                                                       Integer status, String startDate, String endDate, Long coachId) {
+        log.info("分页查询课程时间安排: current={}, size={}, courseId={}, status={}, startDate={}, endDate={}, coachId={}", 
+                 current, size, courseId, status, startDate, endDate, coachId);
 
         Page<GymCourseSchedule> page = new Page<>(current, size);
         LambdaQueryWrapper<GymCourseSchedule> wrapper = new LambdaQueryWrapper<>();
+
+        // 如果指定了教练ID,需要先查询该教练负责的课程
+        List<String> coachCourseIds = null;
+        if (coachId != null) {
+            LambdaQueryWrapper<GymCourse> courseWrapper = new LambdaQueryWrapper<>();
+            courseWrapper.eq(GymCourse::getCoachId, coachId);
+            List<GymCourse> coachCourses = courseMapper.selectList(courseWrapper);
+            coachCourseIds = coachCourses.stream()
+                    .map(GymCourse::getId)
+                    .collect(Collectors.toList());
+            
+            // 如果教练没有负责的课程,直接返回空结果
+            if (coachCourseIds.isEmpty()) {
+                log.info("教练ID {} 没有负责的课程", coachId);
+                Page<CourseScheduleResponseDTO> emptyPage = new Page<>(current, size, 0);
+                emptyPage.setRecords(List.of());
+                return emptyPage;
+            }
+            
+            wrapper.in(GymCourseSchedule::getCourseId, coachCourseIds);
+        }
 
         // 条件查询
         if (courseId != null && !courseId.isEmpty()) {

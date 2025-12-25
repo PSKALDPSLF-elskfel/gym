@@ -19,6 +19,18 @@
       <view class="course-basic">
         <view class="course-title">{{ courseDetail.name }}</view>
         
+        <!-- 分类和教练信息 -->
+        <view class="course-tags">
+          <view v-if="courseDetail.categoryName" class="tag-item category-tag">
+            <text class="fa fa-tag"></text>
+            <text>{{ courseDetail.categoryName }}</text>
+          </view>
+          <view v-if="courseDetail.coachName" class="tag-item coach-tag">
+            <text class="fa fa-user-tie"></text>
+            <text>教练：{{ courseDetail.coachName }}</text>
+          </view>
+        </view>
+        
         <view class="course-price-box">
           <view class="price-label">课程价格</view>
           <view class="price-value">
@@ -137,6 +149,8 @@ import { ref, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getCourseById, getCourseScheduleList } from '@/apis/course.js'
 import { getFileUrl } from '@/utils/fileUtils.js'
+import DateUtils from '@/utils/dateUtils.js'
+import { ensureArray } from '@/utils/dataUtils.js'
 
 // 数据
 const courseDetail = ref(null)
@@ -183,6 +197,12 @@ const fetchScheduleList = () => {
   getCourseScheduleList(courseId.value, {
     showDefaultMsg: false,
     onSuccess: (data) => {
+      // 添加空值检查，确保 data 是数组
+      if (!data || !Array.isArray(data)) {
+        console.warn('课程时间安排数据格式错误:', data)
+        scheduleList.value = []
+        return
+      }
       // 过滤掉已取消和已过期的排课
       scheduleList.value = data.filter(schedule => 
         schedule.status !== 0 && !schedule.isExpired
@@ -207,17 +227,10 @@ const getCoverImageUrl = (coverImage) => {
 
 /**
  * 格式化日期时间
+ * 使用统一的DateUtils工具，已内置iOS兼容性处理
  */
 const formatDateTime = (dateTime) => {
-  if (!dateTime) return ''
-  // 兼容iOS：将 "-" 替换为 "/"
-  const iosCompatibleDate = dateTime.replace(/-/g, '/')
-  const date = new Date(iosCompatibleDate)
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  const hours = String(date.getHours()).padStart(2, '0')
-  const minutes = String(date.getMinutes()).padStart(2, '0')
-  return `${month}-${day} ${hours}:${minutes}`
+  return DateUtils.format(dateTime, 'MM-DD HH:mm')
 }
 
 /**
@@ -330,8 +343,46 @@ onLoad((options) => {
   font-size: 36rpx;
   font-weight: bold;
   color: #333;
-  margin-bottom: 24rpx;
+  margin-bottom: 20rpx;
   line-height: 1.4;
+}
+
+.course-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.tag-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 28rpx;
+  font-size: 24rpx;
+  
+  .fa {
+    font-size: 22rpx;
+  }
+}
+
+.category-tag {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  
+  .fa {
+    color: #1976d2;
+  }
+}
+
+.coach-tag {
+  background-color: #fff3e0;
+  color: #f57c00;
+  
+  .fa {
+    color: #f57c00;
+  }
 }
 
 .course-price-box {

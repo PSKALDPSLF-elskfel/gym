@@ -11,7 +11,7 @@
  Target Server Version : 80300 (8.3.0)
  File Encoding         : 65001
 
- Date: 12/12/2025 16:46:56
+ Date: 21/12/2025 17:32:31
 */
 
 SET NAMES utf8mb4;
@@ -64,7 +64,7 @@ CREATE TABLE `gym_body_test`  (
   INDEX `idx_test_time`(`test_time` ASC) USING BTREE,
   INDEX `idx_tester_id`(`tester_id` ASC) USING BTREE,
   CONSTRAINT `gym_body_test_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '体测数据表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '体测数据表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_body_test
@@ -95,9 +95,9 @@ CREATE TABLE `gym_coach`  (
 -- ----------------------------
 -- Records of gym_coach
 -- ----------------------------
-INSERT INTO `gym_coach` VALUES (1, 4, '瑜伽、普拉提、柔韧性训练', '[{\"name\":\"瑜伽教练证\",\"level\":\"国家级\"},{\"name\":\"普拉提认证\",\"level\":\"高级\"}]', '10年以上瑜伽教学经验，专业的普拉提塑形教练，擅长帮助学员改善体态和增强柔韧性', 4.8, 1, '2025-10-17 09:19:31', '2025-12-05 14:00:00');
-INSERT INTO `gym_coach` VALUES (2, 5, '力量训练、健美、运动表现', '[{\"name\":\"健身教练证\",\"level\":\"国家级\"},{\"name\":\"健美运动员\",\"level\":\"高级\"}]', '8年健身房工作经验，拥有健美运动员背景，专业的力量训练指导', 4.9, 1, '2025-10-17 09:19:31', '2025-12-05 14:00:00');
-INSERT INTO `gym_coach` VALUES (3, 6, '有氧健身、动感单车、团课', '[{\"name\":\"有氧健身教练证\",\"level\":\"国家级\"},{\"name\":\"动感单车教练\",\"level\":\"高级\"}]', '6年有氧健身教学经验，活力四射的动感单车教练，深受学员欢迎', 4.7, 1, '2025-10-17 09:19:31', '2025-12-05 14:00:00');
+INSERT INTO `gym_coach` VALUES (1, 4, '瑜伽、普拉提、柔韧性训练', '[{\"name\":\"瑜伽教练证\",\"level\":\"国家级\"},{\"name\":\"普拉提认证\",\"level\":\"高级\"}]', '10年以上瑜伽教学经验，专业的普拉提塑形教练，擅长帮助学员改善体态和增强柔韧性', 4.7, 1, '2025-10-17 09:19:31', '2025-12-20 20:56:39');
+INSERT INTO `gym_coach` VALUES (2, 5, '力量训练、健美、运动表现', '[{\"name\":\"健身教练证\",\"level\":\"国家级\"},{\"name\":\"健美运动员\",\"level\":\"高级\"}]', '8年健身房工作经验，拥有健美运动员背景，专业的力量训练指导', 4.6, 1, '2025-10-17 09:19:31', '2025-12-20 20:56:39');
+INSERT INTO `gym_coach` VALUES (3, 6, '有氧健身、动感单车、团课', '[{\"name\":\"有氧健身教练证\",\"level\":\"国家级\"},{\"name\":\"动感单车教练\",\"level\":\"高级\"}]', '6年有氧健身教学经验，活力四射的动感单车教练，深受学员欢迎', 4.4, 1, '2025-10-17 09:19:31', '2025-12-20 20:56:39');
 
 -- ----------------------------
 -- Table structure for gym_coach_leave
@@ -125,7 +125,7 @@ CREATE TABLE `gym_coach_leave`  (
   INDEX `gym_coach_leave_ibfk_2`(`approver_id` ASC) USING BTREE,
   CONSTRAINT `gym_coach_leave_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `gym_coach` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_coach_leave_ibfk_2` FOREIGN KEY (`approver_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练请假表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练请假表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_coach_leave
@@ -167,7 +167,7 @@ CREATE TABLE `gym_coach_review`  (
   CONSTRAINT `gym_coach_review_ibfk_2` FOREIGN KEY (`coach_id`) REFERENCES `gym_coach` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_coach_review_ibfk_3` FOREIGN KEY (`plan_id`) REFERENCES `gym_training_plan` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
   CONSTRAINT `gym_coach_review_ibfk_4` FOREIGN KEY (`course_booking_id`) REFERENCES `gym_course_booking` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练评价表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练评价表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_coach_review
@@ -175,6 +175,37 @@ CREATE TABLE `gym_coach_review`  (
 INSERT INTO `gym_coach_review` VALUES (1, 3, 1, NULL, NULL, 2, 5, '[\"专业\",\"耐心\",\"认真负责\"]', '李教练非常专业，课程讲解很细致，动作示范标准，每次上课都能学到很多东西！', NULL, 0, '感谢您的认可，我会继续努力为大家提供更优质的教学服务！', '2025-12-06 10:30:00', 0, 1, '2025-12-05 18:20:00', '2025-12-06 10:30:00');
 INSERT INTO `gym_coach_review` VALUES (2, 3, 2, NULL, NULL, 2, 5, '[\"效果显著\",\"幽默风趣\",\"激励性强\"]', '王教练的力量训练课程效果太棒了！跟着练了一个月，力量提升明显，而且教练很会调动气氛。', NULL, 0, NULL, NULL, 0, 1, '2025-12-07 15:45:00', '2025-12-07 15:45:00');
 INSERT INTO `gym_coach_review` VALUES (3, 3, 3, NULL, NULL, 2, 4, '[\"活力四射\",\"音乐选得好\"]', '动感单车课太燃了！教练很有活力，音乐也选得很棒，每次上完课都大汗淋漓，减脂效果很好。', NULL, 0, NULL, NULL, 0, 1, '2025-12-08 20:10:00', '2025-12-08 20:10:00');
+INSERT INTO `gym_coach_review` VALUES (4, 9, 1, NULL, NULL, 2, 5, '[\"专业\",\"细致\",\"耐心\"]', '李教练讲解非常细致，每个动作都认真示范，我收获很大！', NULL, 0, '感谢认可，会继续加油！', '2025-12-12 14:00:00', 0, 1, '2025-12-11 10:00:00', '2025-12-12 14:00:00');
+INSERT INTO `gym_coach_review` VALUES (5, 11, 1, NULL, NULL, 2, 5, '[\"专业\",\"热情\",\"认真负责\"]', '在李教练的指导下，我的柔韧性提升明显，身体舒展多了！', NULL, 0, NULL, NULL, 0, 1, '2025-12-10 15:30:00', '2025-12-10 15:30:00');
+INSERT INTO `gym_coach_review` VALUES (6, 13, 1, NULL, NULL, 2, 4, '[\"耐心\",\"鼓励\",\"支持\"]', '作为新手，李教练给了我很多帮助和鼓励，让我有信心继续练下去！', NULL, 0, '谢谢信任，新手坚持就好！', '2025-12-12 16:00:00', 0, 1, '2025-12-11 11:00:00', '2025-12-12 16:00:00');
+INSERT INTO `gym_coach_review` VALUES (7, 15, 1, NULL, NULL, 2, 5, '[\"专业\",\"挑战性强\",\"效果显著\"]', '李教练安排的高难度动作很有挑战，完成后很有成就感！', NULL, 0, NULL, NULL, 0, 1, '2025-12-09 18:00:00', '2025-12-09 18:00:00');
+INSERT INTO `gym_coach_review` VALUES (8, 17, 1, NULL, NULL, 2, 5, '[\"专业\",\"热情\",\"用心\"]', '坚持跟李教练练习，身体变化真的很明显，太满意了！', NULL, 0, '继续保持，效果会更好！', '2025-12-08 14:00:00', 0, 1, '2025-12-07 10:00:00', '2025-12-08 14:00:00');
+INSERT INTO `gym_coach_review` VALUES (9, 19, 1, NULL, NULL, 2, 5, '[\"专业\",\"个性化\",\"效果好\"]', '作为铂金会员，李教练给我制定的一对一计划效果非常显著！', NULL, 0, NULL, NULL, 0, 1, '2025-12-11 17:00:00', '2025-12-11 17:00:00');
+INSERT INTO `gym_coach_review` VALUES (10, 21, 1, NULL, NULL, 2, 4, '[\"热情\",\"耐心\",\"支持\"]', '新加入就得到李教练的专业指导，感觉很值！', NULL, 0, '欢迎加入，一起努力！', '2025-12-12 10:30:00', 0, 1, '2025-12-12 09:00:00', '2025-12-12 10:30:00');
+INSERT INTO `gym_coach_review` VALUES (11, 23, 1, NULL, NULL, 2, 5, '[\"专业\",\"信任\",\"长期合作\"]', '多年跟着李教练，每次都有新的进步，非常信任！', NULL, 0, NULL, NULL, 0, 1, '2025-12-06 16:00:00', '2025-12-06 16:00:00');
+INSERT INTO `gym_coach_review` VALUES (12, 25, 1, NULL, NULL, 2, 4, '[\"耐心\",\"细致\",\"鼓励\"]', '李教练从零开始教我，现在我已经初见成效了！', NULL, 0, '坚持就是胜利！', '2025-12-10 18:00:00', 0, 1, '2025-12-09 14:00:00', '2025-12-10 18:00:00');
+INSERT INTO `gym_coach_review` VALUES (13, 27, 1, NULL, NULL, 2, 5, '[\"专业\",\"高强度\",\"效果显著\"]', '铂金会员参加李教练的高强度课程，效果真的很好！', NULL, 0, 'ok', '2025-12-21 08:29:51', 0, 1, '2025-12-12 12:00:00', '2025-12-12 12:00:00');
+INSERT INTO `gym_coach_review` VALUES (14, 10, 2, NULL, NULL, 2, 5, '[\"专业\",\"有天赋\",\"进度快\"]', '王教练的力量训练课程很系统，我的进度超出预期！', NULL, 0, '继续加油，潜力很大！', '2025-12-12 15:00:00', 0, 1, '2025-12-11 14:00:00', '2025-12-12 15:00:00');
+INSERT INTO `gym_coach_review` VALUES (15, 12, 2, NULL, NULL, 2, 5, '[\"耐心\",\"细致\",\"有效果\"]', '在王教练的坚持指导下，力量水平提升了很多！', NULL, 0, NULL, NULL, 0, 1, '2025-12-10 19:00:00', '2025-12-10 19:00:00');
+INSERT INTO `gym_coach_review` VALUES (16, 14, 2, NULL, NULL, 2, 4, '[\"专业\",\"高效\",\"激励\"]', '王教练的课程安排很科学，效果明显，强烈推荐！', NULL, 0, '谢谢支持，会继续优化！', '2025-12-11 16:30:00', 0, 1, '2025-12-11 15:00:00', '2025-12-11 16:30:00');
+INSERT INTO `gym_coach_review` VALUES (17, 16, 2, NULL, NULL, 2, 5, '[\"热心\",\"耐心\",\"进度快\"]', '新手跟王教练学习，进度特别快，感觉学到了很多！', NULL, 0, NULL, NULL, 0, 1, '2025-12-09 17:00:00', '2025-12-09 17:00:00');
+INSERT INTO `gym_coach_review` VALUES (18, 18, 2, NULL, NULL, 2, 4, '[\"专业\",\"定期\",\"稳定效果\"]', '作为黄金会员，王教练的定期指导让我进度很稳定！', NULL, 0, '坚持就会有好结果！', '2025-12-12 11:00:00', 0, 1, '2025-12-11 13:00:00', '2025-12-12 11:00:00');
+INSERT INTO `gym_coach_review` VALUES (19, 20, 2, NULL, NULL, 2, 5, '[\"专业\",\"小组课\",\"氛围好\"]', '参加王教练的小组课程，大家互相鼓励，效果很棒！', NULL, 0, NULL, NULL, 0, 1, '2025-12-08 19:30:00', '2025-12-08 19:30:00');
+INSERT INTO `gym_coach_review` VALUES (20, 22, 2, NULL, NULL, 2, 4, '[\"经验丰富\",\"调整计划\",\"专业\"]', '王教练很专业，帮我突破力量瓶颈，调整了训练计划！', NULL, 0, '继续突破，更高目标！', '2025-12-12 13:30:00', 0, 1, '2025-12-12 10:00:00', '2025-12-12 13:30:00');
+INSERT INTO `gym_coach_review` VALUES (21, 24, 2, NULL, NULL, 2, 5, '[\"专业\",\"用心\",\"效果显著\"]', '坚持跟王教练练习，肌肉线条改善明显，非常满意！', NULL, 0, NULL, NULL, 0, 1, '2025-12-07 18:00:00', '2025-12-07 18:00:00');
+INSERT INTO `gym_coach_review` VALUES (22, 26, 2, NULL, NULL, 2, 5, '[\"专业\",\"自律\",\"成效显著\"]', '高级会员也推荐王教练，他的专业度和耐心真的一流！', NULL, 0, '感谢信任，继续努力！', '2025-12-06 17:00:00', 0, 1, '2025-12-05 15:00:00', '2025-12-06 17:00:00');
+INSERT INTO `gym_coach_review` VALUES (23, 28, 2, NULL, NULL, 2, 4, '[\"热情\",\"个性化\",\"支持\"]', '新加入就享受王教练的个性化训练计划，感觉很值得！', NULL, 0, NULL, NULL, 0, 1, '2025-12-12 14:30:00', '2025-12-12 14:30:00');
+INSERT INTO `gym_coach_review` VALUES (24, 30, 3, NULL, NULL, 2, 5, '[\"活力四射\",\"音乐好\",\"燃脂\"]', '张教练的动感单车课程太棒了，节奏感十足，燃脂效果很好！', NULL, 0, '继续坚持，效果会更好！', '2025-12-12 16:30:00', 0, 1, '2025-12-11 18:00:00', '2025-12-12 16:30:00');
+INSERT INTO `gym_coach_review` VALUES (25, 31, 3, NULL, NULL, 2, 5, '[\"热情\",\"有氧\",\"团课氛围\"]', '铂金会员参加张教练的有氧团课，大家一起运动氛围特别好！', NULL, 0, NULL, NULL, 0, 1, '2025-12-10 20:00:00', '2025-12-10 20:00:00');
+INSERT INTO `gym_coach_review` VALUES (26, 32, 3, NULL, NULL, 2, 4, '[\"基础培训\",\"耐心\",\"专业\"]', '新手在张教练的基础培训下，已经掌握了正确的运动方法！', NULL, 0, '好好学，坚持就有成果！', '2025-12-12 17:00:00', 0, 1, '2025-12-11 15:00:00', '2025-12-12 17:00:00');
+INSERT INTO `gym_coach_review` VALUES (27, 33, 3, NULL, NULL, 2, 5, '[\"热心\",\"鼓励\",\"升级计划\"]', '张教练激励我升级黄金会员，相信自己的潜力很重要！', NULL, 0, NULL, NULL, 0, 1, '2025-12-09 19:00:00', '2025-12-09 19:00:00');
+INSERT INTO `gym_coach_review` VALUES (28, 34, 3, NULL, NULL, 2, 4, '[\"定期参加\",\"专业\",\"有效\"]', '作为黄金会员，定期参加张教练的有氧课程，效果很稳定！', NULL, 0, '坚持参加，身体会更好！', '2025-12-11 17:30:00', 0, 1, '2025-12-10 14:00:00', '2025-12-11 17:30:00');
+INSERT INTO `gym_coach_review` VALUES (29, 35, 3, NULL, NULL, 2, 5, '[\"高强度\",\"间歇训练\",\"挑战\"]', '参加张教练的高强度间歇训练课程，很有挑战，也很有收获！', NULL, 0, NULL, NULL, 0, 1, '2025-12-08 20:30:00', '2025-12-08 20:30:00');
+INSERT INTO `gym_coach_review` VALUES (30, 36, 3, NULL, NULL, 2, 5, '[\"稳定\",\"进度好\",\"坚持\"]', '中级学员的进度稳定，张教练的课程设置很科学！', NULL, 0, '继续坚持，目标一定能达到！', '2025-12-12 15:30:00', 0, 1, '2025-12-11 16:00:00', '2025-12-12 15:30:00');
+INSERT INTO `gym_coach_review` VALUES (31, 37, 3, NULL, NULL, 2, 4, '[\"热情\",\"鼓励\",\"进步快\"]', '新加入的学员在张教练的鼓励下，进度快得惊人！', NULL, 0, NULL, NULL, 0, 1, '2025-12-12 18:00:00', '2025-12-12 18:00:00');
+INSERT INTO `gym_coach_review` VALUES (32, 38, 3, NULL, NULL, 2, 5, '[\"出色表现\",\"单车课\",\"优秀\"]', '黄金会员在张教练的动感单车课上表现出色，很励志！', NULL, 0, '表现很好，继续加油！', '2025-12-07 19:00:00', 0, 1, '2025-12-06 17:00:00', '2025-12-07 19:00:00');
+INSERT INTO `gym_coach_review` VALUES (33, 29, 3, NULL, NULL, 2, 4, '[\"新手\",\"多节课\",\"进步\"]', '新手参加了多节张教练的课程，每次都有新收获！', NULL, 0, NULL, NULL, 0, 1, '2025-12-09 20:00:00', '2025-12-09 20:00:00');
+INSERT INTO `gym_coach_review` VALUES (35, 39, 3, NULL, NULL, 2, 3, '[\"专业\",\"音乐选得好\",\"认真负责\"]', '好好好', NULL, 0, NULL, NULL, 0, 1, '2025-12-20 21:00:30', '2025-12-20 21:00:30');
 
 -- ----------------------------
 -- Table structure for gym_coach_review_statistics
@@ -196,14 +227,14 @@ CREATE TABLE `gym_coach_review_statistics`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_coach_id`(`coach_id` ASC) USING BTREE,
   CONSTRAINT `gym_coach_review_statistics_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `gym_coach` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练评价统计表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练评价统计表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_coach_review_statistics
 -- ----------------------------
-INSERT INTO `gym_coach_review_statistics` VALUES (1, 1, 1, 5.00, 1, 0, 0, 0, 0, 100.00, '2025-12-05 18:20:00', '2025-12-06 10:30:00');
-INSERT INTO `gym_coach_review_statistics` VALUES (2, 2, 1, 5.00, 1, 0, 0, 0, 0, 0.00, '2025-12-07 15:45:00', '2025-12-07 15:45:00');
-INSERT INTO `gym_coach_review_statistics` VALUES (3, 3, 1, 4.00, 0, 1, 0, 0, 0, 0.00, '2025-12-08 20:10:00', '2025-12-08 20:10:00');
+INSERT INTO `gym_coach_review_statistics` VALUES (1, 1, 11, 4.73, 8, 3, 0, 0, 0, 64.00, '2025-12-12 12:00:00', '2025-12-20 20:56:39');
+INSERT INTO `gym_coach_review_statistics` VALUES (2, 2, 11, 4.64, 7, 4, 0, 0, 0, 45.45, '2025-12-12 14:30:00', '2025-12-20 20:56:39');
+INSERT INTO `gym_coach_review_statistics` VALUES (3, 3, 12, 4.42, 6, 5, 1, 0, 0, 42.00, '2025-12-20 21:00:30', '2025-12-20 20:56:39');
 
 -- ----------------------------
 -- Table structure for gym_coach_schedule
@@ -230,7 +261,7 @@ CREATE TABLE `gym_coach_schedule`  (
   INDEX `idx_status`(`status` ASC) USING BTREE,
   INDEX `idx_coach_date`(`coach_id` ASC, `work_date` ASC) USING BTREE,
   CONSTRAINT `gym_coach_schedule_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `gym_coach` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练排班表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练排班表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_coach_schedule
@@ -256,7 +287,7 @@ CREATE TABLE `gym_coach_student`  (
   UNIQUE INDEX `uk_coach_student`(`coach_id` ASC, `student_id` ASC) USING BTREE,
   INDEX `idx_coach_id`(`coach_id` ASC) USING BTREE,
   INDEX `idx_student_id`(`student_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练学员关系表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '教练学员关系表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_coach_student
@@ -264,6 +295,36 @@ CREATE TABLE `gym_coach_student`  (
 INSERT INTO `gym_coach_student` VALUES (1, 1, 3, '学员基础薄弱，需要耐心指导，已安排个人训练计划', '2025-12-10 14:00:00', '2025-12-10 14:00:00');
 INSERT INTO `gym_coach_student` VALUES (2, 1, 7, '学员进度快，可以加大训练强度', '2025-12-11 10:00:00', '2025-12-11 10:00:00');
 INSERT INTO `gym_coach_student` VALUES (3, 2, 1, '会员很活跃，坚持训练，效果显著', '2025-12-09 09:00:00', '2025-12-09 09:00:00');
+INSERT INTO `gym_coach_student` VALUES (4, 1, 9, '李欣怡：学员态度认真，坚持参加课程，进度明显', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (5, 1, 11, '张梦琪：柔韧性训练效果显著，已达到预期目标', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (6, 1, 13, '陈思彤：新手学员，需要更多基础指导和鼓励', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (7, 1, 15, '黄佳琪：高级学员，可以尝试更难的动作组合', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (8, 1, 17, '周欣悦：坚持到底，体态改善明显，已续费年卡', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (9, 1, 19, '孙思琦：铂金会员，接受一对一指导效果很好', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (10, 1, 21, '郑欣妍：新加入会员，目标明确，需要制定专项计划', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (11, 1, 23, '高小琳：长期会员，信任度高，配合度良好', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (12, 1, 25, '邱思玥：初级学员，从零开始，进度稳定', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (13, 1, 27, '傅思诺：铂金会员，接受高强度训练，效果显著', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (14, 2, 10, '王晓婷：力量训练有天赋，进度超预期', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (15, 2, 12, '刘晓芳：坚持训练，力量水平稳步提升', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (16, 2, 14, '杨娜娜：训练积极性高，已达到中级水平', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (17, 2, 16, '吴梦雨：新手学员，学习能力强，进度快', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (18, 2, 18, '徐晓美：黄金会员，定期接受指导，效果稳定', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (19, 2, 20, '何佳怡：铂金会员，参加小组课程，表现突出', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (20, 2, 22, '罗思语：中级学员，力量突破瓶颈，需要调整计划', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (21, 2, 24, '林晓晓：坚持训练，肌肉线条明显改善', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (22, 2, 26, '曾梦雪：高级会员，自律性强，成效显著', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (23, 2, 28, '蒋欣妤：新加入学员，接受个性化训练计划', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (24, 3, 30, '韦思琪：动感单车课程表现优秀，坚持参加', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (25, 3, 31, '唐晓敏：铂金会员，参加有氧团课，热情高涨', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (26, 3, 32, '苏思欣：新手，已完成基础有氧课程培训', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (27, 3, 33, '许欣怡：初级学员，准备升级黄金会员', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (28, 3, 34, '冯思琳：黄金会员，定期参加有氧课程', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (29, 3, 35, '卢梦琪：铂金会员，参加高强度间歇训练课程', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (30, 3, 36, '叶晓雪：中级学员，进度稳定，坚持参加课程', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (31, 3, 37, '樊思语：新加入学员，热情高，进步快', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (32, 3, 38, '葛欣琳：黄金会员，动感单车表现出色', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_coach_student` VALUES (33, 3, 29, '谢晓嘉：新手，已参加多节课程，持续进步', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
 
 -- ----------------------------
 -- Table structure for gym_course
@@ -292,12 +353,12 @@ CREATE TABLE `gym_course`  (
 -- ----------------------------
 -- Records of gym_course
 -- ----------------------------
-INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440001', '瑜伽基础课', 1, NULL, '适合初学者的瑜伽课程，帮助放松身心，提高柔韧性', '/files/bussiness/course/1761619290737.png', 60, 20, 68.00, 1, '2025-10-17 09:19:31', '2025-10-28 10:41:32');
-INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440002', '高强度间歇训练(HIIT)', 3, NULL, '高效燃脂训练，提高心肺功能和肌肉力量', '/images/hiit.jpg', 45, 15, 88.00, 1, '2025-10-17 09:19:31', '2025-10-17 09:19:31');
-INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440003', '普拉提塑形', 4, NULL, '核心力量训练，改善体态，塑造完美身形', '/images/pilates.jpg', 50, 12, 78.00, 1, '2025-10-17 09:19:31', '2025-10-17 09:19:31');
-INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440004', '动感单车', 5, NULL, '音乐节拍配合，燃烧卡路里，释放压力', '/images/spinning.jpg', 45, 25, 58.00, 1, '2025-10-17 09:19:31', '2025-10-17 09:19:31');
-INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440005', '力量训练基础', 2, NULL, '器械使用指导，安全有效的力量训练', '/images/strength.jpg', 60, 10, 98.00, 1, '2025-10-17 09:19:31', '2025-10-17 09:19:31');
-INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440006', '拉伸放松课', 6, NULL, '运动后恢复，肌肉放松，预防运动损伤', '/images/stretching.jpg', 30, 15, 38.00, 1, '2025-10-17 09:19:31', '2025-10-17 09:19:31');
+INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440001', '瑜伽基础课', 1, 1, '适合初学者的瑜伽课程，帮助放松身心，提高柔韧性', '/files/bussiness/course/1766219574497.jpg', 60, 20, 68.00, 1, '2025-12-17 09:19:31', '2025-12-20 16:32:56');
+INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440002', '高强度间歇训练(HIIT)', 3, 2, '高效燃脂训练，提高心肺功能和肌肉力量', '/files/bussiness/course/1766219564065.png', 45, 15, 88.00, 1, '2025-12-18 09:19:31', '2025-12-20 16:32:45');
+INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440003', '普拉提塑形', 4, 1, '核心力量训练，改善体态，塑造完美身形', '/files/bussiness/course/1766219551439.jpg', 50, 12, 78.00, 1, '2025-12-19 09:19:31', '2025-12-20 16:32:32');
+INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440004', '动感单车', 5, 3, '音乐节拍配合，燃烧卡路里，释放压力', '/files/bussiness/course/1766219588034.png', 45, 25, 58.00, 1, '2025-12-10 09:19:31', '2025-12-20 16:33:09');
+INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440005', '力量训练基础', 2, 2, '器械使用指导，安全有效的力量训练', '/files/bussiness/course/1766276361852.jpg', 60, 10, 98.00, 1, '2025-12-30 09:19:31', '2025-12-21 08:19:24');
+INSERT INTO `gym_course` VALUES ('550e8400-e29b-41d4-a716-446655440006', '拉伸放松课', 6, 3, '运动后恢复，肌肉放松，预防运动损伤', '/files/bussiness/course/1766219539658.jpg', 30, 15, 38.00, 1, '2025-12-22 09:19:31', '2025-12-20 16:32:21');
 
 -- ----------------------------
 -- Table structure for gym_course_booking
@@ -322,7 +383,7 @@ CREATE TABLE `gym_course_booking`  (
   INDEX `idx_booking_time`(`booking_time` ASC) USING BTREE,
   CONSTRAINT `gym_course_booking_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_course_booking_ibfk_2` FOREIGN KEY (`schedule_id`) REFERENCES `gym_course_schedule` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '课程预约表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '课程预约表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_course_booking
@@ -330,6 +391,37 @@ CREATE TABLE `gym_course_booking`  (
 INSERT INTO `gym_course_booking` VALUES (1, 3, 25, '2025-12-12 10:00:00', 68.00, 64.60, 0.95, 1, NULL, '2025-12-12 09:55:00', '2025-12-12 09:55:00');
 INSERT INTO `gym_course_booking` VALUES (2, 1, 26, '2025-12-12 11:30:00', 68.00, 61.20, 0.90, 1, NULL, '2025-12-12 11:25:00', '2025-12-12 11:25:00');
 INSERT INTO `gym_course_booking` VALUES (3, 7, 27, '2025-12-12 12:00:00', 68.00, 68.00, 1.00, 1, NULL, '2025-12-12 11:55:00', '2025-12-12 11:55:00');
+INSERT INTO `gym_course_booking` VALUES (4, 9, 28, '2025-12-13 10:00:00', 68.00, 64.60, 0.95, 1, NULL, '2025-12-13 09:30:00', '2025-12-13 09:30:00');
+INSERT INTO `gym_course_booking` VALUES (5, 11, 29, '2025-12-13 14:00:00', 68.00, 54.40, 0.80, 1, NULL, '2025-12-13 13:30:00', '2025-12-13 13:30:00');
+INSERT INTO `gym_course_booking` VALUES (6, 13, 30, '2025-12-14 10:00:00', 68.00, 68.00, 1.00, 1, NULL, '2025-12-14 09:45:00', '2025-12-14 09:45:00');
+INSERT INTO `gym_course_booking` VALUES (7, 15, 31, '2025-12-14 15:00:00', 68.00, 61.20, 0.90, 1, NULL, '2025-12-14 14:30:00', '2025-12-14 14:30:00');
+INSERT INTO `gym_course_booking` VALUES (8, 17, 32, '2025-12-15 10:00:00', 68.00, 64.60, 0.95, 1, NULL, '2025-12-15 09:50:00', '2025-12-15 09:50:00');
+INSERT INTO `gym_course_booking` VALUES (9, 19, 33, '2025-12-15 14:00:00', 68.00, 61.20, 0.90, 1, NULL, '2025-12-15 13:45:00', '2025-12-15 13:45:00');
+INSERT INTO `gym_course_booking` VALUES (10, 21, 34, '2025-12-16 10:00:00', 68.00, 68.00, 1.00, 1, NULL, '2025-12-16 09:55:00', '2025-12-16 09:55:00');
+INSERT INTO `gym_course_booking` VALUES (11, 23, 35, '2025-12-16 15:00:00', 68.00, 64.60, 0.95, 1, NULL, '2025-12-16 14:40:00', '2025-12-16 14:40:00');
+INSERT INTO `gym_course_booking` VALUES (12, 25, 36, '2025-12-17 10:00:00', 68.00, 61.20, 0.90, 1, NULL, '2025-12-17 09:40:00', '2025-12-17 09:40:00');
+INSERT INTO `gym_course_booking` VALUES (13, 27, 37, '2025-12-17 14:00:00', 68.00, 68.00, 1.00, 1, NULL, '2025-12-17 13:50:00', '2025-12-17 13:50:00');
+INSERT INTO `gym_course_booking` VALUES (14, 10, 28, '2025-12-13 11:00:00', 98.00, 98.00, 1.00, 1, NULL, '2025-12-13 10:45:00', '2025-12-13 10:45:00');
+INSERT INTO `gym_course_booking` VALUES (15, 12, 29, '2025-12-13 16:00:00', 98.00, 88.20, 0.90, 1, NULL, '2025-12-13 15:30:00', '2025-12-13 15:30:00');
+INSERT INTO `gym_course_booking` VALUES (16, 14, 30, '2025-12-14 11:00:00', 98.00, 93.10, 0.95, 1, NULL, '2025-12-14 10:50:00', '2025-12-14 10:50:00');
+INSERT INTO `gym_course_booking` VALUES (17, 16, 31, '2025-12-14 16:00:00', 98.00, 88.20, 0.90, 1, NULL, '2025-12-14 15:40:00', '2025-12-14 15:40:00');
+INSERT INTO `gym_course_booking` VALUES (18, 18, 32, '2025-12-15 11:00:00', 98.00, 98.00, 1.00, 1, NULL, '2025-12-15 10:40:00', '2025-12-15 10:40:00');
+INSERT INTO `gym_course_booking` VALUES (19, 20, 33, '2025-12-15 16:00:00', 98.00, 88.20, 0.90, 1, NULL, '2025-12-15 15:35:00', '2025-12-15 15:35:00');
+INSERT INTO `gym_course_booking` VALUES (20, 22, 34, '2025-12-16 11:00:00', 98.00, 93.10, 0.95, 1, NULL, '2025-12-16 10:45:00', '2025-12-16 10:45:00');
+INSERT INTO `gym_course_booking` VALUES (21, 24, 35, '2025-12-16 16:00:00', 98.00, 88.20, 0.90, 1, NULL, '2025-12-16 15:50:00', '2025-12-16 15:50:00');
+INSERT INTO `gym_course_booking` VALUES (22, 26, 36, '2025-12-17 11:00:00', 98.00, 98.00, 1.00, 1, NULL, '2025-12-17 10:35:00', '2025-12-17 10:35:00');
+INSERT INTO `gym_course_booking` VALUES (23, 28, 37, '2025-12-17 16:00:00', 98.00, 88.20, 0.90, 1, NULL, '2025-12-17 15:45:00', '2025-12-17 15:45:00');
+INSERT INTO `gym_course_booking` VALUES (24, 30, 38, '2025-12-13 18:30:00', 58.00, 58.00, 1.00, 1, NULL, '2025-12-13 18:00:00', '2025-12-13 18:00:00');
+INSERT INTO `gym_course_booking` VALUES (25, 31, 39, '2025-12-14 18:30:00', 58.00, 52.20, 0.90, 1, NULL, '2025-12-14 18:15:00', '2025-12-14 18:15:00');
+INSERT INTO `gym_course_booking` VALUES (26, 32, 25, '2025-12-13 09:00:00', 68.00, 64.60, 0.95, 1, NULL, '2025-12-13 08:45:00', '2025-12-13 08:45:00');
+INSERT INTO `gym_course_booking` VALUES (27, 33, 26, '2025-12-14 09:00:00', 68.00, 61.20, 0.90, 1, NULL, '2025-12-14 08:50:00', '2025-12-14 08:50:00');
+INSERT INTO `gym_course_booking` VALUES (28, 34, 27, '2025-12-15 09:00:00', 68.00, 68.00, 1.00, 1, NULL, '2025-12-15 08:40:00', '2025-12-15 08:40:00');
+INSERT INTO `gym_course_booking` VALUES (29, 35, 38, '2025-12-15 18:30:00', 58.00, 58.00, 1.00, 1, NULL, '2025-12-15 18:20:00', '2025-12-15 18:20:00');
+INSERT INTO `gym_course_booking` VALUES (30, 36, 39, '2025-12-16 18:30:00', 58.00, 52.20, 0.90, 1, NULL, '2025-12-16 18:10:00', '2025-12-16 18:10:00');
+INSERT INTO `gym_course_booking` VALUES (31, 37, 25, '2025-12-16 09:00:00', 68.00, 64.60, 0.95, 1, NULL, '2025-12-16 08:45:00', '2025-12-16 08:45:00');
+INSERT INTO `gym_course_booking` VALUES (32, 38, 26, '2025-12-17 09:00:00', 68.00, 61.20, 0.90, 1, NULL, '2025-12-17 08:50:00', '2025-12-17 08:50:00');
+INSERT INTO `gym_course_booking` VALUES (33, 29, 27, '2025-12-17 18:30:00', 58.00, 58.00, 1.00, 1, NULL, '2025-12-17 18:15:00', '2025-12-17 18:15:00');
+INSERT INTO `gym_course_booking` VALUES (34, 39, 40, '2025-12-20 16:38:42', 98.00, 98.00, 1.00, 1, NULL, '2025-12-20 16:38:42', '2025-12-20 16:38:42');
 
 -- ----------------------------
 -- Table structure for gym_course_category
@@ -352,12 +444,12 @@ CREATE TABLE `gym_course_category`  (
 -- ----------------------------
 -- Records of gym_course_category
 -- ----------------------------
-INSERT INTO `gym_course_category` VALUES (1, '瑜伽课程', '各类瑜伽课程', '/images/category/yoga.png', 1, 1, '2025-12-05 14:00:00', '2025-12-05 14:00:00');
-INSERT INTO `gym_course_category` VALUES (2, '力量训练', '器械和力量训练课程', '/images/category/strength.png', 2, 1, '2025-12-05 14:00:00', '2025-12-05 14:00:00');
-INSERT INTO `gym_course_category` VALUES (3, '有氧运动', '有氧健身课程', '/images/category/cardio.png', 3, 1, '2025-12-05 14:00:00', '2025-12-05 14:00:00');
-INSERT INTO `gym_course_category` VALUES (4, '普拉提', '普拉提塑形课程', '/images/category/pilates.png', 4, 1, '2025-12-05 14:00:00', '2025-12-05 14:00:00');
-INSERT INTO `gym_course_category` VALUES (5, '动感单车', '动感单车课程', '/images/category/spinning.png', 5, 1, '2025-12-05 14:00:00', '2025-12-05 14:00:00');
-INSERT INTO `gym_course_category` VALUES (6, '拉伸放松', '拉伸恢复课程', '/images/category/stretching.png', 6, 1, '2025-12-05 14:00:00', '2025-12-05 14:00:00');
+INSERT INTO `gym_course_category` VALUES (1, '瑜伽课程', '各类瑜伽课程', '/files/bussiness/course/1766219574497.jpg', 1, 1, '2025-12-05 14:00:00', '2025-12-21 15:15:54');
+INSERT INTO `gym_course_category` VALUES (2, '力量训练', '器械和力量训练课程', '/files/bussiness/course/1766219574497.jpg', 2, 1, '2025-12-05 14:00:00', '2025-12-21 15:15:56');
+INSERT INTO `gym_course_category` VALUES (3, '有氧运动', '有氧健身课程', '/files/bussiness/course/1766219574497.jpg', 3, 1, '2025-12-05 14:00:00', '2025-12-21 15:15:57');
+INSERT INTO `gym_course_category` VALUES (4, '普拉提', '普拉提塑形课程', '/files/bussiness/course/1766219574497.jpg', 4, 1, '2025-12-05 14:00:00', '2025-12-21 15:15:59');
+INSERT INTO `gym_course_category` VALUES (5, '动感单车', '动感单车课程', '/files/bussiness/course/1766219574497.jpg', 5, 1, '2025-12-05 14:00:00', '2025-12-21 15:16:00');
+INSERT INTO `gym_course_category` VALUES (6, '拉伸放松', '拉伸恢复课程', '/files/bussiness/course/1766219574497.jpg', 6, 1, '2025-12-05 14:00:00', '2025-12-21 15:22:24');
 
 -- ----------------------------
 -- Table structure for gym_course_schedule
@@ -378,7 +470,7 @@ CREATE TABLE `gym_course_schedule`  (
   INDEX `idx_schedule_start_time`(`start_time` ASC) USING BTREE,
   INDEX `idx_schedule_status`(`status` ASC) USING BTREE,
   CONSTRAINT `gym_course_schedule_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `gym_course` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '课程时间安排表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 41 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '课程时间安排表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_course_schedule
@@ -398,6 +490,7 @@ INSERT INTO `gym_course_schedule` VALUES (36, '550e8400-e29b-41d4-a716-446655440
 INSERT INTO `gym_course_schedule` VALUES (37, '550e8400-e29b-41d4-a716-446655440001', '2025-11-25 15:00:00', '2025-11-25 18:00:00', 20, 0, 1, '2025-10-28 11:57:56', '2025-10-28 11:57:56');
 INSERT INTO `gym_course_schedule` VALUES (38, '550e8400-e29b-41d4-a716-446655440001', '2025-11-26 15:00:00', '2025-11-26 18:00:00', 20, 0, 1, '2025-10-28 11:57:56', '2025-10-28 11:57:56');
 INSERT INTO `gym_course_schedule` VALUES (39, '550e8400-e29b-41d4-a716-446655440001', '2025-11-27 15:00:00', '2025-11-27 18:00:00', 20, 0, 1, '2025-10-28 11:57:56', '2025-10-28 11:57:56');
+INSERT INTO `gym_course_schedule` VALUES (40, '550e8400-e29b-41d4-a716-446655440005', '2025-12-22 18:46:35', '2025-12-22 21:46:42', 10, 1, 1, '2025-12-19 18:46:52', '2025-12-19 18:46:52');
 
 -- ----------------------------
 -- Table structure for gym_course_sign_in
@@ -420,7 +513,7 @@ CREATE TABLE `gym_course_sign_in`  (
   CONSTRAINT `gym_course_sign_in_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `gym_course_booking` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_course_sign_in_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_course_sign_in_ibfk_3` FOREIGN KEY (`schedule_id`) REFERENCES `gym_course_schedule` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '课程签到表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '课程签到表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_course_sign_in
@@ -493,7 +586,7 @@ CREATE TABLE `gym_equipment_booking`  (
   INDEX `idx_start_time`(`start_time` ASC) USING BTREE,
   CONSTRAINT `gym_equipment_booking_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_equipment_booking_ibfk_2` FOREIGN KEY (`equipment_id`) REFERENCES `gym_equipment` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '器材预约表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '器材预约表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_equipment_booking
@@ -557,7 +650,7 @@ CREATE TABLE `gym_equipment_queue`  (
   INDEX `idx_join_time`(`join_time` ASC) USING BTREE,
   CONSTRAINT `gym_equipment_queue_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_equipment_queue_ibfk_2` FOREIGN KEY (`equipment_id`) REFERENCES `gym_equipment` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '器材排队表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '器材排队表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_equipment_queue
@@ -584,7 +677,7 @@ CREATE TABLE `gym_membership_package`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_package_member_type`(`member_type` ASC) USING BTREE,
   INDEX `idx_package_status`(`status` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '会员套餐表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '会员套餐表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_membership_package
@@ -641,14 +734,14 @@ CREATE TABLE `gym_review_tag`  (
 -- ----------------------------
 -- Records of gym_review_tag
 -- ----------------------------
-INSERT INTO `gym_review_tag` VALUES (1, '专业', 1, NULL, 1, 1, 1, '2025-12-05 14:00:00', '2025-12-05 18:20:00');
+INSERT INTO `gym_review_tag` VALUES (1, '专业', 1, NULL, 1, 2, 1, '2025-12-05 14:00:00', '2025-12-05 18:20:00');
 INSERT INTO `gym_review_tag` VALUES (2, '耐心', 1, NULL, 2, 1, 1, '2025-12-05 14:00:00', '2025-12-05 18:20:00');
-INSERT INTO `gym_review_tag` VALUES (3, '认真负责', 1, NULL, 3, 1, 1, '2025-12-05 14:00:00', '2025-12-05 18:20:00');
+INSERT INTO `gym_review_tag` VALUES (3, '认真负责', 1, NULL, 3, 2, 1, '2025-12-05 14:00:00', '2025-12-05 18:20:00');
 INSERT INTO `gym_review_tag` VALUES (4, '效果显著', 1, NULL, 4, 1, 1, '2025-12-05 14:00:00', '2025-12-07 15:45:00');
 INSERT INTO `gym_review_tag` VALUES (5, '幽默风趣', 1, NULL, 5, 1, 1, '2025-12-05 14:00:00', '2025-12-07 15:45:00');
 INSERT INTO `gym_review_tag` VALUES (6, '激励性强', 1, NULL, 6, 1, 1, '2025-12-05 14:00:00', '2025-12-07 15:45:00');
 INSERT INTO `gym_review_tag` VALUES (7, '活力四射', 1, NULL, 7, 1, 1, '2025-12-05 14:00:00', '2025-12-08 20:10:00');
-INSERT INTO `gym_review_tag` VALUES (8, '音乐选得好', 1, NULL, 8, 1, 1, '2025-12-05 14:00:00', '2025-12-08 20:10:00');
+INSERT INTO `gym_review_tag` VALUES (8, '音乐选得好', 1, NULL, 8, 2, 1, '2025-12-05 14:00:00', '2025-12-08 20:10:00');
 INSERT INTO `gym_review_tag` VALUES (9, '动作标准', 1, NULL, 9, 0, 1, '2025-12-05 14:00:00', '2025-12-05 14:00:00');
 INSERT INTO `gym_review_tag` VALUES (10, '讲解清晰', 1, NULL, 10, 0, 1, '2025-12-05 14:00:00', '2025-12-05 14:00:00');
 INSERT INTO `gym_review_tag` VALUES (11, '体贴细心', 1, NULL, 11, 0, 1, '2025-12-05 14:00:00', '2025-12-05 14:00:00');
@@ -682,11 +775,16 @@ CREATE TABLE `gym_schedule_record`  (
   INDEX `idx_status`(`status` ASC) USING BTREE,
   CONSTRAINT `gym_schedule_record_ibfk_1` FOREIGN KEY (`schedule_id`) REFERENCES `gym_coach_schedule` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_schedule_record_ibfk_2` FOREIGN KEY (`coach_id`) REFERENCES `gym_coach` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '排班打卡记录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '排班打卡记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_schedule_record
 -- ----------------------------
+INSERT INTO `gym_schedule_record` VALUES (1, 1, 1, '2025-12-13 08:55:00', '2025-12-13 12:10:00', '健身房一楼', '健身房一楼', 2, 100, '正常打卡', '2025-12-13 08:55:00', '2025-12-13 12:10:00');
+INSERT INTO `gym_schedule_record` VALUES (2, 2, 1, '2025-12-13 14:05:00', '2025-12-13 17:05:00', '健身房一楼', '健身房一楼', 2, 100, '正常打卡', '2025-12-13 14:05:00', '2025-12-13 17:05:00');
+INSERT INTO `gym_schedule_record` VALUES (3, 3, 2, '2025-12-14 08:15:00', NULL, '健身房二楼力量区', NULL, 3, 95, '迟到15分钟', '2025-12-14 08:15:00', '2025-12-14 08:15:00');
+INSERT INTO `gym_schedule_record` VALUES (4, 4, 2, '2025-12-14 19:00:00', '2025-12-14 20:50:00', '健身房二楼力量区', '健身房二楼力量区', 4, 90, '早退10分钟', '2025-12-14 19:00:00', '2025-12-14 20:50:00');
+INSERT INTO `gym_schedule_record` VALUES (5, 5, 3, '2025-12-13 17:58:00', '2025-12-13 19:32:00', '健身房二楼单车区', '健身房二楼单车区', 2, 100, '正常打卡', '2025-12-13 17:58:00', '2025-12-13 19:32:00');
 
 -- ----------------------------
 -- Table structure for gym_schedule_request
@@ -718,11 +816,15 @@ CREATE TABLE `gym_schedule_request`  (
   CONSTRAINT `gym_schedule_request_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `gym_coach` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_schedule_request_ibfk_2` FOREIGN KEY (`approver_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
   CONSTRAINT `gym_schedule_request_ibfk_3` FOREIGN KEY (`exchange_with_coach_id`) REFERENCES `gym_coach` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '排班申请表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '排班申请表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_schedule_request
 -- ----------------------------
+INSERT INTO `gym_schedule_request` VALUES (1, 1, 1, '2025-12-20', '身体不适，需要请假休息', NULL, NULL, 1, 1, '2025-12-18 10:00:00', '同意请假，注意身体', NULL, '2025-12-18 09:30:00', '2025-12-18 10:00:00');
+INSERT INTO `gym_schedule_request` VALUES (2, 2, 2, '2025-12-25', '圣诞节想加班服务会员', NULL, NULL, 0, NULL, NULL, NULL, NULL, '2025-12-17 14:00:00', '2025-12-17 14:00:00');
+INSERT INTO `gym_schedule_request` VALUES (3, 3, 3, '2025-12-21', '想和李教练换班，她同意了', 1, 1, 1, 1, '2025-12-19 15:00:00', '已批准换班申请', NULL, '2025-12-19 11:00:00', '2025-12-19 15:00:00');
+INSERT INTO `gym_schedule_request` VALUES (4, 1, 1, '2025-12-22', '家里有事需要调休', NULL, NULL, 2, 1, '2025-12-20 09:00:00', '当天课程已满，无法批准', NULL, '2025-12-19 16:30:00', '2025-12-20 09:00:00');
 
 -- ----------------------------
 -- Table structure for gym_schedule_rule
@@ -771,11 +873,17 @@ CREATE TABLE `gym_schedule_statistics`  (
   UNIQUE INDEX `uk_coach_date`(`coach_id` ASC, `statistics_date` ASC) USING BTREE,
   INDEX `idx_coach_id`(`coach_id` ASC) USING BTREE,
   CONSTRAINT `gym_schedule_statistics_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `gym_coach` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '排班统计表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '排班统计表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_schedule_statistics
 -- ----------------------------
+INSERT INTO `gym_schedule_statistics` VALUES (1, 1, '2025-12-01', 168.50, 160.00, 8.50, 22, 0, 1, 2, 98, '2025-12-01 00:00:00', '2025-12-14 00:00:00');
+INSERT INTO `gym_schedule_statistics` VALUES (2, 2, '2025-12-01', 184.00, 176.00, 8.00, 23, 0, 2, 0, 96, '2025-12-01 00:00:00', '2025-12-14 00:00:00');
+INSERT INTO `gym_schedule_statistics` VALUES (3, 3, '2025-12-01', 156.00, 156.00, 0.00, 20, 0, 0, 0, 100, '2025-12-01 00:00:00', '2025-12-14 00:00:00');
+INSERT INTO `gym_schedule_statistics` VALUES (4, 1, '2025-11-01', 176.00, 168.00, 8.00, 24, 1, 0, 3, 95, '2025-11-01 00:00:00', '2025-11-30 23:59:59');
+INSERT INTO `gym_schedule_statistics` VALUES (5, 2, '2025-11-01', 192.00, 184.00, 8.00, 25, 0, 1, 0, 97, '2025-11-01 00:00:00', '2025-11-30 23:59:59');
+INSERT INTO `gym_schedule_statistics` VALUES (6, 3, '2025-11-01', 144.00, 144.00, 0.00, 18, 0, 1, 0, 100, '2025-11-01 00:00:00', '2025-11-30 23:59:59');
 
 -- ----------------------------
 -- Table structure for gym_training_action
@@ -831,11 +939,48 @@ CREATE TABLE `gym_training_plan`  (
   INDEX `idx_coach_id`(`coach_id` ASC) USING BTREE,
   INDEX `idx_status`(`status` ASC) USING BTREE,
   CONSTRAINT `gym_training_plan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '训练计划表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '训练计划表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_training_plan
 -- ----------------------------
+INSERT INTO `gym_training_plan` VALUES (1, 3, 1, '瑜伽入门计划', '塑形', '2025-12-01', '2026-01-31', 1, 1, '专注于柔韧性和体态改善', '2025-12-01 10:00:00', '2025-12-01 10:00:00');
+INSERT INTO `gym_training_plan` VALUES (2, 3, 1, '普拉提进阶计划', '塑形', '2025-11-01', '2025-11-30', 0, 1, '核心力量训练已完成', '2025-11-01 09:00:00', '2025-12-01 00:00:00');
+INSERT INTO `gym_training_plan` VALUES (3, 7, 1, '减脂塑形计划', '减脂', '2025-12-05', '2026-02-05', 1, 1, '结合瑜伽和有氧运动', '2025-12-05 14:00:00', '2025-12-05 14:00:00');
+INSERT INTO `gym_training_plan` VALUES (4, 9, 1, '柔韧性提升计划', '塑形', '2025-12-10', '2026-01-10', 1, 1, '初级学员,循序渐进', '2025-12-10 10:00:00', '2025-12-10 10:00:00');
+INSERT INTO `gym_training_plan` VALUES (5, 11, 1, '体态矫正计划', '康复', '2025-11-20', '2025-12-20', 1, 1, '改善体态和增强柔韧性', '2025-11-20 15:00:00', '2025-11-20 15:00:00');
+INSERT INTO `gym_training_plan` VALUES (6, 13, 1, '瑜伽基础计划', '塑形', '2025-12-08', '2026-01-08', 1, 1, '新手学员基础训练', '2025-12-08 11:00:00', '2025-12-08 11:00:00');
+INSERT INTO `gym_training_plan` VALUES (7, 15, 1, '高级瑜伽计划', '塑形', '2025-12-03', '2026-02-03', 1, 1, '高难度动作组合', '2025-12-03 09:00:00', '2025-12-03 09:00:00');
+INSERT INTO `gym_training_plan` VALUES (8, 17, 1, '全面塑形计划V2', '塑形', '2025-12-12', '2026-02-12', 1, 1, '续费后的新计划', '2025-12-12 10:00:00', '2025-12-12 10:00:00');
+INSERT INTO `gym_training_plan` VALUES (9, 19, 1, '一对一定制计划', '增肌', '2025-12-06', '2026-01-06', 1, 1, '铂金会员专属定制', '2025-12-06 14:00:00', '2025-12-06 14:00:00');
+INSERT INTO `gym_training_plan` VALUES (10, 21, 1, '减脂塑形专项计划', '减脂', '2025-12-11', '2026-01-11', 1, 1, '新会员专项计划', '2025-12-11 10:00:00', '2025-12-11 10:00:00');
+INSERT INTO `gym_training_plan` VALUES (11, 23, 1, '普拉提长期计划', '塑形', '2025-10-15', '2025-12-15', 1, 1, '长期会员持续训练', '2025-10-15 09:00:00', '2025-10-15 09:00:00');
+INSERT INTO `gym_training_plan` VALUES (12, 25, 1, '零基础瑜伽计划', '塑形', '2025-12-09', '2026-01-09', 1, 1, '从零开始系统训练', '2025-12-09 14:00:00', '2025-12-09 14:00:00');
+INSERT INTO `gym_training_plan` VALUES (13, 27, 1, '高强度塑形计划', '塑形', '2025-12-07', '2026-02-07', 1, 1, '铂金会员高强度训练', '2025-12-07 10:00:00', '2025-12-07 10:00:00');
+INSERT INTO `gym_training_plan` VALUES (14, 1, 2, '增肌力量计划V3', '增肌', '2025-12-01', '2026-01-31', 1, 1, '铂金会员第三期计划', '2025-12-01 08:00:00', '2025-12-01 08:00:00');
+INSERT INTO `gym_training_plan` VALUES (15, 1, 2, '增肌力量计划V2', '增肌', '2025-10-01', '2025-11-30', 0, 1, '第二期已完成', '2025-10-01 08:00:00', '2025-12-01 00:00:00');
+INSERT INTO `gym_training_plan` VALUES (16, 10, 2, '力量训练进阶计划', '增肌', '2025-12-10', '2026-01-10', 1, 1, '有天赋的学员,进度快', '2025-12-10 09:00:00', '2025-12-10 09:00:00');
+INSERT INTO `gym_training_plan` VALUES (17, 12, 2, '力量提升计划', '增肌', '2025-11-25', '2025-12-25', 1, 1, '持续稳定提升', '2025-11-25 10:00:00', '2025-11-25 10:00:00');
+INSERT INTO `gym_training_plan` VALUES (18, 14, 2, '中级力量训练', '增肌', '2025-12-05', '2026-01-05', 1, 1, '已达到中级水平', '2025-12-05 11:00:00', '2025-12-05 11:00:00');
+INSERT INTO `gym_training_plan` VALUES (19, 16, 2, '新手力量入门', '增肌', '2025-12-08', '2026-01-08', 1, 1, '新手学员快速进步', '2025-12-08 14:00:00', '2025-12-08 14:00:00');
+INSERT INTO `gym_training_plan` VALUES (20, 18, 2, '稳定增肌计划', '增肌', '2025-12-03', '2026-01-03', 1, 1, '黄金会员定期指导', '2025-12-03 10:00:00', '2025-12-03 10:00:00');
+INSERT INTO `gym_training_plan` VALUES (21, 20, 2, '小组力量训练', '增肌', '2025-12-06', '2026-01-06', 1, 1, '小组课程表现突出', '2025-12-06 15:00:00', '2025-12-06 15:00:00');
+INSERT INTO `gym_training_plan` VALUES (22, 22, 2, '力量突破计划', '增肌', '2025-12-09', '2026-01-09', 1, 1, '突破瓶颈专项计划', '2025-12-09 10:00:00', '2025-12-09 10:00:00');
+INSERT INTO `gym_training_plan` VALUES (23, 24, 2, '肌肉线条塑造', '增肌', '2025-11-20', '2025-12-20', 1, 1, '改善肌肉线条', '2025-11-20 14:00:00', '2025-11-20 14:00:00');
+INSERT INTO `gym_training_plan` VALUES (24, 26, 2, '高级力量训练', '增肌', '2025-12-04', '2026-02-04', 1, 1, '高级会员自律训练', '2025-12-04 09:00:00', '2025-12-04 09:00:00');
+INSERT INTO `gym_training_plan` VALUES (25, 28, 2, '个性化增肌计划', '增肌', '2025-12-11', '2026-01-11', 1, 1, '新学员定制计划', '2025-12-11 15:00:00', '2025-12-11 15:00:00');
+INSERT INTO `gym_training_plan` VALUES (26, 30, 3, '有氧燃脂计划', '减脂', '2025-12-05', '2026-01-05', 1, 1, '动感单车为主', '2025-12-05 18:00:00', '2025-12-05 18:00:00');
+INSERT INTO `gym_training_plan` VALUES (27, 31, 3, '团课减脂计划', '减脂', '2025-12-08', '2026-01-08', 1, 1, '铂金会员团课专属', '2025-12-08 17:00:00', '2025-12-08 17:00:00');
+INSERT INTO `gym_training_plan` VALUES (28, 32, 3, '基础有氧训练', '减脂', '2025-12-10', '2026-01-10', 1, 1, '新手基础培训', '2025-12-10 19:00:00', '2025-12-10 19:00:00');
+INSERT INTO `gym_training_plan` VALUES (29, 33, 3, '有氧进阶计划', '减脂', '2025-12-06', '2026-01-06', 1, 1, '准备升级黄金会员', '2025-12-06 18:30:00', '2025-12-06 18:30:00');
+INSERT INTO `gym_training_plan` VALUES (30, 34, 3, '定期有氧课程', '减脂', '2025-11-28', '2025-12-28', 1, 1, '黄金会员定期课程', '2025-11-28 18:00:00', '2025-11-28 18:00:00');
+INSERT INTO `gym_training_plan` VALUES (31, 35, 3, 'HIIT高强度训练', '减脂', '2025-12-07', '2026-01-07', 1, 1, '高强度间歇训练', '2025-12-07 19:00:00', '2025-12-07 19:00:00');
+INSERT INTO `gym_training_plan` VALUES (32, 36, 3, '中级有氧计划', '减脂', '2025-12-09', '2026-01-09', 1, 1, '中级学员稳定训练', '2025-12-09 18:00:00', '2025-12-09 18:00:00');
+INSERT INTO `gym_training_plan` VALUES (33, 37, 3, '新手燃脂计划', '减脂', '2025-12-11', '2026-01-11', 1, 1, '新学员热情高', '2025-12-11 19:00:00', '2025-12-11 19:00:00');
+INSERT INTO `gym_training_plan` VALUES (34, 38, 3, '单车减脂计划', '减脂', '2025-12-04', '2026-01-04', 1, 1, '动感单车表现出色', '2025-12-04 18:00:00', '2025-12-04 18:00:00');
+INSERT INTO `gym_training_plan` VALUES (35, 29, 3, '综合有氧训练', '减脂', '2025-12-12', '2026-01-12', 1, 1, '多节课程持续进步', '2025-12-12 18:30:00', '2025-12-12 18:30:00');
+INSERT INTO `gym_training_plan` VALUES (36, 39, NULL, '减脂塑形-初级计划 - 我的计划', '减脂', '2025-12-21', '2026-01-18', 1, 1, '基于模板：减脂塑形-初级计划', '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan` VALUES (37, 39, NULL, '运动康复-康复计划 - 我的计划', '康复', '2025-12-21', '2026-01-11', 1, 1, '基于模板：运动康复-康复计划', '2025-12-21 17:23:16', '2025-12-21 17:23:16');
 
 -- ----------------------------
 -- Table structure for gym_training_plan_detail
@@ -854,6 +999,9 @@ CREATE TABLE `gym_training_plan_detail`  (
   `sort_order` int NULL DEFAULT 0 COMMENT '排序',
   `is_completed` tinyint NULL DEFAULT 0 COMMENT '是否完成：0-未完成，1-已完成',
   `complete_time` datetime NULL DEFAULT NULL COMMENT '完成时间',
+  `execution_note` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '执行备注',
+  `actual_sets` int NULL DEFAULT NULL COMMENT '实际完成组数',
+  `actual_reps` int NULL DEFAULT NULL COMMENT '实际完成次数',
   `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
@@ -861,11 +1009,30 @@ CREATE TABLE `gym_training_plan_detail`  (
   INDEX `idx_action_id`(`action_id` ASC) USING BTREE,
   CONSTRAINT `gym_training_plan_detail_ibfk_1` FOREIGN KEY (`plan_id`) REFERENCES `gym_training_plan` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_training_plan_detail_ibfk_2` FOREIGN KEY (`action_id`) REFERENCES `gym_training_action` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '训练计划明细表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '训练计划明细表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_training_plan_detail
 -- ----------------------------
+INSERT INTO `gym_training_plan_detail` VALUES (1, 36, 1, 1, 3, 12, 60.00, NULL, 60, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (2, 36, 1, 2, 4, 8, 80.00, NULL, 90, 2, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (3, 36, 2, 5, 3, 20, NULL, 30, 60, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (4, 36, 2, 6, 3, 30, NULL, 30, 45, 2, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (5, 36, 3, 3, 4, 6, 50.00, NULL, 90, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (6, 36, 3, 4, 3, 12, 25.00, NULL, 60, 2, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (7, 36, 4, 5, 3, 20, NULL, 30, 45, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (8, 36, 4, 1, 3, 10, 50.00, NULL, 60, 2, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (9, 36, 5, 2, 4, 10, 100.00, NULL, 90, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (10, 36, 5, 6, 2, 30, NULL, 20, 45, 2, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (11, 36, 6, 3, 3, 8, 60.00, NULL, 90, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (12, 36, 7, 5, 4, 25, NULL, 45, 45, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:17:28', '2025-12-21 17:17:28');
+INSERT INTO `gym_training_plan_detail` VALUES (13, 37, 1, 6, 3, 45, NULL, 40, 45, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:23:16', '2025-12-21 17:23:16');
+INSERT INTO `gym_training_plan_detail` VALUES (14, 37, 1, 5, 2, 15, NULL, 20, 30, 2, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:23:16', '2025-12-21 17:23:16');
+INSERT INTO `gym_training_plan_detail` VALUES (15, 37, 2, 1, 2, 10, 30.00, NULL, 60, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:23:16', '2025-12-21 17:23:16');
+INSERT INTO `gym_training_plan_detail` VALUES (16, 37, 3, 3, 2, 6, 20.00, NULL, 60, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:23:16', '2025-12-21 17:23:16');
+INSERT INTO `gym_training_plan_detail` VALUES (17, 37, 4, 4, 2, 12, 15.00, NULL, 45, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:23:16', '2025-12-21 17:23:16');
+INSERT INTO `gym_training_plan_detail` VALUES (18, 37, 5, 6, 4, 60, NULL, 50, 45, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:23:16', '2025-12-21 17:23:16');
+INSERT INTO `gym_training_plan_detail` VALUES (19, 37, 6, 5, 2, 10, NULL, 15, 30, 1, 0, NULL, NULL, NULL, NULL, '2025-12-21 17:23:16', '2025-12-21 17:23:16');
 
 -- ----------------------------
 -- Table structure for gym_training_plan_template
@@ -981,7 +1148,7 @@ CREATE TABLE `gym_user_achievement`  (
   INDEX `idx_is_achieved`(`is_achieved` ASC) USING BTREE,
   CONSTRAINT `gym_user_achievement_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_user_achievement_ibfk_2` FOREIGN KEY (`achievement_id`) REFERENCES `gym_workout_achievement` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户成就记录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户成就记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_user_achievement
@@ -1010,7 +1177,7 @@ CREATE TABLE `gym_user_membership`  (
   INDEX `idx_membership_end_time`(`end_time` ASC) USING BTREE,
   CONSTRAINT `gym_user_membership_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_user_membership_ibfk_2` FOREIGN KEY (`package_id`) REFERENCES `gym_membership_package` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户会员记录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户会员记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_user_membership
@@ -1074,7 +1241,7 @@ CREATE TABLE `gym_workout_daily_stats`  (
   UNIQUE INDEX `uk_user_date`(`user_id` ASC, `stat_date` ASC) USING BTREE,
   INDEX `idx_stat_date`(`stat_date` ASC) USING BTREE,
   CONSTRAINT `gym_workout_daily_stats_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '每日运动数据统计表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 39 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '每日运动数据统计表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_workout_daily_stats
@@ -1082,6 +1249,36 @@ CREATE TABLE `gym_workout_daily_stats`  (
 INSERT INTO `gym_workout_daily_stats` VALUES (1, 3, '2025-12-10', 60, 450, 5.00, 8000, 1, 30, 30, 0, 0, 100.00, '2025-12-10 14:00:00', '2025-12-10 14:00:00');
 INSERT INTO `gym_workout_daily_stats` VALUES (2, 1, '2025-12-12', 90, 650, 8.00, 12000, 2, 45, 45, 0, 0, 95.50, '2025-12-12 09:00:00', '2025-12-12 17:30:00');
 INSERT INTO `gym_workout_daily_stats` VALUES (3, 7, '2025-12-11', 120, 800, 10.00, 15000, 2, 60, 60, 0, 0, 100.00, '2025-12-11 08:00:00', '2025-12-11 20:30:00');
+INSERT INTO `gym_workout_daily_stats` VALUES (4, 1, '2025-12-01', 60, 480, 8.00, 10000, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (5, 1, '2025-12-02', 100, 600, 0.00, 0, 2, 0, 100, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (7, 1, '2025-12-03', 90, 550, 3.00, 0, 1, 90, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (8, 1, '2025-12-04', 60, 600, 0.00, 0, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (9, 1, '2025-12-05', 60, 280, 6.00, 8000, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (10, 1, '2025-12-06', 60, 400, 0.00, 0, 1, 0, 60, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (11, 1, '2025-12-07', 90, 520, 15.00, 0, 1, 90, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (12, 1, '2025-12-08', 60, 480, 8.50, 10500, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (13, 1, '2025-12-09', 85, 600, 0.00, 0, 2, 0, 85, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (15, 1, '2025-12-10', 60, 380, 0.00, 0, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (16, 1, '2025-12-11', 60, 420, 2.50, 0, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (17, 1, '2025-12-13', 60, 520, 9.00, 11000, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (18, 1, '2025-12-14', 90, 580, 0.00, 0, 2, 0, 90, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (20, 1, '2025-12-15', 60, 580, 0.00, 0, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (21, 1, '2025-12-16', 60, 290, 6.50, 8500, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (22, 1, '2025-12-17', 95, 740, 0.00, 0, 2, 0, 95, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (24, 1, '2025-12-18', 90, 530, 16.00, 0, 1, 90, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (25, 1, '2025-12-19', 90, 560, 3.50, 0, 1, 90, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (26, 1, '2025-12-20', 60, 490, 8.80, 10800, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (27, 1, '2025-12-21', 85, 570, 0.00, 0, 2, 0, 85, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (29, 3, '2025-12-05', 60, 460, 7.50, 9500, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (30, 3, '2025-12-08', 60, 590, 0.00, 0, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (31, 3, '2025-12-12', 60, 410, 2.30, 0, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (32, 3, '2025-12-15', 60, 360, 0.00, 0, 1, 0, 60, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (33, 3, '2025-12-18', 60, 470, 8.00, 10000, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (34, 7, '2025-12-05', 90, 510, 14.00, 0, 1, 90, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (35, 7, '2025-12-08', 60, 340, 0.00, 0, 1, 0, 60, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (36, 7, '2025-12-14', 60, 480, 8.20, 10200, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (37, 7, '2025-12-17', 90, 540, 3.20, 0, 1, 90, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_daily_stats` VALUES (38, 7, '2025-12-20', 60, 600, 0.00, 0, 1, 60, 0, 0, 0, NULL, '2025-12-21 17:31:12', '2025-12-21 17:31:12');
 
 -- ----------------------------
 -- Table structure for gym_workout_detail
@@ -1105,7 +1302,7 @@ CREATE TABLE `gym_workout_detail`  (
   INDEX `idx_workout_record_id`(`workout_record_id` ASC) USING BTREE,
   INDEX `idx_sort_order`(`sort_order` ASC) USING BTREE,
   CONSTRAINT `gym_workout_detail_ibfk_1` FOREIGN KEY (`workout_record_id`) REFERENCES `gym_workout_record` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '运动详情表（力量训练动作明细）' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '运动详情表（力量训练动作明细）' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_workout_detail
@@ -1149,7 +1346,7 @@ CREATE TABLE `gym_workout_record`  (
   INDEX `idx_start_time`(`start_time` ASC) USING BTREE,
   CONSTRAINT `gym_workout_record_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `gym_workout_record_ibfk_2` FOREIGN KEY (`workout_type_id`) REFERENCES `gym_workout_type` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '健身运动记录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '健身运动记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gym_workout_record
@@ -1158,6 +1355,41 @@ INSERT INTO `gym_workout_record` VALUES (1, 3, 1, '跑步', '2025-12-10', '2025-
 INSERT INTO `gym_workout_record` VALUES (2, 1, 7, '深蹲', '2025-12-12', '2025-12-12 09:30:00', '2025-12-12 11:00:00', 90, 'HIGH', 600, NULL, NULL, 140, 165, NULL, '今天深蹲进度有提升，完成了目标重量', 'GOOD', '多云', '健身房二楼', 1, NULL, 'MANUAL', '2025-12-12 11:05:00', '2025-12-12 11:05:00');
 INSERT INTO `gym_workout_record` VALUES (3, 7, 6, '动感单车', '2025-12-11', '2025-12-11 08:00:00', '2025-12-11 09:30:00', 90, 'HIGH', 700, NULL, NULL, 155, 180, NULL, '跟着教练的节奏，整堂课燃脂效果很棒', 'GREAT', '晴天', '健身房二楼', 1, NULL, 'MANUAL', '2025-12-11 09:35:00', '2025-12-11 09:35:00');
 INSERT INTO `gym_workout_record` VALUES (4, 1, 3, '游泳', '2025-12-12', '2025-12-12 15:00:00', '2025-12-12 16:30:00', 90, 'MEDIUM', 500, 2.00, NULL, 130, 150, NULL, '水温适宜，游泳时很放松', 'GOOD', '晴天', '健身房游泳池', 1, NULL, 'MANUAL', '2025-12-12 16:35:00', '2025-12-12 16:35:00');
+INSERT INTO `gym_workout_record` VALUES (10, 1, 1, '跑步', '2025-12-01', '2025-12-01 07:00:00', '2025-12-01 08:00:00', 60, 'MEDIUM', 480, 8.00, 10000, 135, 160, NULL, '早晨跑步，状态不错', 'GOOD', '晴天', '健身房跑步机', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (11, 1, 7, '深蹲', '2025-12-02', '2025-12-02 18:00:00', '2025-12-02 19:00:00', 60, 'HIGH', 350, NULL, NULL, 130, 155, NULL, '力量训练日，腿部训练', 'GOOD', '多云', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (12, 1, 8, '卧推', '2025-12-02', '2025-12-02 19:10:00', '2025-12-02 19:50:00', 40, 'HIGH', 250, NULL, NULL, 125, 150, NULL, '胸部训练，感觉良好', 'GOOD', '多云', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (13, 1, 3, '游泳', '2025-12-03', '2025-12-03 15:00:00', '2025-12-03 16:30:00', 90, 'MEDIUM', 550, 3.00, NULL, 120, 145, NULL, '游泳放松，水温适宜', 'GREAT', '晴天', '健身房游泳池', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (14, 1, 6, '动感单车', '2025-12-04', '2025-12-04 18:30:00', '2025-12-04 19:30:00', 60, 'HIGH', 600, NULL, NULL, 155, 180, NULL, '跟着节奏，燃脂效果好', 'GREAT', '晴天', '健身房有氧区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (15, 1, 2, '快走', '2025-12-05', '2025-12-05 07:30:00', '2025-12-05 08:30:00', 60, 'LOW', 280, 6.00, 8000, 110, 130, NULL, '轻松快走，舒缓压力', 'GOOD', '阴天', '健身房跑步机', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (16, 1, 9, '硬拉', '2025-12-06', '2025-12-06 18:00:00', '2025-12-06 19:00:00', 60, 'HIGH', 400, NULL, NULL, 140, 165, NULL, '全身力量训练', 'TIRED', '晴天', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (17, 1, 4, '骑行', '2025-12-07', '2025-12-07 08:00:00', '2025-12-07 09:30:00', 90, 'MEDIUM', 520, 15.00, NULL, 130, 155, NULL, '周末骑行，天气很好', 'GREAT', '晴天', '健身房有氧区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (18, 1, 1, '跑步', '2025-12-08', '2025-12-08 07:00:00', '2025-12-08 08:00:00', 60, 'MEDIUM', 480, 8.50, 10500, 138, 162, NULL, '继续坚持晨跑', 'GOOD', '晴天', '健身房跑步机', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (19, 1, 10, '引体向上', '2025-12-09', '2025-12-09 18:00:00', '2025-12-09 18:40:00', 40, 'HIGH', 280, NULL, NULL, 125, 148, NULL, '背部训练日', 'GOOD', '多云', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (20, 1, 7, '深蹲', '2025-12-09', '2025-12-09 18:45:00', '2025-12-09 19:30:00', 45, 'HIGH', 320, NULL, NULL, 132, 155, NULL, '腿部训练', 'GOOD', '多云', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (21, 1, 5, '椭圆机', '2025-12-10', '2025-12-10 19:00:00', '2025-12-10 20:00:00', 60, 'MEDIUM', 380, NULL, NULL, 128, 150, NULL, '低冲击有氧训练', 'GOOD', '晴天', '健身房有氧区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (22, 1, 3, '游泳', '2025-12-11', '2025-12-11 15:00:00', '2025-12-11 16:00:00', 60, 'MEDIUM', 420, 2.50, NULL, 118, 142, NULL, '游泳训练', 'GOOD', '晴天', '健身房游泳池', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (23, 1, 1, '跑步', '2025-12-13', '2025-12-13 07:00:00', '2025-12-13 08:00:00', 60, 'HIGH', 520, 9.00, 11000, 145, 170, NULL, '提速训练，感觉很棒', 'GREAT', '晴天', '健身房跑步机', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (24, 1, 8, '卧推', '2025-12-14', '2025-12-14 18:00:00', '2025-12-14 18:50:00', 50, 'HIGH', 300, NULL, NULL, 128, 152, NULL, '上肢训练日', 'GOOD', '多云', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (25, 1, 10, '引体向上', '2025-12-14', '2025-12-14 19:00:00', '2025-12-14 19:40:00', 40, 'HIGH', 280, NULL, NULL, 126, 148, NULL, '背部训练', 'GOOD', '多云', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (26, 1, 6, '动感单车', '2025-12-15', '2025-12-15 09:00:00', '2025-12-15 10:00:00', 60, 'HIGH', 580, NULL, NULL, 152, 178, NULL, '周末燃脂训练', 'GREAT', '晴天', '健身房有氧区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (27, 1, 2, '快走', '2025-12-16', '2025-12-16 07:30:00', '2025-12-16 08:30:00', 60, 'LOW', 290, 6.50, 8500, 112, 132, NULL, '恢复性训练', 'GOOD', '阴天', '健身房跑步机', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (28, 1, 9, '硬拉', '2025-12-17', '2025-12-17 18:00:00', '2025-12-17 18:45:00', 45, 'HIGH', 380, NULL, NULL, 138, 162, NULL, '下肢力量强化', 'GOOD', '晴天', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (29, 1, 7, '深蹲', '2025-12-17', '2025-12-17 18:50:00', '2025-12-17 19:40:00', 50, 'HIGH', 360, NULL, NULL, 135, 158, NULL, '腿部训练', 'TIRED', '晴天', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (30, 1, 4, '骑行', '2025-12-18', '2025-12-18 08:00:00', '2025-12-18 09:30:00', 90, 'MEDIUM', 530, 16.00, NULL, 132, 156, NULL, '有氧耐力训练', 'GOOD', '晴天', '健身房有氧区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (31, 1, 3, '游泳', '2025-12-19', '2025-12-19 15:00:00', '2025-12-19 16:30:00', 90, 'MEDIUM', 560, 3.50, NULL, 122, 146, NULL, '全身有氧训练', 'GREAT', '晴天', '健身房游泳池', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (32, 1, 1, '跑步', '2025-12-20', '2025-12-20 07:00:00', '2025-12-20 08:00:00', 60, 'MEDIUM', 490, 8.80, 10800, 140, 164, NULL, '晨跑继续', 'GOOD', '晴天', '健身房跑步机', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (33, 1, 8, '卧推', '2025-12-21', '2025-12-21 10:00:00', '2025-12-21 10:50:00', 50, 'HIGH', 310, NULL, NULL, 130, 153, NULL, '上肢力量训练', 'GOOD', '晴天', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (34, 1, 10, '引体向上', '2025-12-21', '2025-12-21 11:00:00', '2025-12-21 11:35:00', 35, 'HIGH', 260, NULL, NULL, 124, 147, NULL, '背部强化', 'GOOD', '晴天', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (40, 3, 1, '跑步', '2025-12-05', '2025-12-05 07:00:00', '2025-12-05 08:00:00', 60, 'MEDIUM', 460, 7.50, 9500, 132, 158, NULL, '晨跑训练', 'GOOD', '晴天', '健身房跑步机', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (41, 3, 6, '动感单车', '2025-12-08', '2025-12-08 18:00:00', '2025-12-08 19:00:00', 60, 'HIGH', 590, NULL, NULL, 150, 175, NULL, '燃脂训练', 'GREAT', '晴天', '健身房有氧区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (42, 3, 3, '游泳', '2025-12-12', '2025-12-12 15:00:00', '2025-12-12 16:00:00', 60, 'MEDIUM', 410, 2.30, NULL, 116, 140, NULL, '游泳训练', 'GOOD', '晴天', '健身房游泳池', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (43, 3, 7, '深蹲', '2025-12-15', '2025-12-15 18:00:00', '2025-12-15 19:00:00', 60, 'HIGH', 360, NULL, NULL, 135, 160, NULL, '腿部力量训练', 'GOOD', '多云', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (44, 3, 1, '跑步', '2025-12-18', '2025-12-18 07:00:00', '2025-12-18 08:00:00', 60, 'MEDIUM', 470, 8.00, 10000, 135, 160, NULL, '晨跑训练', 'GOOD', '晴天', '健身房跑步机', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (50, 7, 4, '骑行', '2025-12-05', '2025-12-05 08:00:00', '2025-12-05 09:30:00', 90, 'MEDIUM', 510, 14.00, NULL, 128, 152, NULL, '有氧骑行', 'GOOD', '晴天', '健身房有氧区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (51, 7, 8, '卧推', '2025-12-08', '2025-12-08 18:00:00', '2025-12-08 19:00:00', 60, 'HIGH', 340, NULL, NULL, 130, 155, NULL, '胸部训练', 'GOOD', '多云', '健身房力量区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (52, 7, 1, '跑步', '2025-12-14', '2025-12-14 07:00:00', '2025-12-14 08:00:00', 60, 'MEDIUM', 480, 8.20, 10200, 137, 161, NULL, '晨跑训练', 'GOOD', '晴天', '健身房跑步机', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (53, 7, 3, '游泳', '2025-12-17', '2025-12-17 15:00:00', '2025-12-17 16:30:00', 90, 'MEDIUM', 540, 3.20, NULL, 120, 144, NULL, '游泳训练', 'GREAT', '晴天', '健身房游泳池', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
+INSERT INTO `gym_workout_record` VALUES (54, 7, 6, '动感单车', '2025-12-20', '2025-12-20 18:00:00', '2025-12-20 19:00:00', 60, 'HIGH', 600, NULL, NULL, 153, 179, NULL, '高强度燃脂', 'GREAT', '晴天', '健身房有氧区', 1, NULL, 'MANUAL', '2025-12-21 17:31:12', '2025-12-21 17:31:12');
 
 -- ----------------------------
 -- Table structure for gym_workout_type
@@ -1259,7 +1491,7 @@ CREATE TABLE `sys_file_info`  (
   INDEX `idx_is_temp`(`is_temp` ASC) USING BTREE,
   INDEX `idx_create_time`(`create_time` ASC) USING BTREE,
   INDEX `idx_file_path`(`file_path` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 41 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件信息表-精简版' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 49 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '文件信息表-精简版' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_file_info
@@ -1269,6 +1501,14 @@ INSERT INTO `sys_file_info` VALUES (37, 'logo.png', '/files/bussiness/course/176
 INSERT INTO `sys_file_info` VALUES (38, 'KccBwJzJCFk746d008584defb0e297c6f6819e149d8d.jpg', '/files/bussiness/user_avatar/1761634887253.jpg', 84624, 'IMG', 'USER_AVATAR', '1', 'avatar', 0, '2025-10-28 15:01:27');
 INSERT INTO `sys_file_info` VALUES (39, '微信图片_20251015184850_31_2.jpg', '/files/bussiness/user_avatar/1761636869026.jpg', 84624, 'IMG', 'USER_AVATAR', '5', 'avatar', 0, '2025-10-28 15:34:29');
 INSERT INTO `sys_file_info` VALUES (40, '微信图片_20230727231054.jpg', '/files/bussiness/user_avatar/1764919899218.jpg', 40703, 'IMG', 'USER_AVATAR', '5', 'avatar', 0, '2025-12-05 15:31:39');
+INSERT INTO `sys_file_info` VALUES (41, '微信图片_20230727231054.jpg', '/files/bussiness/course/1766214401147.jpg', 40703, 'IMG', 'COURSE', '550e8400-e29b-41d4-a716-446655440005', 'cover_image', 0, '2025-12-20 15:06:41');
+INSERT INTO `sys_file_info` VALUES (42, '1761618669374.jpg', '/files/bussiness/course/1766219539658.jpg', 168829, 'IMG', 'COURSE', '550e8400-e29b-41d4-a716-446655440006', 'cover_image', 0, '2025-12-20 16:32:20');
+INSERT INTO `sys_file_info` VALUES (43, '1181597-rId21.jpg', '/files/bussiness/course/1766219551439.jpg', 189613, 'IMG', 'COURSE', '550e8400-e29b-41d4-a716-446655440003', 'cover_image', 0, '2025-12-20 16:32:31');
+INSERT INTO `sys_file_info` VALUES (44, '1xfavgp86qikr2nsmh9b7cd0ew4z5luo_PIC2018.png', '/files/bussiness/course/1766219564065.png', 1736562, 'IMG', 'COURSE', '550e8400-e29b-41d4-a716-446655440002', 'cover_image', 0, '2025-12-20 16:32:44');
+INSERT INTO `sys_file_info` VALUES (45, '5148.jpg_wh860.jpg', '/files/bussiness/course/1766219574497.jpg', 158186, 'IMG', 'COURSE', '550e8400-e29b-41d4-a716-446655440001', 'cover_image', 0, '2025-12-20 16:32:55');
+INSERT INTO `sys_file_info` VALUES (46, '1xfavgp86qikr2nsmh9b7cd0ew4z5luo_PIC2018.png', '/files/bussiness/course/1766219588034.png', 1736562, 'IMG', 'COURSE', '550e8400-e29b-41d4-a716-446655440004', 'cover_image', 0, '2025-12-20 16:33:08');
+INSERT INTO `sys_file_info` VALUES (47, '10389099752_1103739600.jpg', '/files/bussiness/course/1766276361852.jpg', 195440, 'IMG', 'COURSE', '550e8400-e29b-41d4-a716-446655440005', 'cover_image', 0, '2025-12-21 08:19:22');
+INSERT INTO `sys_file_info` VALUES (48, '1765962376426.jpg', '/files/bussiness/user_avatar/1766276383386.jpg', 40703, 'IMG', 'USER_AVATAR', '1', 'avatar', 0, '2025-12-21 08:19:43');
 
 -- ----------------------------
 -- Table structure for sys_notification
@@ -1300,15 +1540,25 @@ CREATE TABLE `sys_notification`  (
   INDEX `idx_send_time`(`send_time` ASC) USING BTREE,
   INDEX `idx_priority`(`priority` ASC) USING BTREE,
   INDEX `idx_related_id`(`related_id` ASC) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统通知表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统通知表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_notification
 -- ----------------------------
-INSERT INTO `sys_notification` VALUES (1, 'SYSTEM', '系统维护通知', '本系统将于本周日凌晨2:00-4:00进行系统维护，届时将无法访问，请提前安排好您的预约计划。', 'ALL', NULL, NULL, NULL, '/images/notification/system.png', 2, 1, '2025-12-12 16:30:00', NULL, 1, '重要维护通知', '2025-12-12 16:00:00', '2025-12-12 16:30:00');
+INSERT INTO `sys_notification` VALUES (1, 'SYSTEM', '系统维护通知', '本系统将于本周日凌晨2:00-4:00进行系统维护，届时将无法访问，请提前安排好您的预约计划。', 'ALL', NULL, NULL, NULL, NULL, 2, 1, '2025-12-12 16:30:00', NULL, 1, '重要维护通知', '2025-12-12 16:00:00', '2025-12-21 17:13:14');
 INSERT INTO `sys_notification` VALUES (2, 'BOOKING', '课程预约确认', '您已成功预约瑜伽基础课，预约时间：2025-10-28 15:00-18:00', 'USER', 3, '550e8400-e29b-41d4-a716-446655440001', 'COURSE', NULL, 1, 1, '2025-12-12 10:05:00', NULL, 1, '自动确认', '2025-12-12 10:00:00', '2025-12-12 10:05:00');
-INSERT INTO `sys_notification` VALUES (3, 'MEMBERSHIP', '会员即将过期提醒', '您的铂金会员将于2025-12-15过期，请及时续费以继续享受会员权益', 'USER', 3, NULL, NULL, '/images/notification/membership.png', 1, 1, '2025-12-12 14:00:00', NULL, 1, '续费提醒', '2025-12-12 14:00:00', '2025-12-12 14:00:00');
+INSERT INTO `sys_notification` VALUES (3, 'MEMBERSHIP', '会员即将过期提醒', '您的铂金会员将于2025-12-15过期，请及时续费以继续享受会员权益', 'USER', 3, NULL, NULL, NULL, 1, 1, '2025-12-12 14:00:00', NULL, 1, '续费提醒', '2025-12-12 14:00:00', '2025-12-21 17:13:14');
 INSERT INTO `sys_notification` VALUES (4, 'EQUIPMENT', '器材维护通知', '跑步机A3已维修完成，可以正常使用，感谢您的耐心等待', 'ALL', NULL, '7', 'EQUIPMENT', NULL, 0, 1, '2025-12-12 08:30:00', NULL, 1, '维修完成通知', '2025-12-12 08:30:00', '2025-12-12 08:30:00');
+INSERT INTO `sys_notification` VALUES (5, 'SYSTEM', '系统维护通知', '本系统将于本周日凌晨2:00-4:00进行系统维护，届时将无法访问，请提前安排好您的预约计划。', 'ALL', NULL, NULL, NULL, NULL, 2, 1, '2025-12-20 21:34:49', NULL, 1, '系统通知测试', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification` VALUES (6, 'BOOKING', '课程预约提醒', '您预约的课程即将开始，请提前15分钟到达健身房。', 'USER', NULL, NULL, 'COURSE_BOOKING', NULL, 1, 1, '2025-12-20 21:34:49', NULL, 1, '预约提醒', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification` VALUES (7, 'MEMBERSHIP', '会员即将到期', '您的会员将于3天后到期，请及时续费以继续享受会员权益。', 'USER', NULL, NULL, 'MEMBERSHIP', NULL, 1, 1, '2025-12-20 21:34:49', NULL, 1, '会员提醒', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification` VALUES (8, 'EQUIPMENT', '器材维护通知', '部分健身器材将于今日下午进行维护保养，预计维护时间2小时，给您带来不便敬请谅解。', 'ALL', NULL, NULL, 'EQUIPMENT', NULL, 0, 1, '2025-12-20 21:34:49', NULL, 1, '器材维护', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification` VALUES (9, 'COURSE', '课程时间变更', '您预约的课程时间已变更，请注意查看最新时间安排。', 'USER', NULL, NULL, 'COURSE_SCHEDULE', NULL, 2, 1, '2025-12-20 21:34:49', NULL, 1, '课程通知', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification` VALUES (10, 'SYSTEM', '新年优惠活动', '新年特惠！所有会员套餐8折优惠，活动时间有限，欢迎咨询。', 'ALL', NULL, NULL, NULL, NULL, 1, 1, '2025-12-20 21:34:49', NULL, 1, '营销活动', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification` VALUES (11, 'COURSE', '教练请假通知', '由于教练临时请假，您预约的课程已取消，费用将原路退回。', 'COACH', NULL, NULL, 'COURSE', NULL, 2, 1, '2025-12-20 21:34:49', NULL, 1, '教练通知', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification` VALUES (12, 'SYSTEM', '系统功能升级', '系统已升级至新版本，新增多项功能，欢迎体验！', 'ADMIN', NULL, NULL, NULL, NULL, 1, 1, '2025-12-20 21:34:49', NULL, 1, '管理员通知', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification` VALUES (13, 'SYSTEM', '春节放假通知', '春节期间健身房营业时间调整，具体时间请关注公告。', 'ALL', NULL, NULL, NULL, NULL, 1, 2, NULL, NULL, 1, '草稿-待发送', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification` VALUES (14, 'MEMBERSHIP', '会员优惠提醒', '本月办理年卡可享受特别优惠，欢迎咨询前台。', 'ALL', NULL, NULL, 'MEMBERSHIP', NULL, 1, 1, '2025-12-20 21:34:49', NULL, 1, '优惠活动', '2025-12-20 21:34:49', '2025-12-21 17:13:14');
 
 -- ----------------------------
 -- Table structure for sys_notification_read
@@ -1329,11 +1579,352 @@ CREATE TABLE `sys_notification_read`  (
   INDEX `idx_read_time`(`read_time` ASC) USING BTREE,
   CONSTRAINT `sys_notification_read_ibfk_1` FOREIGN KEY (`notification_id`) REFERENCES `sys_notification` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `sys_notification_read_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户通知读取记录表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 396 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '用户通知读取记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_notification_read
 -- ----------------------------
+INSERT INTO `sys_notification_read` VALUES (1, 14, 1, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (2, 10, 1, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (3, 8, 1, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (4, 5, 1, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (5, 4, 1, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (6, 1, 1, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (7, 14, 2, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (8, 10, 2, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (9, 8, 2, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (10, 5, 2, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (11, 4, 2, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (12, 1, 2, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (13, 14, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (14, 10, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (15, 8, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (16, 5, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (17, 4, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (18, 1, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (19, 14, 4, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (20, 10, 4, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (21, 8, 4, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (22, 5, 4, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (23, 4, 4, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (24, 1, 4, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (25, 14, 5, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (26, 10, 5, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (27, 8, 5, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (28, 5, 5, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (29, 4, 5, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (30, 1, 5, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (31, 14, 6, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (32, 10, 6, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (33, 8, 6, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (34, 5, 6, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (35, 4, 6, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (36, 1, 6, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (37, 14, 7, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (38, 10, 7, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (39, 8, 7, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (40, 5, 7, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (41, 4, 7, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (42, 1, 7, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (43, 14, 8, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (44, 10, 8, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (45, 8, 8, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (46, 5, 8, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (47, 4, 8, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (48, 1, 8, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (49, 14, 9, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (50, 10, 9, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (51, 8, 9, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (52, 5, 9, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (53, 4, 9, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (54, 1, 9, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (55, 14, 10, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (56, 10, 10, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (57, 8, 10, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (58, 5, 10, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (59, 4, 10, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (60, 1, 10, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (61, 14, 11, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (62, 10, 11, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (63, 8, 11, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (64, 5, 11, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (65, 4, 11, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (66, 1, 11, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (67, 14, 12, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (68, 10, 12, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (69, 8, 12, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (70, 5, 12, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (71, 4, 12, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (72, 1, 12, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (73, 14, 13, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (74, 10, 13, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (75, 8, 13, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (76, 5, 13, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (77, 4, 13, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (78, 1, 13, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (79, 14, 14, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (80, 10, 14, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (81, 8, 14, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (82, 5, 14, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (83, 4, 14, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (84, 1, 14, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (85, 14, 15, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (86, 10, 15, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (87, 8, 15, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (88, 5, 15, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (89, 4, 15, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (90, 1, 15, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (91, 14, 16, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (92, 10, 16, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (93, 8, 16, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (94, 5, 16, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (95, 4, 16, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (96, 1, 16, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (97, 14, 17, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (98, 10, 17, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (99, 8, 17, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (100, 5, 17, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (101, 4, 17, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (102, 1, 17, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (103, 14, 18, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (104, 10, 18, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (105, 8, 18, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (106, 5, 18, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (107, 4, 18, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (108, 1, 18, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (109, 14, 19, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (110, 10, 19, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (111, 8, 19, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (112, 5, 19, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (113, 4, 19, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (114, 1, 19, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (115, 14, 20, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (116, 10, 20, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (117, 8, 20, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (118, 5, 20, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (119, 4, 20, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (120, 1, 20, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (121, 14, 21, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (122, 10, 21, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (123, 8, 21, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (124, 5, 21, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (125, 4, 21, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (126, 1, 21, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (127, 14, 22, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (128, 10, 22, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (129, 8, 22, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (130, 5, 22, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (131, 4, 22, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (132, 1, 22, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (133, 14, 23, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (134, 10, 23, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (135, 8, 23, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (136, 5, 23, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (137, 4, 23, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (138, 1, 23, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (139, 14, 24, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (140, 10, 24, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (141, 8, 24, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (142, 5, 24, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (143, 4, 24, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (144, 1, 24, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (145, 14, 25, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (146, 10, 25, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (147, 8, 25, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (148, 5, 25, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (149, 4, 25, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (150, 1, 25, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (151, 14, 26, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (152, 10, 26, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (153, 8, 26, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (154, 5, 26, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (155, 4, 26, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (156, 1, 26, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (157, 14, 27, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (158, 10, 27, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (159, 8, 27, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (160, 5, 27, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (161, 4, 27, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (162, 1, 27, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (163, 14, 28, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (164, 10, 28, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (165, 8, 28, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (166, 5, 28, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (167, 4, 28, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (168, 1, 28, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (169, 14, 29, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (170, 10, 29, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (171, 8, 29, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (172, 5, 29, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (173, 4, 29, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (174, 1, 29, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (175, 14, 30, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (176, 10, 30, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (177, 8, 30, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (178, 5, 30, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (179, 4, 30, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (180, 1, 30, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (181, 14, 31, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (182, 10, 31, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (183, 8, 31, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (184, 5, 31, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (185, 4, 31, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (186, 1, 31, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (187, 14, 32, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (188, 10, 32, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (189, 8, 32, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (190, 5, 32, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (191, 4, 32, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (192, 1, 32, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (193, 14, 33, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (194, 10, 33, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (195, 8, 33, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (196, 5, 33, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (197, 4, 33, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (198, 1, 33, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (199, 14, 34, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (200, 10, 34, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (201, 8, 34, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (202, 5, 34, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (203, 4, 34, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (204, 1, 34, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (205, 14, 35, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (206, 10, 35, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (207, 8, 35, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (208, 5, 35, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (209, 4, 35, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (210, 1, 35, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (211, 14, 36, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (212, 10, 36, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (213, 8, 36, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (214, 5, 36, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (215, 4, 36, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (216, 1, 36, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (217, 14, 37, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (218, 10, 37, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (219, 8, 37, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (220, 5, 37, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (221, 4, 37, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (222, 1, 37, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (223, 14, 38, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (224, 10, 38, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (225, 8, 38, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (226, 5, 38, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (227, 4, 38, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (228, 1, 38, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (229, 14, 39, '2025-12-21 17:14:26', 1, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (230, 10, 39, '2025-12-21 17:14:26', 1, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (231, 8, 39, '2025-12-21 17:14:26', 1, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (232, 5, 39, '2025-12-21 17:14:26', 1, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (233, 4, 39, '2025-12-21 17:14:26', 1, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (234, 1, 39, '2025-12-21 17:14:14', 1, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (256, 9, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (257, 7, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (258, 6, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (259, 9, 7, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (260, 7, 7, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (261, 6, 7, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (262, 9, 9, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (263, 7, 9, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (264, 6, 9, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (265, 9, 10, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (266, 7, 10, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (267, 6, 10, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (268, 9, 11, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (269, 7, 11, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (270, 6, 11, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (271, 9, 12, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (272, 7, 12, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (273, 6, 12, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (274, 9, 13, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (275, 7, 13, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (276, 6, 13, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (277, 9, 14, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (278, 7, 14, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (279, 6, 14, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (280, 9, 15, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (281, 7, 15, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (282, 6, 15, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (283, 9, 16, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (284, 7, 16, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (285, 6, 16, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (286, 9, 17, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (287, 7, 17, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (288, 6, 17, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (289, 9, 18, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (290, 7, 18, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (291, 6, 18, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (292, 9, 19, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (293, 7, 19, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (294, 6, 19, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (295, 9, 20, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (296, 7, 20, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (297, 6, 20, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (298, 9, 21, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (299, 7, 21, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (300, 6, 21, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (301, 9, 22, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (302, 7, 22, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (303, 6, 22, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (304, 9, 23, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (305, 7, 23, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (306, 6, 23, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (307, 9, 24, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (308, 7, 24, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (309, 6, 24, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (310, 9, 25, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (311, 7, 25, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (312, 6, 25, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (313, 9, 26, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (314, 7, 26, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (315, 6, 26, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (316, 9, 27, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (317, 7, 27, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (318, 6, 27, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (319, 9, 28, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (320, 7, 28, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (321, 6, 28, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (322, 9, 29, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (323, 7, 29, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (324, 6, 29, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (325, 9, 30, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (326, 7, 30, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (327, 6, 30, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (328, 9, 31, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (329, 7, 31, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (330, 6, 31, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (331, 9, 32, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (332, 7, 32, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (333, 6, 32, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (334, 9, 33, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (335, 7, 33, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (336, 6, 33, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (337, 9, 34, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (338, 7, 34, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (339, 6, 34, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (340, 9, 35, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (341, 7, 35, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (342, 6, 35, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (343, 9, 36, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (344, 7, 36, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (345, 6, 36, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (346, 9, 37, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (347, 7, 37, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (348, 6, 37, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (349, 9, 38, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (350, 7, 38, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (351, 6, 38, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (352, 9, 39, '2025-12-21 17:14:26', 1, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (353, 7, 39, '2025-12-21 17:14:26', 1, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (354, 6, 39, '2025-12-21 17:14:26', 1, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (383, 2, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (384, 3, 3, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (386, 12, 1, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (387, 12, 2, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (389, 11, 4, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (390, 11, 5, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (391, 11, 6, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
+INSERT INTO `sys_notification_read` VALUES (392, 11, 8, NULL, 0, '2025-12-21 17:13:14', '2025-12-21 17:13:14');
 
 -- ----------------------------
 -- Table structure for user
@@ -1360,19 +1951,50 @@ CREATE TABLE `user`  (
   INDEX `idx_user_email`(`email` ASC) USING BTREE,
   INDEX `idx_user_member_type`(`member_type` ASC) USING BTREE,
   INDEX `idx_user_status`(`status` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '统一用户表（包含小程序用户和管理员）' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '统一用户表（包含小程序用户和管理员）' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'ADMIN', '系统管理员', '/files/bussiness/user_avatar/1764919899218.jpg', '13900139001', 1, '2026-01-11 14:53:47', 'admin', '$2a$10$0EB8hAzCT25cUhNeXDOhkujD./0TYjjiENnpirImJg4q4MeE/pKPa', 'admin@gym.com', 1, '2025-10-17 09:19:31', '2025-12-05 15:31:40');
-INSERT INTO `user` VALUES (2, 'ADMIN', '健身房经理', NULL, '13900139002', 0, NULL, 'manager', '$2a$10$lqnSaaWggBoGo5BftUKuX.hmQzk3yNF4UqC5H47AeySo5KOEg6MEC', 'manager@gym.com', 1, '2025-10-17 09:19:31', '2025-10-28 09:22:58');
-INSERT INTO `user` VALUES (3, 'USER', '小明', NULL, '18888888888', 2, '2025-12-15 10:00:00', NULL, NULL, NULL, 1, '2025-12-05 15:21:02', '2025-12-05 15:21:02');
-INSERT INTO `user` VALUES (4, 'COACH', '李教练', NULL, '13900139004', 0, NULL, 'coach_li', '$2a$10$0EB8hAzCT25cUhNeXDOhkujD./0TYjjiENnpirImJg4q4MeE/pKPa', 'coach_li@gym.com', 1, '2025-10-17 09:19:31', '2025-12-05 14:00:00');
-INSERT INTO `user` VALUES (5, 'COACH', '王教练', NULL, '13900139005', 0, NULL, 'coach_wang', '$2a$10$0EB8hAzCT25cUhNeXDOhkujD./0TYjjiENnpirImJg4q4MeE/pKPa', 'coach_wang@gym.com', 1, '2025-10-17 09:19:31', '2025-12-05 14:00:00');
-INSERT INTO `user` VALUES (6, 'COACH', '张教练', NULL, '13900139006', 0, NULL, 'coach_zhang', '$2a$10$0EB8hAzCT25cUhNeXDOhkujD./0TYjjiENnpirImJg4q4MeE/pKPa', 'coach_zhang@gym.com', 1, '2025-10-17 09:19:31', '2025-12-05 14:00:00');
-INSERT INTO `user` VALUES (7, 'USER', '小红', NULL, '18888888889', 1, '2026-12-31 23:59:59', NULL, NULL, NULL, 1, '2025-12-11 10:00:00', '2025-12-11 10:00:00');
-INSERT INTO `user` VALUES (8, 'COACH', 'lw', NULL, '19878726645', 0, NULL, 'lw1', '$2a$10$EhkcCnHsF4UGmGfFG8aXouy/PgQyFBDwwGCVD2WMyGfLFS1HhuANq', '22548944@qq.com', 1, '2025-12-11 20:43:55', '2025-12-11 20:43:55');
+INSERT INTO `user` VALUES (1, 'ADMIN', '系统管理员', '/files/bussiness/user_avatar/1766276383386.jpg', '13900139001', 1, '2026-01-11 14:53:47', 'admin', '$2a$10$0EB8hAzCT25cUhNeXDOhkujD./0TYjjiENnpirImJg4q4MeE/pKPa', 'admin@gym.com', 1, '2025-10-17 09:19:31', '2025-12-21 08:19:44');
+INSERT INTO `user` VALUES (2, 'ADMIN', '健身房经理', '/files/bussiness/user_avatar/1766276383386.jpg', '13900139002', 0, NULL, 'manager', '$2a$10$lqnSaaWggBoGo5BftUKuX.hmQzk3yNF4UqC5H47AeySo5KOEg6MEC', 'manager@gym.com', 1, '2025-10-17 09:19:31', '2025-12-21 15:11:49');
+INSERT INTO `user` VALUES (3, 'USER', '小明', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888888', 2, '2025-12-15 10:00:00', NULL, NULL, NULL, 1, '2025-12-05 15:21:02', '2025-12-21 15:13:26');
+INSERT INTO `user` VALUES (4, 'COACH', '李教练', '/files/bussiness/user_avatar/1759645666149.jpg', '13900139004', 0, NULL, 'coach_li', '$2a$10$0EB8hAzCT25cUhNeXDOhkujD./0TYjjiENnpirImJg4q4MeE/pKPa', 'coach_li@gym.com', 1, '2025-10-17 09:19:31', '2025-12-21 15:13:33');
+INSERT INTO `user` VALUES (5, 'COACH', '王教练', '/files/bussiness/user_avatar/1759645666149.jpg', '13900139005', 0, NULL, 'coach_wang', '$2a$10$0EB8hAzCT25cUhNeXDOhkujD./0TYjjiENnpirImJg4q4MeE/pKPa', 'coach_wang@gym.com', 1, '2025-10-17 09:19:31', '2025-12-21 15:13:38');
+INSERT INTO `user` VALUES (6, 'COACH', '张教练', '/files/bussiness/user_avatar/1766276383386.jpg', '13900139006', 0, NULL, 'coach_zhang', '$2a$10$0EB8hAzCT25cUhNeXDOhkujD./0TYjjiENnpirImJg4q4MeE/pKPa', 'coach_zhang@gym.com', 1, '2025-10-17 09:19:31', '2025-12-21 15:11:55');
+INSERT INTO `user` VALUES (7, 'USER', '小红', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888889', 1, '2026-12-31 23:59:59', NULL, NULL, NULL, 1, '2025-12-11 10:00:00', '2025-12-21 15:11:57');
+INSERT INTO `user` VALUES (8, 'COACH', 'lw', '/files/bussiness/user_avatar/1759644698565.jpg', '19878726645', 0, NULL, 'lw1', '$2a$10$EhkcCnHsF4UGmGfFG8aXouy/PgQyFBDwwGCVD2WMyGfLFS1HhuANq', '22548944@qq.com', 1, '2025-12-11 20:43:55', '2025-12-21 15:13:47');
+INSERT INTO `user` VALUES (9, 'USER', '李欣怡', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888890', 1, '2026-01-10 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:00');
+INSERT INTO `user` VALUES (10, 'USER', '王晓婷', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888891', 1, '2026-02-15 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:13:48');
+INSERT INTO `user` VALUES (11, 'USER', '张梦琪', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888892', 2, '2026-03-20 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:03');
+INSERT INTO `user` VALUES (12, 'USER', '刘晓芳', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888893', 1, '2026-01-25 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:13:55');
+INSERT INTO `user` VALUES (13, 'USER', '陈思彤', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888894', 0, NULL, NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:07');
+INSERT INTO `user` VALUES (14, 'USER', '杨娜娜', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888895', 1, '2026-02-01 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:13:57');
+INSERT INTO `user` VALUES (15, 'USER', '黄佳琪', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888896', 2, '2026-04-10 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:09');
+INSERT INTO `user` VALUES (16, 'USER', '吴梦雨', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888897', 1, '2026-03-05 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:13:59');
+INSERT INTO `user` VALUES (17, 'USER', '周欣悦', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888898', 0, NULL, NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:11');
+INSERT INTO `user` VALUES (18, 'USER', '徐晓美', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888899', 1, '2026-01-15 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:01');
+INSERT INTO `user` VALUES (19, 'USER', '孙思琦', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888800', 2, '2026-02-28 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:13');
+INSERT INTO `user` VALUES (20, 'USER', '何佳怡', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888801', 1, '2026-03-12 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:03');
+INSERT INTO `user` VALUES (21, 'USER', '郑欣妍', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888802', 0, NULL, NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:25');
+INSERT INTO `user` VALUES (22, 'USER', '罗思语', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888803', 1, '2026-01-20 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:04');
+INSERT INTO `user` VALUES (23, 'USER', '高小琳', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888804', 2, '2026-04-05 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:24');
+INSERT INTO `user` VALUES (24, 'USER', '林晓晓', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888805', 1, '2026-02-20 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:23');
+INSERT INTO `user` VALUES (25, 'USER', '邱思玥', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888806', 0, NULL, NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:26');
+INSERT INTO `user` VALUES (26, 'USER', '曾梦雪', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888807', 1, '2026-03-15 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:07');
+INSERT INTO `user` VALUES (27, 'USER', '傅思诺', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888808', 2, '2026-01-30 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:21');
+INSERT INTO `user` VALUES (28, 'USER', '蒋欣妤', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888809', 1, '2026-02-10 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:28');
+INSERT INTO `user` VALUES (29, 'USER', '谢晓嘉', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888810', 0, NULL, NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:10');
+INSERT INTO `user` VALUES (30, 'USER', '韦思琪', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888811', 1, '2026-03-25 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:11');
+INSERT INTO `user` VALUES (31, 'USER', '唐晓敏', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888812', 2, '2026-04-15 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:32');
+INSERT INTO `user` VALUES (32, 'USER', '苏思欣', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888813', 1, '2026-01-08 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:18');
+INSERT INTO `user` VALUES (33, 'USER', '许欣怡', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888814', 0, NULL, NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:34');
+INSERT INTO `user` VALUES (34, 'USER', '冯思琳', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888815', 1, '2026-02-05 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:35');
+INSERT INTO `user` VALUES (35, 'USER', '卢梦琪', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888816', 2, '2026-03-30 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:36');
+INSERT INTO `user` VALUES (36, 'USER', '叶晓雪', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888817', 1, '2026-01-22 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:37');
+INSERT INTO `user` VALUES (37, 'USER', '樊思语', '/files/bussiness/user_avatar/1759644698565.jpg', '18888888818', 0, NULL, NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:14:16');
+INSERT INTO `user` VALUES (38, 'USER', '葛欣琳', '/files/bussiness/user_avatar/1766276383386.jpg', '18888888819', 1, '2026-04-01 00:00:00', NULL, NULL, NULL, 1, '2025-12-12 10:00:00', '2025-12-21 15:12:39');
+INSERT INTO `user` VALUES (39, 'USER', 'pgl', '/files/bussiness/user_avatar/1766276383386.jpg', '19878726696', 0, NULL, 'pgl', '$2a$10$F79W5Dij2SDgsvNEF2YF.OeI5D4nZGYJa301exvp6iPcMc0Sp3XY.', '2254894294@qq.com', 1, '2025-12-19 19:32:19', '2025-12-21 15:55:19');
 
 -- ----------------------------
 -- View structure for view_user_workout_summary

@@ -48,6 +48,12 @@ public class GymCourseSchedule {
     @TableField("current_participants")
     private Integer currentParticipants;
 
+    /**
+     * 排课状态：
+     * 0 - 已取消: 该时间段的课程已取消，不可预约
+     * 1 - 正常: 可以正常预约
+     * 2 - 已满: 参与人数已达上限，不可预约
+     */
     @Schema(description = "状态：0-取消，1-正常，2-已满")
     private Integer status;
 

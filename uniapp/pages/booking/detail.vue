@@ -99,6 +99,14 @@
           取消预约
         </button>
       </view>
+      
+      <!-- 已完成课程：评价教练按钮 -->
+      <view v-if="booking.status === 2" class="action-footer">
+        <button class="review-btn" @click="handleReview">
+          <text class="fa fa-star"></text>
+          评价教练
+        </button>
+      </view>
     </view>
 
     <!-- 加载中 -->
@@ -189,6 +197,14 @@ const handleCancel = () => {
         })
       }
     }
+  })
+}
+
+// 评价教练
+const handleReview = () => {
+  // 跳转到评价页面，传递教练ID和课程预约ID
+  uni.navigateTo({
+    url: `/pages/coach-review/create?courseBookingId=${booking.value.id}&coachId=${booking.value.coachId || ''}&coachName=${encodeURIComponent(booking.value.courseName || '')}`
   })
 }
 
@@ -351,6 +367,22 @@ onLoad((options) => {
     font-weight: bold;
     border-radius: 44rpx;
     border: 2rpx solid #ff4d4f;
+
+    .fa {
+      margin-right: 10rpx;
+    }
+  }
+  
+  .review-btn {
+    width: 100%;
+    height: 88rpx;
+    line-height: 88rpx;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    font-size: 32rpx;
+    font-weight: bold;
+    border-radius: 44rpx;
+    border: none;
 
     .fa {
       margin-right: 10rpx;

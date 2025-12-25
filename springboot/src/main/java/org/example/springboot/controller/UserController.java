@@ -180,7 +180,30 @@ public class UserController {
         return Result.success(response);
     }
 
+    /**
+     * 删除用户（管理员功能）
+     */
+    @Operation(summary = "删除用户")
+    @DeleteMapping("/{id}")
+    public Result<Void> deleteUser(@Parameter(description = "用户ID") @PathVariable Long id) {
+        try {
+            // 权限检查：只有管理员可以删除用户
+            UserDetailResponseDTO currentUser = (UserDetailResponseDTO) JwtTokenUtils.getCurrentUser();
+            if (currentUser == null || !UserType.ADMIN.getCode().equals(currentUser.getUserType())) {
+                return Result.error("权限不足");
+            }
 
+            // 不能删除自己
+            if (currentUser.getId().equals(id)) {
+                return Result.error("不能删除当前登录用户");
+            }
 
-
+            log.info("管理员删除用户: userId={}", id);
+            userService.deleteUser(id);
+            return Result.success();
+        } catch (Exception e) {
+            log.error("删除用户失败: userId={}", id, e);
+            return Result.error("删除失败: " + e.getMessage());
+        }
+    }
 }

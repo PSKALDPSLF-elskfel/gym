@@ -5,12 +5,21 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.example.springboot.dto.command.CoachCreateDTO;
 import org.example.springboot.dto.command.CoachUpdateDTO;
+import org.example.springboot.dto.response.CoachDashboardDTO;
 import org.example.springboot.dto.response.CoachResponseDTO;
 import org.example.springboot.entity.GymCoach;
+import org.example.springboot.entity.GymCoachStudent;
+import org.example.springboot.entity.GymCourse;
+import org.example.springboot.entity.GymCourseSchedule;
+import org.example.springboot.entity.GymTrainingPlan;
 import org.example.springboot.entity.User;
 import org.example.springboot.exception.BusinessException;
 import org.example.springboot.exception.ServiceException;
 import org.example.springboot.mapper.GymCoachMapper;
+import org.example.springboot.mapper.GymCoachStudentMapper;
+import org.example.springboot.mapper.GymCourseMapper;
+import org.example.springboot.mapper.GymCourseScheduleMapper;
+import org.example.springboot.mapper.GymTrainingPlanMapper;
 import org.example.springboot.mapper.UserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -18,6 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,6 +47,18 @@ public class CoachService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private GymCoachStudentMapper coachStudentMapper;
+
+    @Resource
+    private GymTrainingPlanMapper trainingPlanMapper;
+
+    @Resource
+    private GymCourseScheduleMapper courseScheduleMapper;
+
+    @Resource
+    private GymCourseMapper courseMapper;
 
     /**
      * 创建教练
@@ -201,6 +225,73 @@ public class CoachService {
     }
 
     /**
+     * 获取教练工作台统计数据
+     */
+    public CoachDashboardDTO getDashboardData(Long userId) {
+        // 1. 根据userId获取coachId
+        GymCoach coach = coachMapper.selectOne(
+            new LambdaQueryWrapper<GymCoach>()
+                .eq(GymCoach::getUserId, userId)
+        );
+        
+        if (coach == null) {
+            throw new BusinessException("当前用户不是教练");
+        }
+        
+        Long coachId = coach.getId();
+        
+        CoachDashboardDTO dto = new CoachDashboardDTO();
+        
+        // 2. 统计学员数
+        Long studentCount = coachStudentMapper.selectCount(
+            new LambdaQueryWrapper<GymCoachStudent>()
+                .eq(GymCoachStudent::getCoachId, coachId)
+        );
+        dto.setStudentCount(studentCount.intValue());
+        
+        // 3. 统计训练方案数
+        Long planCount = trainingPlanMapper.selectCount(
+            new LambdaQueryWrapper<GymTrainingPlan>()
+                .eq(GymTrainingPlan::getCoachId, coachId)
+                .eq(GymTrainingPlan::getStatus, 1)
+        );
+        dto.setPlanCount(planCount.intValue());
+        
+        // 4. 统计本周课程数
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+        LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
+        
+        LocalDateTime startTime = startOfWeek.atStartOfDay();
+        LocalDateTime endTime = endOfWeek.atTime(23, 59, 59);
+        
+        // 先查询该教练的所有课程ID
+        List<GymCourse> courses = courseMapper.selectList(
+            new LambdaQueryWrapper<GymCourse>()
+                .eq(GymCourse::getCoachId, coachId)
+        );
+        
+        Long weekCourseCount = 0L;
+        if (!courses.isEmpty()) {
+            List<String> courseIds = courses.stream()
+                .map(GymCourse::getId)
+                .collect(Collectors.toList());
+            
+            weekCourseCount = courseScheduleMapper.selectCount(
+                new LambdaQueryWrapper<GymCourseSchedule>()
+                    .in(GymCourseSchedule::getCourseId, courseIds)
+                    .between(GymCourseSchedule::getStartTime, startTime, endTime)
+            );
+        }
+        dto.setWeekCourseCount(weekCourseCount.intValue());
+        
+        // 5. 获取平均评分
+        dto.setAvgRating(coach.getRating() != null ? coach.getRating().doubleValue() : 0.0);
+        
+        return dto;
+    }
+
+    /**
      * 实体转响应DTO
      */
     private CoachResponseDTO entityToResponseDTO(GymCoach coach, User user) {
@@ -209,9 +300,11 @@ public class CoachService {
         
         if (user != null) {
             dto.setUsername(user.getUsername());
+            dto.setUserType(user.getUserType());
             dto.setNickname(user.getNickname());
             dto.setAvatar(user.getAvatar());
             dto.setPhone(user.getPhone());
+            dto.setEmail(user.getEmail());
         }
         
         dto.setStatusName(Integer.valueOf(1).equals(coach.getStatus()) ? "在职" : "离职");

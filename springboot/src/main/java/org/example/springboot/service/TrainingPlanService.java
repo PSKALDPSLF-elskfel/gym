@@ -343,6 +343,7 @@ public class TrainingPlanService {
         User user = userMapper.selectById(plan.getUserId());
         if (user != null) {
             dto.setUserNickname(user.getNickname());
+            dto.setUserAvatar(user.getAvatar());
         }
         
         // 设置教练信息
@@ -581,17 +582,27 @@ public class TrainingPlanService {
     @Transactional(rollbackFor = Exception.class)
     public TrainingPlanResponseDTO createPlanFromTemplate(Long userId, Long templateId, String planName) {
         try {
+            log.info("开始从模板创建训练计划: userId={}, templateId={}, planName={}", userId, templateId, planName);
+            
             // 验证用户存在
             User user = userMapper.selectById(userId);
             if (user == null) {
+                log.error("用户不存在: userId={}", userId);
                 throw new BusinessException("用户不存在");
             }
+            log.info("用户验证通过: {}", user.getNickname());
 
             // 获取模板
             GymTrainingPlanTemplate template = trainingPlanTemplateMapper.selectById(templateId);
-            if (template == null || !template.isActive()) {
-                throw new BusinessException("训练计划模板不存在或已禁用");
+            if (template == null) {
+                log.error("训练计划模板不存在: templateId={}", templateId);
+                throw new BusinessException("训练计划模板不存在");
             }
+            if (!template.isActive()) {
+                log.error("训练计划模板已禁用: templateId={}, status={}", templateId, template.getStatus());
+                throw new BusinessException("训练计划模板已禁用");
+            }
+            log.info("模板验证通过: {}, status={}", template.getName(), template.getStatus());
 
             // 创建计划
             GymTrainingPlan plan = GymTrainingPlan.builder()
@@ -605,7 +616,8 @@ public class TrainingPlanService {
                     .remark("基于模板：" + template.getName())
                     .build();
 
-            trainingPlanMapper.insert(plan);
+            int insertResult = trainingPlanMapper.insert(plan);
+            log.info("训练计划插入结果: insertResult={}, planId={}", insertResult, plan.getId());
 
             // 复制模板明细到计划明细
             LambdaQueryWrapper<GymTrainingPlanTemplateDetail> templateDetailWrapper = new LambdaQueryWrapper<>();
@@ -613,8 +625,10 @@ public class TrainingPlanService {
                     .orderByAsc(GymTrainingPlanTemplateDetail::getDayOfWeek)
                     .orderByAsc(GymTrainingPlanTemplateDetail::getSortOrder);
             List<GymTrainingPlanTemplateDetail> templateDetails = trainingPlanTemplateDetailMapper.selectList(templateDetailWrapper);
+            log.info("找到模板明细数量: {}", templateDetails.size());
 
             for (GymTrainingPlanTemplateDetail templateDetail : templateDetails) {
+                log.debug("复制明细: day={}, actionId={}", templateDetail.getDayOfWeek(), templateDetail.getActionId());
                 GymTrainingPlanDetail planDetail = GymTrainingPlanDetail.builder()
                         .planId(plan.getId())
                         .dayOfWeek(templateDetail.getDayOfWeek())
@@ -630,13 +644,14 @@ public class TrainingPlanService {
                 trainingPlanDetailMapper.insert(planDetail);
             }
 
-            log.info("从模板创建训练计划成功: {}", plan.getName());
+            log.info("从模板创建训练计划成功: planId={}, planName={}", plan.getId(), plan.getName());
             return getPlanById(plan.getId());
         } catch (BusinessException e) {
+            log.error("业务异常: {}", e.getMessage());
             throw e;
         } catch (Exception e) {
-            log.error("从模板创建训练计划失败", e);
-            throw new ServiceException("创建失败");
+            log.error("从模板创建训练计划失败: userId={}, templateId={}, planName={}", userId, templateId, planName, e);
+            throw new ServiceException("创建失败: " + e.getMessage());
         }
     }
 

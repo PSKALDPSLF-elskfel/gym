@@ -113,8 +113,8 @@
     </view>
     
     <!-- 标记完成弹窗 -->
-    <uni-popup ref="completionPopup" type="bottom">
-      <view class="completion-popup">
+    <view v-if="showCompletionPopup" class="popup-mask" @click="closeCompletionPopup">
+      <view class="completion-popup" @click.stop>
         <view class="popup-header">
           <text class="popup-title">标记完成</text>
           <text class="close-btn" @click="closeCompletionPopup">×</text>
@@ -157,7 +157,7 @@
           <button class="confirm-btn" @click="confirmCompletion">确认</button>
         </view>
       </view>
-    </uni-popup>
+    </view>
   </view>
 </template>
 
@@ -178,7 +178,10 @@ export default {
         actualSets: null,
         actualReps: null,
         executionNote: ''
-      }
+      },
+      
+      // 弹窗显示状态
+      showCompletionPopup: false
     }
   },
   
@@ -255,7 +258,7 @@ export default {
           actualReps: action.reps,
           executionNote: ''
         }
-        this.$refs.completionPopup.open()
+        this.showCompletionPopup = true
       }
     },
     
@@ -276,7 +279,7 @@ export default {
     
     // 关闭弹窗
     closeCompletionPopup() {
-      this.$refs.completionPopup.close()
+      this.showCompletionPopup = false
       this.currentAction = null
     },
     
@@ -590,10 +593,24 @@ export default {
 }
 
 /* 弹窗样式 */
+.popup-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+}
+
 .completion-popup {
+  width: 100%;
   background-color: #fff;
   border-radius: 32rpx 32rpx 0 0;
   padding: 40rpx;
+  animation: slideUp 0.3s ease-out;
 }
 
 .popup-header {
@@ -668,5 +685,14 @@ export default {
 .confirm-btn {
   background-color: #3b82f6;
   color: #fff;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 </style>

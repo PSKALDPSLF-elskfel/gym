@@ -30,7 +30,7 @@
           <!-- 教练信息 -->
           <view class="coach-info">
             <view class="coach-header">
-              <text class="coach-name">{{ coach.name || '未设置姓名' }}</text>
+              <text class="coach-name">{{ coach.nickname || '未设置昵称' }}</text>
               <view v-if="coach.averageRating > 0" class="rating-badge">
                 <text class="fa fa-star"></text>
                 <text class="rating-text">{{ coach.averageRating.toFixed(1) }}</text>
@@ -131,7 +131,7 @@ const getAvatarUrl = (avatar) => {
  */
 const goToCoachReviews = (coach) => {
   uni.navigateTo({
-    url: `/pages/coach-review/list?coachId=${coach.id}&coachName=${coach.name}&coachAvatar=${encodeURIComponent(getAvatarUrl(coach.avatar) || '')}`
+    url: `/pages/coach-review/list?coachId=${coach.id}&coachName=${coach.nickname || '未设置昵称'}&coachAvatar=${encodeURIComponent(getAvatarUrl(coach.avatar) || '')}`
   })
 }
 </script>

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * @author system
  */
 @RestController
-@RequestMapping("/api/wx")
+@RequestMapping("/wx")
 @Tag(name = "微信小程序", description = "微信小程序相关接口")
 public class WxController {
 

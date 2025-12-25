@@ -6,25 +6,25 @@
       <!-- 汇总数据卡片 -->
       <view class="summary-section">
         <view class="stat-card">
-          <text class="stat-value">{{ summary.totalWorkouts || 0 }}</text>
+          <text class="stat-value">{{ safeNumber(summary.totalWorkouts, 0) }}</text>
           <text class="stat-label">运动次数</text>
           <text class="fa fa-trophy stat-icon"></text>
         </view>
         
         <view class="stat-card">
-          <text class="stat-value">{{ summary.totalDuration || 0 }}</text>
+          <text class="stat-value">{{ safeNumber(summary.totalDuration, 0) }}</text>
           <text class="stat-label">总时长(分)</text>
           <text class="fa fa-clock-o stat-icon"></text>
         </view>
         
         <view class="stat-card">
-          <text class="stat-value">{{ summary.totalCalories || 0 }}</text>
+          <text class="stat-value">{{ safeNumber(summary.totalCalories, 0) }}</text>
           <text class="stat-label">总热量(千卡)</text>
           <text class="fa fa-fire stat-icon"></text>
         </view>
         
         <view class="stat-card">
-          <text class="stat-value">{{ summary.streakDays || 0 }}</text>
+          <text class="stat-value">{{ safeNumber(summary.streakDays, 0) }}</text>
           <text class="stat-label">连续天数</text>
           <text class="fa fa-calendar-check-o stat-icon"></text>
         </view>
@@ -39,20 +39,20 @@
           <view class="percentage-item">
             <view class="item-header">
               <text class="item-label">有氧运动</text>
-              <text class="item-value">{{ summary.cardioPercentage || 0 }}%</text>
+              <text class="item-value">{{ safeNumber(summary.cardioPercentage, 0).toFixed(1) }}%</text>
             </view>
             <view class="progress-bar">
-              <view class="progress-fill cardio" :style="{ width: (summary.cardioPercentage || 0) + '%' }"></view>
+              <view class="progress-fill cardio" :style="{ width: safeNumber(summary.cardioPercentage, 0) + '%' }"></view>
             </view>
           </view>
           
           <view class="percentage-item">
             <view class="item-header">
               <text class="item-label">力量训练</text>
-              <text class="item-value">{{ summary.strengthPercentage || 0 }}%</text>
+              <text class="item-value">{{ safeNumber(summary.strengthPercentage, 0).toFixed(1) }}%</text>
             </view>
             <view class="progress-bar">
-              <view class="progress-fill strength" :style="{ width: (summary.strengthPercentage || 0) + '%' }"></view>
+              <view class="progress-fill strength" :style="{ width: safeNumber(summary.strengthPercentage, 0) + '%' }"></view>
             </view>
           </view>
         </view>
@@ -78,13 +78,22 @@
         <view class="section-header">
           <text class="section-title">运动时长趋势</text>
         </view>
-        <view class="chart-container">
-          <qiun-data-charts 
-            type="line"
-            :opts="durationChartOpts"
-            :chartData="durationChartData"
-            :canvas2d="true"
-          />
+        <view v-if="dailyStats.length === 0" class="empty-chart">
+          <text class="fa fa-line-chart empty-icon"></text>
+          <text class="empty-text">暂无运动数据</text>
+          <text class="empty-hint">请先添加运动记录</text>
+        </view>
+        <view v-else class="chart-wrapper">
+          <view class="chart-container">
+            <qiun-data-charts 
+              :key="`duration-chart-${activeTab}`"
+              type="line"
+              :opts="durationChartOpts"
+              :chartData="durationChartData"
+              :canvas2d="false"
+              :tapLegend="false"
+            />
+          </view>
         </view>
       </view>
       
@@ -93,13 +102,22 @@
         <view class="section-header">
           <text class="section-title">热量消耗趋势</text>
         </view>
-        <view class="chart-container">
-          <qiun-data-charts 
-            type="line"
-            :opts="caloriesChartOpts"
-            :chartData="caloriesChartData"
-            :canvas2d="true"
-          />
+        <view v-if="dailyStats.length === 0" class="empty-chart">
+          <text class="fa fa-line-chart empty-icon"></text>
+          <text class="empty-text">暂无运动数据</text>
+          <text class="empty-hint">请先添加运动记录</text>
+        </view>
+        <view v-else class="chart-wrapper">
+          <view class="chart-container">
+            <qiun-data-charts 
+              :key="`calories-chart-${activeTab}`"
+              type="line"
+              :opts="caloriesChartOpts"
+              :chartData="caloriesChartData"
+              :canvas2d="false"
+              :tapLegend="false"
+            />
+          </view>
         </view>
       </view>
       
@@ -107,22 +125,22 @@
       <view class="period-stats">
         <view class="period-card">
           <text class="period-label">本周运动</text>
-          <text class="period-value">{{ summary.weekWorkouts || 0 }}次</text>
+          <text class="period-value">{{ safeNumber(summary.weekWorkouts, 0) }}次</text>
         </view>
         
         <view class="period-card">
           <text class="period-label">本月运动</text>
-          <text class="period-value">{{ summary.monthWorkouts || 0 }}次</text>
+          <text class="period-value">{{ safeNumber(summary.monthWorkouts, 0) }}次</text>
         </view>
         
         <view class="period-card">
           <text class="period-label">平均时长</text>
-          <text class="period-value">{{ summary.avgDuration || 0 }}分</text>
+          <text class="period-value">{{ safeNumber(summary.avgDuration, 0) }}分</text>
         </view>
         
         <view class="period-card">
           <text class="period-label">运动天数</text>
-          <text class="period-value">{{ summary.workoutDays || 0 }}天</text>
+          <text class="period-value">{{ safeNumber(summary.workoutDays, 0) }}天</text>
         </view>
       </view>
     </view>
@@ -162,7 +180,8 @@ const dateTabs = [
 // 时长图表配置
 const durationChartOpts = ref({
   color: ['#4facfe'],
-  padding: [15, 15, 0, 5],
+  padding: [15, 15, 0, 15],
+  enableScroll: false,
   legend: {
     show: false
   },
@@ -171,10 +190,9 @@ const durationChartOpts = ref({
     fontSize: 10
   },
   yAxis: {
-    data: [
-      { min: 0 }
-    ],
-    fontSize: 10
+    min: 0,
+    fontSize: 10,
+    gridType: 'dash'
   },
   extra: {
     line: {
@@ -188,7 +206,8 @@ const durationChartOpts = ref({
 // 热量图表配置
 const caloriesChartOpts = ref({
   color: ['#fa709a'],
-  padding: [15, 15, 0, 5],
+  padding: [15, 15, 0, 15],
+  enableScroll: false,
   legend: {
     show: false
   },
@@ -197,10 +216,9 @@ const caloriesChartOpts = ref({
     fontSize: 10
   },
   yAxis: {
-    data: [
-      { min: 0 }
-    ],
-    fontSize: 10
+    min: 0,
+    fontSize: 10,
+    gridType: 'dash'
   },
   extra: {
     line: {
@@ -230,7 +248,7 @@ const durationChartData = computed(() => {
     series: [
       {
         name: '运动时长(分钟)',
-        data: dailyStats.value.map(item => item.totalDuration || 0)
+        data: dailyStats.value.map(item => safeNumber(item.totalDuration, 0))
       }
     ]
   }
@@ -255,11 +273,22 @@ const caloriesChartData = computed(() => {
     series: [
       {
         name: '消耗热量(千卡)',
-        data: dailyStats.value.map(item => item.totalCalories || 0)
+        data: dailyStats.value.map(item => safeNumber(item.totalCalories, 0))
       }
     ]
   }
 })
+
+/**
+ * 安全转换数字
+ */
+const safeNumber = (value, defaultValue = 0) => {
+  if (value === null || value === undefined || value === '') {
+    return defaultValue
+  }
+  const num = Number(value)
+  return isNaN(num) ? defaultValue : num
+}
 
 /**
  * 获取汇总统计
@@ -268,7 +297,43 @@ const fetchSummary = () => {
   getWorkoutStatisticsSummary({
     showDefaultMsg: false,
     onSuccess: (data) => {
-      summary.value = data || {}
+      console.log('运动统计汇总数据:', data)
+      if (!data) {
+        console.warn('未获取到汇总统计数据')
+        summary.value = {
+          totalWorkouts: 0,
+          totalDuration: 0,
+          totalCalories: 0,
+          totalDistance: 0,
+          avgDuration: 0,
+          workoutDays: 0,
+          streakDays: 0,
+          weekWorkouts: 0,
+          monthWorkouts: 0,
+          cardioPercentage: 0,
+          strengthPercentage: 0
+        }
+        return
+      }
+      
+      // 安全转换所有数值字段
+      summary.value = {
+        totalWorkouts: safeNumber(data.totalWorkouts, 0),
+        totalDuration: safeNumber(data.totalDuration, 0),
+        totalCalories: safeNumber(data.totalCalories, 0),
+        totalDistance: safeNumber(data.totalDistance, 0),
+        avgDuration: safeNumber(data.avgDuration, 0),
+        workoutDays: safeNumber(data.workoutDays, 0),
+        streakDays: safeNumber(data.streakDays, 0),
+        weekWorkouts: safeNumber(data.weekWorkouts, 0),
+        monthWorkouts: safeNumber(data.monthWorkouts, 0),
+        cardioPercentage: safeNumber(data.cardioPercentage, 0),
+        strengthPercentage: safeNumber(data.strengthPercentage, 0)
+      }
+      console.log('处理后的汇总数据:', summary.value)
+    },
+    onError: (error) => {
+      console.error('获取汇总统计失败:', error)
     }
   })
 }
@@ -296,13 +361,56 @@ const fetchDailyStats = () => {
   const startDay = String(startDate.getDate()).padStart(2, '0')
   const startDateStr = `${startYear}-${startMonth}-${startDay}`
   
+  console.log('查询每日统计，日期范围:', startDateStr, '至', endDate)
+  
   getWorkoutDailyStats({
     startDate: startDateStr,
     endDate: endDate
   }, {
     showDefaultMsg: false,
     onSuccess: (data) => {
-      dailyStats.value = data || []
+      console.log('每日统计数据:', data)
+      if (!data || !Array.isArray(data)) {
+        console.warn('未获取到每日统计数据')
+        dailyStats.value = []
+        return
+      }
+      
+      // 安全转换每日统计数据
+      console.log('=== 开始处理每日统计数据 ===')
+      console.log('原始数据类型:', typeof data)
+      console.log('是否为数组:', Array.isArray(data))
+      console.log('数据长度:', data.length)
+      
+      dailyStats.value = data.map((item, index) => {
+        console.log(`--- 第${index + 1}条数据 ---`)
+        console.log('原始item:', JSON.stringify(item))
+        console.log('statDate类型:', typeof item.statDate)
+        console.log('totalDuration值:', item.totalDuration, '类型:', typeof item.totalDuration)
+        console.log('totalCalories值:', item.totalCalories, '类型:', typeof item.totalCalories)
+        
+        const processed = {
+          statDate: item.statDate,
+          totalDuration: safeNumber(item.totalDuration, 0),
+          totalCalories: safeNumber(item.totalCalories, 0),
+          totalDistance: safeNumber(item.totalDistance, 0),
+          workoutCount: safeNumber(item.workoutCount, 0),
+          totalSteps: safeNumber(item.totalSteps, 0),
+          cardioDuration: safeNumber(item.cardioDuration, 0),
+          strengthDuration: safeNumber(item.strengthDuration, 0),
+          flexibilityDuration: safeNumber(item.flexibilityDuration, 0)
+        }
+        console.log('处理后的数据:', JSON.stringify(processed))
+        return processed
+      })
+      
+      console.log('=== 处理完成 ===')
+      console.log('dailyStats.value:', dailyStats.value)
+      console.log('图表数据 - 时长:', durationChartData.value)
+      console.log('图表数据 - 热量:', caloriesChartData.value)
+    },
+    onError: (error) => {
+      console.error('获取每日统计失败:', error)
     }
   })
 }
@@ -320,10 +428,36 @@ const switchTab = (tab) => {
  */
 const formatChartDate = (dateStr) => {
   if (!dateStr) return ''
-  const date = new Date(dateStr.replace(/-/g, '/'))
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${month}-${day}`
+  
+  // 如果是对象，转换为字符串
+  if (typeof dateStr === 'object') {
+    if (dateStr.year && dateStr.monthValue && dateStr.dayOfMonth) {
+      // LocalDate对象格式 {year: 2024, monthValue: 12, dayOfMonth: 24}
+      const month = String(dateStr.monthValue).padStart(2, '0')
+      const day = String(dateStr.dayOfMonth).padStart(2, '0')
+      return `${month}-${day}`
+    }
+    dateStr = String(dateStr)
+  }
+  
+  // 处理 yyyy-MM-dd 格式的字符串
+  const parts = String(dateStr).split('-')
+  if (parts.length === 3) {
+    const month = parseInt(parts[1])
+    const day = parseInt(parts[2])
+    return `${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+  }
+  
+  // 兜底处理
+  try {
+    const date = new Date(String(dateStr).replace(/-/g, '/'))
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${month}-${day}`
+  } catch (e) {
+    console.error('日期格式化失败:', dateStr, e)
+    return ''
+  }
 }
 
 // 页面加载
@@ -461,9 +595,42 @@ onMounted(() => {
     }
   }
   
+  .chart-wrapper {
+    width: 100%;
+    height: 500rpx;
+    position: relative;
+    flex-shrink: 0;
+  }
+  
   .chart-container {
     width: 100%;
-    height: 400rpx;
+    height: 100%;
+  }
+  
+  .empty-chart {
+    width: 100%;
+    height: 500rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    .empty-icon {
+      font-size: 120rpx;
+      color: #ddd;
+      margin-bottom: 20rpx;
+    }
+    
+    .empty-text {
+      font-size: 28rpx;
+      color: #999;
+      margin-bottom: 10rpx;
+    }
+    
+    .empty-hint {
+      font-size: 24rpx;
+      color: #ccc;
+    }
   }
 }
 
@@ -522,3 +689,6 @@ onMounted(() => {
   }
 }
 </style>
+
+
+

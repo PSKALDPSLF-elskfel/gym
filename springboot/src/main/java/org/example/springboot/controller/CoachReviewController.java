@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Tag(name = "教练评价管理")
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping("/reviews")
 @RequiredArgsConstructor
 public class CoachReviewController {
     

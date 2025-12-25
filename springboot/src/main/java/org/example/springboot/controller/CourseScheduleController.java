@@ -1,5 +1,6 @@
 package org.example.springboot.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,6 +13,8 @@ import org.example.springboot.dto.command.CourseScheduleCreateDTO;
 import org.example.springboot.dto.command.CourseScheduleUpdateDTO;
 import org.example.springboot.dto.command.CourseSignInDTO;
 import org.example.springboot.dto.response.CourseScheduleResponseDTO;
+import org.example.springboot.entity.GymCoach;
+import org.example.springboot.mapper.GymCoachMapper;
 import org.example.springboot.service.CourseScheduleService;
 import org.example.springboot.service.CourseSignInService;
 import org.example.springboot.util.JwtTokenUtils;
@@ -31,6 +34,9 @@ public class CourseScheduleController {
 
     @Resource
     private CourseScheduleService courseScheduleService;
+
+    @Resource
+    private GymCoachMapper coachMapper;
 
     @Resource
     private CourseSignInService signInService;
@@ -99,8 +105,23 @@ public class CourseScheduleController {
         log.info("分页查询课程时间安排: current={}, size={}, courseId={}, status={}, startDate={}, endDate={}", 
                  current, size, courseId, status, startDate, endDate);
 
+        // 获取当前登录用户ID
+        Long currentUserId = JwtTokenUtils.getCurrentUserId();
+        Long coachId = null;
+        
+        // 如果是教练登录,获取教练ID,只查询该教练负责的课程
+        if (currentUserId != null) {
+            LambdaQueryWrapper<GymCoach> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(GymCoach::getUserId, currentUserId);
+            GymCoach coach = coachMapper.selectOne(wrapper);
+            if (coach != null) {
+                coachId = coach.getId();
+                log.info("教练用户登录，userId={}, coachId={}, 只查询该教练负责的课程", currentUserId, coachId);
+            }
+        }
+
         Page<CourseScheduleResponseDTO> pageResult = courseScheduleService.selectPage(
-                current, size, courseId, status, startDate, endDate);
+                current, size, courseId, status, startDate, endDate, coachId);
         return Result.success(pageResult);
     }
 

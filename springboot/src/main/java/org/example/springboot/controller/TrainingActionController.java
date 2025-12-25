@@ -20,7 +20,7 @@ import java.util.List;
  * @author system
  */
 @RestController
-@RequestMapping("/api/training-actions")
+@RequestMapping("/training-actions")
 @Tag(name = "训练动作管理", description = "训练动作库相关接口")
 public class TrainingActionController {
 

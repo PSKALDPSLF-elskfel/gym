@@ -1,5 +1,6 @@
 package org.example.springboot.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,7 +12,11 @@ import org.example.springboot.common.Result;
 import org.example.springboot.dto.command.CourseCreateDTO;
 import org.example.springboot.dto.command.CourseUpdateDTO;
 import org.example.springboot.dto.response.CourseResponseDTO;
+import org.example.springboot.entity.GymCoach;
+import org.example.springboot.exception.BusinessException;
+import org.example.springboot.mapper.GymCoachMapper;
 import org.example.springboot.service.CourseService;
+import org.example.springboot.util.JwtTokenUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +33,9 @@ public class CourseController {
 
     @Resource
     private CourseService courseService;
+
+    @Resource
+    private GymCoachMapper coachMapper;
 
     /**
      * 创建课程
@@ -115,6 +123,28 @@ public class CourseController {
     public Result<List<CourseResponseDTO>> listOnline() {
         log.info("查询所有上架的课程列表");
         List<CourseResponseDTO> list = courseService.listOnline();
+        return Result.success(list);
+    }
+
+    /**
+     * 查询教练负责的课程列表(教练端专用)
+     */
+    @Operation(summary = "查询我负责的课程列表")
+    @GetMapping("/my-courses")
+    public Result<List<CourseResponseDTO>> listMyManagedCourses() {
+        Long currentUserId = JwtTokenUtils.getCurrentUserId();
+
+        // 获取教练ID
+        LambdaQueryWrapper<GymCoach> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(GymCoach::getUserId, currentUserId);
+        GymCoach coach = coachMapper.selectOne(wrapper);
+
+        if (coach == null) {
+            throw new BusinessException("当前用户不是教练");
+        }
+
+        log.info("查询教练负责的课程列表, coachId={}", coach.getId());
+        List<CourseResponseDTO> list = courseService.listByCoachId(coach.getId());
         return Result.success(list);
     }
 }

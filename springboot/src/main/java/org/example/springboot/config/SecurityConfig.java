@@ -61,6 +61,20 @@ public class SecurityConfig {
         
         // 公告相关接口（公开访问）
         "/announcement/**",      // 公告相关接口
+        "/api/announcement/**",  // 公告相关接口（带API前缀）
+        
+        // 课程相关接口（公开访问）
+        "/api/course/list-online",  // 课程列表查询
+        "/api/course/{id}",         // 课程详情查询
+        
+        // 器材相关接口（公开访问）
+        "/api/equipment/page",       // 器材分页查询
+        "/api/equipment/{id}",       // 器材详情查询
+        
+        // 会员套餐相关接口（公开访问）
+        "/api/membership-package/list-online",  // 套餐列表查询
+        "/api/membership-package/list-by-type", // 按类型查询套餐
+        "/api/membership-package/{id}",         // 套餐详情查询
         
         // 训练计划模板查询接口（公开访问，用户浏览模板）
         "/api/training-plan-templates/page",   // 模板列表查询

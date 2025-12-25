@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -289,8 +290,7 @@ public class WorkoutRecordService {
 
         Page<GymWorkoutRecord> recordPage = workoutRecordMapper.selectPage(page, wrapper);
 
-        Page<WorkoutRecordResponseDTO> responsePage = new Page<>();
-        BeanUtils.copyProperties(recordPage, responsePage, "records");
+        Page<WorkoutRecordResponseDTO> responsePage = new Page<>(recordPage.getCurrent(), recordPage.getSize(), recordPage.getTotal());
 
         List<WorkoutRecordResponseDTO> responseDTOList = recordPage.getRecords().stream()
                 .map(record -> convertToResponseDTO(record, false))
@@ -411,23 +411,51 @@ public class WorkoutRecordService {
     public List<WorkoutDailyStatsResponseDTO> getDailyStats(Long userId, LocalDate startDate, LocalDate endDate) {
         log.info("查询每日统计数据: userId={}, startDate={}, endDate={}", userId, startDate, endDate);
 
+        // 如果是空字符串日期，使用默认的日期范围
+        if (startDate == null) {
+            startDate = LocalDate.now().minusDays(7);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now();
+        }
+
         LambdaQueryWrapper<GymWorkoutDailyStats> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(GymWorkoutDailyStats::getUserId, userId);
-
-        if (startDate != null) {
-            wrapper.ge(GymWorkoutDailyStats::getStatDate, startDate);
-        }
-        if (endDate != null) {
-            wrapper.le(GymWorkoutDailyStats::getStatDate, endDate);
-        }
-
-        wrapper.orderByAsc(GymWorkoutDailyStats::getStatDate);
+        wrapper.eq(GymWorkoutDailyStats::getUserId, userId)
+                .ge(GymWorkoutDailyStats::getStatDate, startDate)
+                .le(GymWorkoutDailyStats::getStatDate, endDate)
+                .orderByAsc(GymWorkoutDailyStats::getStatDate);
 
         List<GymWorkoutDailyStats> statsList = dailyStatsMapper.selectList(wrapper);
 
-        return statsList.stream()
-                .map(this::convertStatsToResponseDTO)
-                .collect(Collectors.toList());
+        // 不管是否有运动记录，为每一天都填充数据
+        Map<LocalDate, GymWorkoutDailyStats> statsMap = statsList.stream()
+                .collect(Collectors.toMap(GymWorkoutDailyStats::getStatDate, s -> s));
+
+        List<WorkoutDailyStatsResponseDTO> result = new ArrayList<>();
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            GymWorkoutDailyStats stats = statsMap.get(date);
+            if (stats != null) {
+                result.add(convertStatsToResponseDTO(stats));
+            } else {
+                // 如果没有数据，为该日期创建一个空的记录，数值为0
+                WorkoutDailyStatsResponseDTO emptyStats = WorkoutDailyStatsResponseDTO.builder()
+                        .statDate(date)
+                        .totalDuration(0)
+                        .totalCalories(0)
+                        .totalDistance(BigDecimal.ZERO)
+                        .totalSteps(0)
+                        .workoutCount(0)
+                        .cardioDuration(0)
+                        .strengthDuration(0)
+                        .flexibilityDuration(0)
+                        .isRestDay(0)
+                        .planCompletionRate(BigDecimal.ZERO)
+                        .build();
+                result.add(emptyStats);
+            }
+        }
+
+        return result;
     }
 
     // ==================== 私有辅助方法 ====================

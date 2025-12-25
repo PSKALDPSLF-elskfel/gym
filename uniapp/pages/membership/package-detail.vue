@@ -96,12 +96,17 @@ import { ref, computed, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getMembershipPackageById } from '@/apis/membershipPackage.js'
 import { purchaseMembershipPackage, getCurrentMembership } from '@/apis/userMembership.js'
+import DateUtils from '@/utils/dateUtils.js'
+import { useUserStore } from '@/store/user.js'
 
 // 数据
 const packageId = ref(null)
 const packageInfo = ref({})
 const currentMembership = ref(null)
-const userId = ref(1) // TODO: 从登录状态获取用户ID
+const userStore = useUserStore()
+
+// 使用store中的userId，每详一个会员应当查看自己的会员信息
+const userId = computed(() => userStore.userId)
 
 // 计算属性
 const benefitsList = computed(() => {
@@ -161,15 +166,9 @@ const formatDuration = (days) => {
 }
 
 // 格式化日期时间
+// 需要在顶部导入：import DateUtils from '@/utils/dateUtils.js'
 const formatDateTime = (dateTime) => {
-  if (!dateTime) return ''
-  // 兼容iOS：将 "-" 替换为 "/"
-  const iosCompatibleDate = dateTime.replace(/-/g, '/')
-  const date = new Date(iosCompatibleDate)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+  return DateUtils.format(dateTime, 'YYYY-MM-DD')
 }
 
 // 处理购买

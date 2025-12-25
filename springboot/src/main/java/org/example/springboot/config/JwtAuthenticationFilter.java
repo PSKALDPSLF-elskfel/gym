@@ -77,9 +77,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 new SimpleGrantedAuthority("ROLE_" + user.getUserType())
                         );
 
+                        // principal设置为userId，方便Controller直接获取
                         UsernamePasswordAuthenticationToken authentication =
                                 new UsernamePasswordAuthenticationToken(
-                                        user.getUsername(),
+                                        userId,
                                         null,
                                         authorities
                                 );

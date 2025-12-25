@@ -61,7 +61,7 @@
         </swiper>
       </view>
       
-      <text class="welcome">欢迎来到健身房预约平台</text>
+      <text class="welcome">欢迎来到健身房多功能平台</text>
       
       <!-- 快捷功能入口 -->
       <view class="quick-menu">
@@ -132,7 +132,7 @@ const announcements = ref([])
 const banners = ref([
   {
     id: 1,
-    image: '/static/images/banner1.jpeg',
+    image: '/static/images/7077.jpg_wh860.jpg',
     title: '健身房预约系统',
     link: '/pages/course/list' // 点击跳转到课程列表
   },
@@ -141,6 +141,12 @@ const banners = ref([
     image: '/static/images/banner2.png',
     title: '会员套餐优惠',
     link: '/pages/membership/package-list' // 点击跳转到会员套餐
+  },
+  {
+    id: 3,
+    image: '/static/images/6369.jpg_wh860.jpg',
+    title: '专业健身器材',
+    link: '/pages/equipment/list' // 点击跳转到器材列表
   }
 ])
 
@@ -149,9 +155,17 @@ const banners = ref([
  */
 const handleBannerClick = (banner) => {
   if (banner.link) {
-    uni.navigateTo({
-      url: banner.link
-    })
+    // 判断是否为tabbar页面
+    const tabbarPages = ['/pages/course/list', '/pages/equipment/list', '/pages/my/my']
+    if (tabbarPages.includes(banner.link)) {
+      uni.switchTab({
+        url: banner.link
+      })
+    } else {
+      uni.navigateTo({
+        url: banner.link
+      })
+    }
   }
 }
 

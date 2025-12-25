@@ -142,7 +142,7 @@ public class SimpleFileService {
             try {
                 // 转换为相对物理路径
                 String relativePath = FileUtil.convertToRelativePath(filename);
-                Path filePath = Paths.get(FileUtil.FILE_BASE_PATH, relativePath);
+                Path filePath = Paths.get(FileUtil.getFileBasePath(), relativePath);
                 if (Files.exists(filePath)) {
                     fileInfo.setLastModified(Files.getLastModifiedTime(filePath).toMillis());
                 }

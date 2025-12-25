@@ -56,6 +56,11 @@ public class GymCourse {
     @Schema(description = "课程价格")
     private BigDecimal price;
 
+    /**
+     * 课程状态：
+     * 0 - 下架: 课程暂时不可预约，不在小程序端显示
+     * 1 - 上架: 课程正常可预约，在小程序端显示
+     */
     @Schema(description = "状态：0-下架，1-上架")
     private Integer status;
 

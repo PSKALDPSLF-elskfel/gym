@@ -11,8 +11,9 @@
 			
 			<!-- 空数据 -->
 			<view v-else-if="historyList.length === 0" class="empty-container">
-				<image src="/static/images/empty.png" mode="aspectFit" class="empty-image" />
+				<view class="empty-icon">📋</view>
 				<text class="empty-text">暂无体测历史记录</text>
+				<text class="empty-hint">您还没有任何体测记录</text>
 			</view>
 			
 			<!-- 历史记录列表 -->
@@ -72,6 +73,7 @@
 import { getBodyTestPage } from '@/apis/bodyTest.js'
 import { getCurrentUser } from '@/apis/user.js'
 import ModNavBar from '@/components/mod-nav-bar/mod-nav-bar.vue'
+import DateUtils from '@/utils/dateUtils.js'
 
 export default {
 	components: {
@@ -189,9 +191,7 @@ export default {
 		
 		// 格式化日期
 		formatDate(dateTime) {
-			if (!dateTime) return ''
-			const date = new Date(dateTime)
-			return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+			return DateUtils.formatDate(dateTime)
 		},
 		
 		// 获取BMI状态
@@ -236,15 +236,22 @@ export default {
 	text-align: center;
 }
 
-.empty-image {
-	width: 300rpx;
-	height: 300rpx;
+.empty-icon {
+	font-size: 120rpx;
 	margin-bottom: 40rpx;
 }
 
 .empty-text {
 	display: block;
-	font-size: 28rpx;
+	font-size: 32rpx;
+	color: #333;
+	font-weight: bold;
+	margin-bottom: 20rpx;
+}
+
+.empty-hint {
+	display: block;
+	font-size: 26rpx;
 	color: #999;
 }
 

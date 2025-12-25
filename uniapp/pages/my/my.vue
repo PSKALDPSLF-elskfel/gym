@@ -67,7 +67,7 @@
 
         <view class="menu-item" @click="goToTrainingPlan">
           <view class="menu-left">
-            <text class="fa fa-dumbbell menu-icon" style="color: #10b981;"></text>
+            <text class="fa fa-clipboard menu-icon" style="color: #10b981;"></text>
             <text class="menu-text">我的训练计划</text>
           </view>
           <text class="fa fa-chevron-right menu-arrow"></text>
@@ -89,6 +89,22 @@
           <text class="fa fa-chevron-right menu-arrow"></text>
         </view>
 
+        <view class="menu-item" @click="goToMyReviews">
+          <view class="menu-left">
+            <text class="fa fa-star menu-icon" style="color: #fadb14;"></text>
+            <text class="menu-text">我的评价</text>
+          </view>
+          <text class="fa fa-chevron-right menu-arrow"></text>
+        </view>
+
+        <view class="menu-item" @click="goToAllReviews">
+          <view class="menu-left">
+            <text class="fa fa-comments menu-icon" style="color: #ff6b35;"></text>
+            <text class="menu-text">查看教练评价</text>
+          </view>
+          <text class="fa fa-chevron-right menu-arrow"></text>
+        </view>
+
         <view class="menu-item" @click="goToProfile">
           <view class="menu-left">
             <text class="fa fa-user menu-icon"></text>
@@ -105,13 +121,7 @@
           <text class="fa fa-chevron-right menu-arrow"></text>
         </view>
 
-        <view class="menu-item" @click="goToApiTest" style="border-top: 2px solid #ff6b00; margin-top: 20px; padding-top: 20px;">
-          <view class="menu-left">
-            <text class="fa fa-bug menu-icon" style="color: #ff6b00;"></text>
-            <text class="menu-text">🔧 API诊断</text>
-          </view>
-          <text class="fa fa-chevron-right menu-arrow"></text>
-        </view>
+
       </view>
       
       <button class="logout-btn" @click="handleLogout">
@@ -124,6 +134,7 @@
 
 <script setup>
 import { computed, ref, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app'
 import { useUserStore } from '@/store/user.js'
 import { safeLogout } from '@/utils/auth.js'
 import { getFileUrl } from '@/utils/fileUtils.js'
@@ -206,15 +217,6 @@ const goToChangePassword = () => {
 }
 
 /**
- * 跳转到API诊断页
- */
-const goToApiTest = () => {
-  uni.navigateTo({
-    url: '/pages/debug/api-test'
-  })
-}
-
-/**
  * 跳转到我的训练计划页
  */
 const goToTrainingPlan = () => {
@@ -238,6 +240,24 @@ const goToTrainingHistory = () => {
 const goToBodyTest = () => {
   uni.navigateTo({
     url: '/pages/body-test/report'
+  })
+}
+
+/**
+ * 跳转到我的评价页
+ */
+const goToMyReviews = () => {
+  uni.navigateTo({
+    url: '/pages/coach-review/my'
+  })
+}
+
+/**
+ * 跳转到所有教练评价页
+ */
+const goToAllReviews = () => {
+  uni.navigateTo({
+    url: '/pages/coach-review/all-reviews'
   })
 }
 
@@ -273,6 +293,13 @@ const loadUnreadCount = async () => {
 // 页面加载时获取未读数量
 onMounted(() => {
   loadUnreadCount()
+})
+
+// 页面显示时刷新未读数量
+onShow(() => {
+  if (isLoggedIn.value) {
+    loadUnreadCount()
+  }
 })
 
 /**

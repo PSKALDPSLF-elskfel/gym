@@ -1,9 +1,11 @@
 <template>
   <view class="template-select-container">
+    <!-- 自定义导航栏 -->
+    <mod-nav-bar title="选择训练方案模板" :showBack="true" titleColor="#fff"></mod-nav-bar>
+    
     <!-- 顶部标题栏 -->
     <view class="header">
       <view class="header-content">
-        <view class="title">选择训练方案模板</view>
         <view class="subtitle">基于专业模板快速创建您的训练计划</view>
       </view>
     </view>
@@ -40,7 +42,7 @@
       </view>
 
       <view v-else-if="templates.length === 0" class="empty">
-        <image src="/static/empty.png" class="empty-img" mode="aspectFit"></image>
+        <text class="empty-icon">📋</text>
         <text class="empty-text">暂无可用模板</text>
       </view>
 
@@ -266,11 +268,19 @@ export default {
           params.difficulty = this.selectedDifficulty
         }
         
+        console.log('加载模板列表参数:', params)
         const res = await getTemplatePage(params)
+        console.log('模板列表响应:', res)
+        
         this.templates = res.records || []
         this.total = res.total || 0
+        
+        if (this.templates.length === 0) {
+          console.log('未找到模板数据')
+        }
       } catch (err) {
-        uni.showToast({ title: '加载失败', icon: 'none' })
+        console.error('加载模板失败:', err)
+        uni.showToast({ title: err?.message || '加载失败', icon: 'none' })
       } finally {
         this.loading = false
       }
@@ -414,22 +424,17 @@ export default {
 /* 顶部标题 */
 .header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 40rpx 30rpx 30rpx;
+  padding: 20rpx 30rpx 30rpx;
 }
 
 .header-content {
   color: #fff;
 }
 
-.title {
-  font-size: 40rpx;
-  font-weight: bold;
-  margin-bottom: 10rpx;
-}
-
 .subtitle {
   font-size: 26rpx;
   opacity: 0.9;
+  text-align: center;
 }
 
 /* 筛选栏 */
@@ -474,16 +479,17 @@ export default {
   text-align: center;
   padding: 100rpx 0;
   color: #999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.empty-img {
-  width: 200rpx;
-  height: 200rpx;
+.empty-icon {
+  font-size: 120rpx;
   margin-bottom: 20rpx;
 }
 
 .empty-text {
-  display: block;
   font-size: 28rpx;
 }
 
@@ -498,8 +504,7 @@ export default {
 
 .template-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   margin-bottom: 20rpx;
 }
 
@@ -507,12 +512,13 @@ export default {
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
-  flex: 1;
+  margin-bottom: 12rpx;
 }
 
 .template-tags {
   display: flex;
   gap: 10rpx;
+  flex-wrap: wrap;
 }
 
 .tag {
@@ -553,17 +559,20 @@ export default {
 
 .info-row {
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 12rpx;
-  gap: 30rpx;
+  gap: 20rpx;
 }
 
 .info-item {
   display: flex;
   font-size: 26rpx;
+  min-width: 200rpx;
 }
 
 .label {
   color: #999;
+  margin-right: 8rpx;
 }
 
 .value {

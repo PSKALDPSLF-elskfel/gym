@@ -52,7 +52,7 @@
           <view class="item-header">
             <view class="icon-wrapper">
               <image 
-                v-if="item.icon" 
+                v-if="item.icon && (item.icon.startsWith('http') || item.icon.startsWith('/files'))"
                 :src="item.icon" 
                 class="notification-icon"
                 mode="aspectFill"
@@ -86,7 +86,7 @@
 
       <!-- 空状态 -->
       <view v-if="!loading && notifications.length === 0" class="empty-container">
-        <image src="/static/images/empty.png" class="empty-icon" mode="aspectFit"></image>
+        <view class="empty-icon-placeholder">📭</view>
         <text class="empty-text">暂无通知</text>
       </view>
 
@@ -97,8 +97,8 @@
     </scroll-view>
 
     <!-- 通知详情弹窗 -->
-    <uni-popup ref="detailPopup" type="bottom" :safe-area="true">
-      <view class="detail-popup">
+    <view v-if="showDetailPopup" class="popup-mask" @click="closeDetailPopup">
+      <view class="detail-popup" @click.stop>
         <view class="popup-header">
           <text class="popup-title">通知详情</text>
           <text class="close-btn" @click="closeDetailPopup">✕</text>
@@ -120,7 +120,7 @@
           <button class="popup-btn" @click="handleJumpToRelated">查看详情</button>
         </view>
       </view>
-    </uni-popup>
+    </view>
   </view>
 </template>
 
@@ -157,7 +157,10 @@ export default {
       loadMoreStatus: 'more', // more/loading/noMore
       
       // 选中的通知
-      selectedNotification: null
+      selectedNotification: null,
+      
+      // 弹窗显示状态
+      showDetailPopup: false
     }
   },
   
@@ -266,14 +269,14 @@ export default {
       
       // 显示详情
       this.selectedNotification = item
-      this.$refs.detailPopup.open()
+      this.showDetailPopup = true
     },
     
     /**
      * 关闭详情弹窗
      */
     closeDetailPopup() {
-      this.$refs.detailPopup.close()
+      this.showDetailPopup = false
     },
     
     /**
@@ -372,15 +375,29 @@ export default {
       try {
         const count = await getUnreadCount({ showDefaultMsg: false })
         
-        // 更新TabBar角标
+        // 更新TabBar角标（使用success/fail回调方式，避免Promise rejection）
         if (count > 0) {
           uni.setTabBarBadge({
             index: 3, // 我的页面的索引
-            text: count > 99 ? '99+' : count.toString()
+            text: count > 99 ? '99+' : count.toString(),
+            success: () => {
+              console.log('设置TabBar角标成功')
+            },
+            fail: (err) => {
+              // 在非TabBar页面会失败，静默处理
+              console.log('TabBar操作跳过（非TabBar页面）:', err.errMsg)
+            }
           })
         } else {
           uni.removeTabBarBadge({
-            index: 3
+            index: 3,
+            success: () => {
+              console.log('移除TabBar角标成功')
+            },
+            fail: (err) => {
+              // 在非TabBar页面会失败，静默处理
+              console.log('TabBar操作跳过（非TabBar页面）:', err.errMsg)
+            }
           })
         }
       } catch (error) {
@@ -408,7 +425,15 @@ export default {
     formatTime(timeStr) {
       if (!timeStr) return ''
       
-      const time = new Date(timeStr)
+      // 兼容 iOS：将 "2025-12-12 16:30:00" 格式转换为 "2025/12/12 16:30:00"
+      const normalizedTimeStr = timeStr.replace(/-/g, '/')
+      const time = new Date(normalizedTimeStr)
+      
+      // 检查日期是否有效
+      if (isNaN(time.getTime())) {
+        return timeStr // 如果无法解析，返回原始字符串
+      }
+      
       const now = new Date()
       const diff = now - time
       
@@ -632,10 +657,10 @@ export default {
   justify-content: center;
   padding: 100rpx 0;
   
-  .empty-icon {
-    width: 300rpx;
-    height: 300rpx;
+  .empty-icon-placeholder {
+    font-size: 200rpx;
     margin-bottom: 30rpx;
+    opacity: 0.5;
   }
   
   .empty-text {
@@ -653,13 +678,28 @@ export default {
   padding: 20rpx 0;
 }
 
+// 弹窗遮罩
+.popup-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  align-items: flex-end;
+}
+
 // 详情弹窗
 .detail-popup {
+  width: 100%;
   background-color: #fff;
   border-radius: 32rpx 32rpx 0 0;
   max-height: 80vh;
   display: flex;
   flex-direction: column;
+  animation: slideUp 0.3s ease-out;
   
   .popup-header {
     display: flex;
@@ -733,6 +773,15 @@ export default {
       border-radius: 44rpx;
       border: none;
     }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
   }
 }
 </style>

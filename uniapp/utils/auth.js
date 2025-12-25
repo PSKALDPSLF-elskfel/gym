@@ -75,6 +75,15 @@ export async function safeLogout() {
 }
 
 /**
+ * 获取当前登录token
+ * @returns {string}
+ */
+export function getToken() {
+  const userStore = useUserStore()
+  return userStore.token || ''
+}
+
+/**
  * 获取用户信息的安全包装
  * @returns {Object|null}
  */

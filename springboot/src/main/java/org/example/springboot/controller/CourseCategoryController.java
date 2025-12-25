@@ -20,7 +20,7 @@ import java.util.List;
  * @author system
  */
 @RestController
-@RequestMapping("/api/course-categories")
+@RequestMapping("/course-categories")
 @Tag(name = "课程分类管理", description = "课程分类相关接口")
 public class CourseCategoryController {
 

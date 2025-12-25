@@ -112,6 +112,7 @@
 <script>
 import { getTrainingPlanPage, calculateProgress } from '@/apis/trainingPlan.js'
 import { getCurrentUser } from '@/utils/auth.js'
+import DateUtils from '@/utils/dateUtils.js'
 
 export default {
   components: {},
@@ -218,12 +219,7 @@ export default {
     
     // 格式化日期
     formatDate(dateTime) {
-      if (!dateTime) return ''
-      const date = new Date(dateTime)
-      const year = date.getFullYear()
-      const month = String(date.getMonth() + 1).padStart(2, '0')
-      const day = String(date.getDate()).padStart(2, '0')
-      return `${year}-${month}-${day}`
+      return DateUtils.formatDate(dateTime)
     },
     
     // 显示创建选项

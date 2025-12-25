@@ -1,14 +1,21 @@
 package org.example.springboot.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.example.springboot.common.Result;
 import org.example.springboot.dto.command.CoachReviewReplyDTO;
 import org.example.springboot.dto.response.CoachReviewResponseDTO;
 import org.example.springboot.dto.response.CoachReviewStatisticsResponseDTO;
+import org.example.springboot.entity.GymCoach;
+import org.example.springboot.entity.User;
+import org.example.springboot.exception.BusinessException;
+import org.example.springboot.mapper.GymCoachMapper;
+import org.example.springboot.mapper.UserMapper;
 import org.example.springboot.service.CoachReviewService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,11 +28,17 @@ import jakarta.validation.Valid;
  */
 @Tag(name = "教练端-评价管理")
 @RestController
-@RequestMapping("/api/coach/reviews")
+@RequestMapping("/coach/reviews")
 @RequiredArgsConstructor
 public class CoachReviewManageController {
     
     private final CoachReviewService reviewService;
+    
+    @Resource
+    private GymCoachMapper coachMapper;
+    
+    @Resource
+    private UserMapper userMapper;
     
     /**
      * 获取我收到的评价列表
@@ -78,15 +91,40 @@ public class CoachReviewManageController {
     
     /**
      * 获取当前登录教练ID
-     * TODO: 需要根据实际的教练认证逻辑调整
+     * 支持管理员访问,管理员可以查看第一个教练的数据(用于测试)
      */
     private Long getCurrentCoachId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof Long) {
             Long userId = (Long) authentication.getPrincipal();
-            // TODO: 根据userId查询对应的coachId
-            // 这里需要查询gym_coach表获取coachId
-            return userId; // 临时返回，实际需要查询
+            
+            // 查询当前用户信息
+            User user = userMapper.selectById(userId);
+            if (user == null) {
+                throw new RuntimeException("用户不存在");
+            }
+            
+            // 如果是管理员,获取第一个教练的ID(用于演示)
+            if ("ADMIN".equals(user.getUserType())) {
+                LambdaQueryWrapper<GymCoach> wrapper = new LambdaQueryWrapper<>();
+                wrapper.eq(GymCoach::getStatus, 1)
+                       .orderByAsc(GymCoach::getId)
+                       .last("LIMIT 1");
+                GymCoach coach = coachMapper.selectOne(wrapper);
+                if (coach == null) {
+                    throw new BusinessException("系统中暂无教练数据");
+                }
+                return coach.getId();
+            }
+            
+            // 根据userId查询对应的coachId
+            LambdaQueryWrapper<GymCoach> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(GymCoach::getUserId, userId);
+            GymCoach coach = coachMapper.selectOne(wrapper);
+            if (coach == null) {
+                throw new BusinessException("当前用户不是教练");
+            }
+            return coach.getId();
         }
         throw new RuntimeException("未登录");
     }

@@ -21,7 +21,7 @@ import java.util.List;
  * @author system
  */
 @RestController
-@RequestMapping("/api/training-plans")
+@RequestMapping("/training-plans")
 @Tag(name = "训练计划管理", description = "训练计划相关接口")
 public class TrainingPlanController {
 

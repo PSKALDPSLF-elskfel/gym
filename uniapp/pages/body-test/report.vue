@@ -11,9 +11,13 @@
 			
 			<!-- 无数据 -->
 			<view v-else-if="!bodyTestData" class="empty-container">
-				<image src="/static/images/empty.png" mode="aspectFit" class="empty-image" />
+				<view class="empty-icon">📊</view>
 				<text class="empty-text">暂无体测数据</text>
-				<button class="btn-primary" @click="goToHistory">查看历史记录</button>
+				<text class="empty-hint">点击下方按钮添加或查看历史记录</text>
+				<view class="button-group">
+					<button class="btn-primary" @click="goToAddBodyTest">添加体测数据</button>
+					<button class="btn-secondary" @click="goToHistory">查看历史记录</button>
+				</view>
 			</view>
 			
 			<!-- 体测数据 -->
@@ -128,6 +132,7 @@
 		
 		<!-- 底部按钮 -->
 		<view class="footer-actions">
+			<button class="btn-secondary" @click="goToAddBodyTest">添加体测</button>
 			<button class="btn-secondary" @click="goToHistory">历史记录</button>
 			<button class="btn-primary" @click="goToCompare">数据对比</button>
 		</view>
@@ -174,13 +179,17 @@ export default {
 		// 加载最新体测数据
 		async loadLatestBodyTest() {
 			try {
-				const res = await getLatestBodyTest(this.userId)
+				const res = await getLatestBodyTest(this.userId, {
+					showDefaultMsg: false  // 不显示默认错误提示
+				})
 				this.bodyTestData = res
 			} catch (error) {
-				console.error('获取体测数据失败:', error)
+				// 如果是"暂无体测数据"，这是正常情况，不需要提示
 				if (error.message && error.message.includes('暂无体测数据')) {
 					this.bodyTestData = null
 				} else {
+					// 其他错误才提示
+					console.error('获取体测数据失败:', error)
 					uni.showToast({
 						title: '加载失败',
 						icon: 'none'
@@ -253,6 +262,13 @@ export default {
 			uni.navigateTo({
 				url: '/pages/body-test/compare'
 			})
+		},
+		
+		// 跳转到添加体测
+		goToAddBodyTest() {
+			uni.navigateTo({
+				url: '/pages/body-test/add'
+			})
 		}
 	}
 }
@@ -279,15 +295,22 @@ export default {
 	text-align: center;
 }
 
-.empty-image {
-	width: 300rpx;
-	height: 300rpx;
+.empty-icon {
+	font-size: 120rpx;
 	margin-bottom: 40rpx;
 }
 
 .empty-text {
 	display: block;
-	font-size: 28rpx;
+	font-size: 32rpx;
+	color: #333;
+	font-weight: bold;
+	margin-bottom: 20rpx;
+}
+
+.empty-hint {
+	display: block;
+	font-size: 26rpx;
 	color: #999;
 	margin-bottom: 40rpx;
 }
@@ -510,6 +533,32 @@ export default {
 .tester-name {
 	font-size: 24rpx;
 	color: #666;
+}
+
+.button-group {
+	display: flex;
+	flex-direction: column;
+	gap: 20rpx;
+	margin-top: 40rpx;
+}
+
+.button-group .btn-primary,
+.button-group .btn-secondary {
+	height: 80rpx;
+	border-radius: 40rpx;
+	font-size: 28rpx;
+	border: none;
+}
+
+.button-group .btn-primary {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+}
+
+.button-group .btn-secondary {
+	background: white;
+	color: #667eea;
+	border: 2rpx solid #667eea;
 }
 
 .footer-actions {

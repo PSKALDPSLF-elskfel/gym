@@ -34,10 +34,31 @@ public class CoachStudentService {
 
     /**
      * 根据用户ID获取教练ID
+     * 支持管理员访问,管理员返回第一个教练的ID
      * @param userId 用户ID
      * @return 教练ID
      */
     public Long getCoachIdByUserId(Long userId) {
+        // 查询用户信息
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException("用户不存在");
+        }
+        
+        // 如果是管理员,返回第一个教练的ID
+        if ("ADMIN".equals(user.getUserType())) {
+            LambdaQueryWrapper<GymCoach> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(GymCoach::getStatus, 1)
+                   .orderByAsc(GymCoach::getId)
+                   .last("LIMIT 1");
+            GymCoach coach = coachMapper.selectOne(wrapper);
+            if (coach == null) {
+                throw new BusinessException("系统中暂无教练数据");
+            }
+            return coach.getId();
+        }
+        
+        // 根据 userId 查询教练记录
         LambdaQueryWrapper<GymCoach> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(GymCoach::getUserId, userId);
         GymCoach coach = coachMapper.selectOne(wrapper);
@@ -68,16 +89,32 @@ public class CoachStudentService {
         planWrapper.eq(GymTrainingPlan::getCoachId, coachId);
         List<GymTrainingPlan> plans = trainingPlanMapper.selectList(planWrapper);
         
-        if (plans.isEmpty()) {
-            // 没有训练计划，返回空列表
-            return new Page<>(pageNum, pageSize);
-        }
-
-        // 获取所有学员ID（去重）
         List<Long> studentIds = plans.stream()
                 .map(GymTrainingPlan::getUserId)
                 .distinct()
                 .collect(Collectors.toList());
+        
+        // 同时从教练学员关系表中获取学员ID
+        LambdaQueryWrapper<GymCoachStudent> csWrapper = new LambdaQueryWrapper<>();
+        csWrapper.eq(GymCoachStudent::getCoachId, coachId);
+        List<GymCoachStudent> coachStudents = coachStudentMapper.selectList(csWrapper);
+        
+        List<Long> studentIdsFromRelation = coachStudents.stream()
+                .map(GymCoachStudent::getStudentId)
+                .distinct()
+                .collect(Collectors.toList());
+        
+        // 合并两种方式获取的学员ID(去重)
+        studentIds.addAll(studentIdsFromRelation);
+        studentIds = studentIds.stream().distinct().collect(Collectors.toList());
+        
+        if (studentIds.isEmpty()) {
+            // 没有学员数据，返回空列表
+            log.info("教练{}暂无学员", coachId);
+            return new Page<>(pageNum, pageSize);
+        }
+
+        // 获取所有学员ID（去重）
 
         // 查询学员用户信息
         LambdaQueryWrapper<User> userWrapper = new LambdaQueryWrapper<>();
@@ -174,7 +211,14 @@ public class CoachStudentService {
         planWrapper.eq(GymTrainingPlan::getUserId, userId)
                 .eq(GymTrainingPlan::getCoachId, coachId);
         Long planCount = trainingPlanMapper.selectCount(planWrapper);
-        if (planCount == 0) {
+        
+        // 同时检查教练学员关系表
+        LambdaQueryWrapper<GymCoachStudent> csWrapper = new LambdaQueryWrapper<>();
+        csWrapper.eq(GymCoachStudent::getCoachId, coachId)
+                .eq(GymCoachStudent::getStudentId, userId);
+        Long relationCount = coachStudentMapper.selectCount(csWrapper);
+        
+        if (planCount == 0 && relationCount == 0) {
             throw new BusinessException("无权查看该学员信息");
         }
 
