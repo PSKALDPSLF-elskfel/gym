@@ -1,0 +1,367 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationStyle": "custom"
+			}
+		},
+	{
+		"path": "pages/auth/login",
+		"style": {
+			"navigationBarTitleText": "登录",
+			"navigationStyle": "custom"
+		}
+	},
+	{
+		"path": "pages/auth/register",
+		"style": {
+			"navigationBarTitleText": "注册",
+			"navigationStyle": "custom"
+		}
+	},
+		{
+			"path" : "pages/my/my",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/my/profile",
+			"style" : 
+			{
+				"navigationBarTitleText" : "个人信息",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/my/change-password",
+			"style" : 
+			{
+				"navigationBarTitleText" : "修改密码",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/membership/package-list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "会员套餐",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/membership/package-detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "套餐详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/membership/my-membership",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的会员",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/course/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "课程列表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/course/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "课程详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/course/booking",
+			"style" : 
+			{
+				"navigationBarTitleText" : "课程预约",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/booking/my",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的预约",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/booking/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "预约详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/announcement/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "全部公告",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/notification/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "系统通知",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/equipment/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "器材列表",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/equipment/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "器材详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/equipment/booking",
+			"style" : 
+			{
+				"navigationBarTitleText" : "器材预约",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/equipment/my-booking",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的器材预约",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/training-plan/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的训练计划",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/training-plan/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "计划详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/training-plan/history",
+			"style" : 
+			{
+				"navigationBarTitleText" : "训练历史",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/training-plan/template-select",
+			"style" : 
+			{
+				"navigationBarTitleText" : "选择模板",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/workout/add-record",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加运动记录",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/workout/history",
+			"style" : 
+			{
+				"navigationBarTitleText" : "运动历史",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/workout/statistics",
+			"style" : 
+			{
+				"navigationBarTitleText" : "运动统计",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/workout/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "运动详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/body-test/report",
+			"style" : 
+			{
+				"navigationBarTitleText" : "体测报告",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/body-test/add",
+			"style" : 
+			{
+				"navigationBarTitleText" : "添加体测数据",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/body-test/history",
+			"style" : 
+			{
+				"navigationBarTitleText" : "体测历史",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/body-test/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "体测详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/body-test/compare",
+			"style" : 
+			{
+				"navigationBarTitleText" : "数据对比",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/page2/page2",
+			"style" : 
+			{
+				"navigationBarTitleText" : "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/page3/page3",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
+		},
+		// {
+		// 	"path" : "pages/debug/api-test",
+		// 	"style" : 
+		// 	{
+		// 		"navigationBarTitleText" : "API诊断",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
+		{
+			"path" : "pages/coach-review/list",
+			"style" : 
+			{
+				"navigationBarTitleText" : "教练评价",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/coach-review/create",
+			"style" : 
+			{
+				"navigationBarTitleText" : "发布评价",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/coach-review/my",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的评价",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/coach-review/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "评价详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/coach-review/all-reviews",
+			"style" : 
+			{
+				"navigationBarTitleText" : "查看教练评价",
+				"navigationStyle": "custom"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	// "uniIdRouter": {},
+	"tabBar": {
+		"color": "#666666",
+		  "selectedColor": "#FF5722",
+		  "borderStyle": "black",
+		  "backgroundColor": "#ffffff",
+		"list": [
+			{
+				"text":"首页",
+				"pagePath": "pages/index/index",
+				"iconPath": "/static/images/home.png",
+				"selectedIconPath": "/static/images/home-selected.png"
+			},	
+			{
+				"text":"课程",
+				"pagePath": "pages/course/list",
+				"iconPath": "/static/images/shop.png",
+				"selectedIconPath": "/static/images/shop-selected.png"
+			},
+			{
+				"text":"器材",
+				"pagePath": "pages/equipment/list",
+				"iconPath": "/static/images/equipment.png",
+				"selectedIconPath": "/static/images/equipment-selected.png"
+			},	
+			{
+				"text":"我的",
+				"pagePath": "pages/my/my",
+				"iconPath": "/static/images/myself.png",
+				"selectedIconPath": "/static/images/myself-selected.png"
+			}
+		]
+	}
+}
